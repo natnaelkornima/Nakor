@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=7.0';
+} from './data.js?v=8.0';
 
-import { TechKnot3D } from './tech-knot.js?v=7.0';
-import { getTechLogo } from './tech-logos.js?v=7.0';
-import { AsciiDitherEngine } from './ascii-dither.js?v=7.0';
+import { TechKnot3D } from './tech-knot.js?v=8.0';
+import { getTechLogo } from './tech-logos.js?v=8.0';
+import { AsciiDitherEngine } from './ascii-dither.js?v=8.0';
 
 // Engines & Subsystems
 const asciiEngine = new AsciiDitherEngine();
@@ -498,14 +498,46 @@ function renderArchitectureFlow(type = 'web') {
   archTitleEl.textContent = data.title;
   archDescEl.textContent = data.description;
 
-  archDiagramEl.innerHTML = data.layers.map((layer, idx) => `
-    <div class="arch-node spotlight-card" data-idx="${idx}" tabindex="0" role="region" aria-label="${layer.layer || layer.step}">
-      <span class="arch-node-step">${layer.step || `Layer 0${idx + 1}`}</span>
-      <h4 class="arch-node-title">${layer.layer || layer.step.replace(/^[0-9.]+\s*/, '')}</h4>
-      <span class="arch-node-tech">${getTechLogo(layer.tech)} <span>${layer.tech}</span></span>
-      <p class="arch-node-detail">${layer.detail}</p>
+  const parseTechBadges = (techStr) => {
+    return techStr
+      .split(/[\/\+]/)
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+  };
+
+  const flowTrackLabels = type === 'web' 
+    ? ['01 CLIENT', '02 GATEWAY', '03 COMPUTE', '04 STATE']
+    : ['01 INGRESS', '02 RETRIEVAL', '03 INFERENCE', '04 VALIDATE'];
+
+  const flowTrackHtml = `
+    <div class="arch-flow-track font-mono" aria-hidden="true">
+      ${flowTrackLabels.map((lbl, i) => `
+        <span class="arch-flow-point"><span class="flow-dot"></span>${lbl}</span>
+        ${i < 3 ? '<span class="arch-flow-arrow">──────→</span>' : ''}
+      `).join('')}
     </div>
-  `).join('');
+  `;
+
+  archDiagramEl.innerHTML = flowTrackHtml + `
+    <div class="arch-nodes-grid">
+      ${data.layers.map((layer, idx) => {
+        const techs = parseTechBadges(layer.tech);
+        return `
+          <div class="arch-node spotlight-card" data-idx="${idx}" tabindex="0" role="region" aria-label="${layer.layer || layer.step}">
+            <div class="arch-node-top">
+              <span class="arch-node-step font-mono">${layer.step || `Layer 0${idx + 1}`}</span>
+              <span class="arch-node-num font-mono">#0${idx + 1}</span>
+            </div>
+            <h4 class="arch-node-title">${layer.layer || layer.step.replace(/^[0-9.]+\s*/, '')}</h4>
+            <div class="arch-tech-badges">
+              ${techs.map(t => `<span class="arch-tech-pill">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
+            </div>
+            <p class="arch-node-detail">${layer.detail}</p>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
 
   attachSpotlightListeners();
 }

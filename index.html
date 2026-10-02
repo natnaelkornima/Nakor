@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#09090b">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/design-system.css?v=7.0">
-  <link rel="stylesheet" href="css/components.css?v=7.0">
+  <link rel="stylesheet" href="css/design-system.css?v=8.0">
+  <link rel="stylesheet" href="css/components.css?v=8.0">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -503,20 +503,32 @@
           <p class="section-subtitle">How I structure distributed client-server systems and production AI inference pipelines.</p>
         </div>
 
-        <div class="architecture-tabs reveal-on-scroll delay-1" role="tablist">
-          <button id="tab-web-arch" class="arch-tab-btn active" role="tab" aria-selected="true">Full-Stack Web Flow</button>
-          <button id="tab-ai-arch" class="arch-tab-btn" role="tab" aria-selected="false">AI Inference & RAG Pipeline</button>
+        <!-- Segmented Tab Switcher -->
+        <div class="arch-controls-wrap reveal-on-scroll delay-1">
+          <div class="architecture-tabs segmented-control" role="tablist" aria-label="Architecture Perspectives">
+            <button id="tab-web-arch" class="arch-tab-btn active" role="tab" aria-selected="true">
+              <span class="tab-indicator-dot" aria-hidden="true"></span>
+              Full-Stack Web Flow
+            </button>
+            <button id="tab-ai-arch" class="arch-tab-btn" role="tab" aria-selected="false">
+              <span class="tab-indicator-dot" aria-hidden="true"></span>
+              AI Inference &amp; RAG Pipeline
+            </button>
+          </div>
         </div>
 
         <div class="architecture-diagram-container reveal-on-scroll delay-2">
-          <div style="margin-bottom: 2rem;">
-            <h3 id="arch-title" style="font-size: 1.35rem; margin-bottom: 0.35rem;">Modern Full-Stack Web Architecture</h3>
-            <p id="arch-description" style="font-size: 0.95rem; color: var(--text-secondary);">How I architect production systems for low latency, high availability, and deterministic observability.</p>
+          <div class="arch-meta-header">
+            <div class="arch-meta-title-group">
+              <span class="arch-sys-kicker font-mono">// PIPELINE BLUEPRINT</span>
+              <h3 id="arch-title" class="arch-main-title">Modern Full-Stack Web Architecture</h3>
+              <p id="arch-description" class="arch-sub-desc">How I architect production systems for low latency, high availability, and deterministic observability.</p>
+            </div>
           </div>
 
           <!-- Architecture Grid Flow -->
-          <div id="arch-diagram-flow" class="arch-flow-grid">
-            <!-- Rendered by js/app.js -->
+          <div id="arch-diagram-flow" class="arch-flow-wrapper">
+            <!-- Rendered dynamically by js/app.js -->
           </div>
         </div>
       </div>
@@ -695,6 +707,6 @@
   </footer>
 
   <!-- Application Logic -->
-  <script type="module" src="js/app.js?v=7.0"></script>
+  <script type="module" src="js/app.js?v=8.0"></script>
 </body>
 </html>
