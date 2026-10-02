@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=4.0';
+} from './data.js?v=5.0';
 
-import { TechKnot3D } from './tech-knot.js?v=4.0';
-import { getTechLogo } from './tech-logos.js?v=4.0';
-import { AsciiDitherEngine } from './ascii-dither.js?v=4.0';
+import { TechKnot3D } from './tech-knot.js?v=5.0';
+import { getTechLogo } from './tech-logos.js?v=5.0';
+import { AsciiDitherEngine } from './ascii-dither.js?v=5.0';
 
 // Engines & Subsystems
 const asciiEngine = new AsciiDitherEngine();
@@ -280,13 +280,6 @@ function attachSpotlightListeners() {
   });
 }
 
-function getBentoSpan(index, total) {
-  if (total === 1) return 'full';
-  if (total === 2) return 'half';
-  const pattern = ['wide', 'narrow', 'narrow', 'wide', 'full'];
-  return pattern[index % pattern.length];
-}
-
 function renderProjects(filter = 'all') {
   if (!projectListEl) return;
 
@@ -302,11 +295,9 @@ function renderProjects(filter = 'all') {
     const bentoGrid = document.createElement('div');
     bentoGrid.className = 'projects-bento-grid';
 
-    filtered.forEach((project, index) => {
-      const span = getBentoSpan(index, filtered.length);
+    filtered.forEach((project) => {
       const card = document.createElement('article');
       card.className = 'bento-card spotlight-card';
-      card.setAttribute('data-span', span);
       card.setAttribute('data-id', project.id);
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');

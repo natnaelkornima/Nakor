@@ -129,8 +129,8 @@ class ProjectAsciiCanvas {
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(this.dpr, this.dpr);
 
-    // ASCII grid resolution: fixed character cell size for sharp typography
-    this.charSize = 11;
+    // ASCII grid resolution: larger cell size for clean, minimalist technical aesthetics
+    this.charSize = 14;
     this.cols = Math.ceil(this.width / this.charSize);
     this.rows = Math.ceil(this.height / this.charSize);
   }
@@ -175,9 +175,9 @@ class ProjectAsciiCanvas {
       return;
     }
 
-    // Smooth speed easing
-    this.currentSpeed += (this.targetSpeed - this.currentSpeed) * 0.08;
-    this.time += 0.02 * this.currentSpeed;
+    // Slow, calming speed easing (gentle ambient pulse)
+    this.currentSpeed += (this.targetSpeed - this.currentSpeed) * 0.05;
+    this.time += 0.006 * this.currentSpeed;
 
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.drawProjectSchematic(this.time);
@@ -185,15 +185,16 @@ class ProjectAsciiCanvas {
 
   /**
    * Render custom simulation depending on project domain
+   * Calibrated for minimal visual distraction and subtle ambient glow
    */
   drawProjectSchematic(t) {
     const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-    const primaryColor = isDark ? "rgba(56, 189, 248, 0.9)" : "rgba(2, 132, 199, 0.95)";
-    const secondaryColor = isDark ? "rgba(161, 161, 170, 0.45)" : "rgba(75, 77, 88, 0.5)";
-    const dimColor = isDark ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.12)";
-    const accentHighlight = isDark ? "#38bdf8" : "#0284c7";
+    const primaryColor = isDark ? "rgba(56, 189, 248, 0.36)" : "rgba(2, 132, 199, 0.40)";
+    const secondaryColor = isDark ? "rgba(161, 161, 170, 0.16)" : "rgba(75, 77, 88, 0.20)";
+    const dimColor = isDark ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.04)";
+    const accentHighlight = isDark ? "rgba(56, 189, 248, 0.60)" : "rgba(2, 132, 199, 0.60)";
 
-    this.ctx.font = `600 ${this.charSize - 2}px 'JetBrains Mono', monospace`;
+    this.ctx.font = `500 ${this.charSize - 3}px 'JetBrains Mono', monospace`;
     this.ctx.textBaseline = 'top';
 
     const cols = this.cols;
@@ -230,48 +231,45 @@ class ProjectAsciiCanvas {
   }
 
   /* --------------------------------------------------------------------------
-     1. Nazazi: High-Throughput SMS Packet Stream & Queue Pipeline
+     1. Nazazi: Clean Horizontal Conduit Channels with Soft Data Packets
      -------------------------------------------------------------------------- */
   renderNazaziSmsQueue(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
+    const laneY1 = Math.floor(rows * 0.35);
+    const laneY2 = Math.floor(rows * 0.55);
+    const laneY3 = Math.floor(rows * 0.75);
+    const lanes = [laneY1, laneY2, laneY3];
+
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const x = c * charW;
         const y = r * charH;
 
-        // Wave packet flow equation
-        const wave = Math.sin(c * 0.18 - t * 2) * Math.cos(r * 0.3 + t);
-        const queuePackets = (Math.sin((c + r) * 0.35 + t * 3) + 1) * 0.5;
-
-        // Distance from mouse ripple
-        const dx = (x - this.mouseX);
-        const dy = (y - this.mouseY);
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const mouseRipple = dist < 75 ? (1 - dist / 75) * 1.5 : 0;
-
-        const val = (wave * 0.4 + queuePackets * 0.6) + mouseRipple;
-        const bayerThreshold = this.bayer4[r % 4][c % 4] / 16;
-
         let char = " ";
         let color = dim;
 
-        if (val > bayerThreshold + 0.45) {
-          char = "█";
-          color = mouseRipple > 0.5 ? accent : primary;
-        } else if (val > bayerThreshold + 0.25) {
-          char = "▓";
-          color = primary;
-        } else if (val > bayerThreshold + 0.1) {
-          char = "▒";
-          color = secondary;
-        } else if (val > bayerThreshold) {
-          char = "░";
-          color = dim;
-        } else if (r % 3 === 0 && c % 4 === 0) {
+        const isLane = lanes.includes(r);
+        if (isLane) {
+          const speedFactor = r === laneY1 ? 1.0 : r === laneY2 ? 0.7 : 0.85;
+          const packetPhase = (c * 0.15 - t * speedFactor);
+          const packetPulse = Math.sin(packetPhase);
+
+          if (packetPulse > 0.88) {
+            char = "━";
+            color = accent;
+          } else if (packetPulse > 0.55) {
+            char = "─";
+            color = primary;
+          } else if (c % 3 === 0) {
+            char = "·";
+            color = secondary;
+          } else {
+            char = " ";
+          }
+        } else if (r % 4 === 0 && c % 6 === 0) {
           char = "·";
           color = dim;
         }
 
-        // Draw character
         if (char !== " ") {
           this.ctx.fillStyle = color;
           this.ctx.fillText(char, x, y);
@@ -279,58 +277,40 @@ class ProjectAsciiCanvas {
       }
     }
 
-    // Overlay Header Telemetry Tag
-    this.drawTelemetryTag("SMS_DISPATCH // BULK_QUEUE", 12, 10, accent);
+    this.drawTelemetryTag("SMS_DISPATCH // BULK_QUEUE", 14, 12, accent);
   }
 
   /* --------------------------------------------------------------------------
      2. Enzira LMS Begena: Acoustic String Harmonic Resonance & Spectral Waveform
      -------------------------------------------------------------------------- */
   renderEnziraBegenaAcoustics(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
-    const midY = rows / 2;
+    const midY = rows * 0.55;
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const x = c * charW;
         const y = r * charH;
 
-        // 6 acoustic Begena string waveforms
-        let sumAmplitude = 0;
-        for (let s = 1; s <= 6; s++) {
-          const freq = s * 0.22;
-          const amp = Math.sin(c * freq + t * 2.5 * s) * (3.5 / s);
-          if (Math.abs((r - midY) - amp) < 1.2) {
-            sumAmplitude += 0.8;
-          }
-        }
+        const wave1 = Math.sin(c * 0.12 + t * 1.2) * (rows * 0.22);
+        const wave2 = Math.cos(c * 0.18 - t * 0.9) * (rows * 0.15);
 
-        // FFT Spectrum bars at bottom
-        const fftVal = Math.abs(Math.sin(c * 0.3 + t * 4)) * (rows * 0.6);
-        const inFftBar = (rows - r) < fftVal;
-
-        // Mouse disturbance
-        const dx = (x - this.mouseX);
-        const dy = (y - this.mouseY);
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const mouseRipple = dist < 70 ? (1 - dist / 70) * 1.8 : 0;
+        const onWave1 = Math.abs((r - midY) - wave1) < 0.75;
+        const onWave2 = Math.abs((r - midY) - wave2) < 0.75;
 
         let char = " ";
         let color = dim;
 
-        if (sumAmplitude > 0.6 || mouseRipple > 0.8) {
-          char = mouseRipple > 0.8 ? "█" : "~";
-          color = accent;
-        } else if (inFftBar) {
-          const bayer = this.bayer4[r % 4][c % 4] / 16;
-          if (bayer > 0.5) {
-            char = "▒";
-            color = primary;
-          } else {
-            char = "░";
-            color = secondary;
-          }
-        } else if ((r + c) % 6 === 0) {
+        if (onWave1 && onWave2) {
           char = "+";
+          color = accent;
+        } else if (onWave1) {
+          char = "─";
+          color = primary;
+        } else if (onWave2) {
+          char = "~";
+          color = secondary;
+        } else if (r % 4 === 0 && c % 5 === 0) {
+          char = "·";
           color = dim;
         }
 
@@ -341,7 +321,7 @@ class ProjectAsciiCanvas {
       }
     }
 
-    this.drawTelemetryTag("BEGENA_ACOUSTIC // FFT_432HZ", 12, 10, accent);
+    this.drawTelemetryTag("BEGENA_ACOUSTIC // 432HZ", 14, 12, accent);
   }
 
   /* --------------------------------------------------------------------------
@@ -349,107 +329,38 @@ class ProjectAsciiCanvas {
      -------------------------------------------------------------------------- */
   renderNutriGeniusNeuralManifold(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
     const centerX = cols / 2;
-    const centerY = rows / 2;
-    const radius = Math.min(cols, rows) * 0.42;
+    const centerY = rows / 2 + 1;
+    const radius = Math.min(cols, rows) * 0.38;
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const x = c * charW;
         const y = r * charH;
 
-        // 3D Sphere projection
         const nx = (c - centerX) / radius;
         const ny = (r - centerY) / radius;
-        const distSq = nx * nx + ny * ny;
+        const dist = Math.sqrt(nx * nx + ny * ny);
+
+        const onRing = Math.abs(dist - 0.9) < 0.12;
+        const onInnerRing = Math.abs(dist - 0.5) < 0.1;
 
         let char = " ";
         let color = dim;
 
-        if (distSq <= 1.05) {
-          const nz = Math.sqrt(Math.max(0, 1 - distSq));
-          
-          // Rotating token manifold coordinate
-          const rotX = nx * Math.cos(t) - nz * Math.sin(t);
-          const rotZ = nx * Math.sin(t) + nz * Math.cos(t);
-
-          // Dot product lighting + Bayer dither
-          const light = Math.max(0, rotZ * 0.7 + rotX * 0.4 + ny * 0.2);
-          const bayer = this.bayer4[r % 4][c % 4] / 16;
-          const finalVal = light + (bayer * 0.35);
-
-          // Mouse warp
-          const dx = (x - this.mouseX);
-          const dy = (y - this.mouseY);
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const mouseHit = dist < 65 ? (1 - dist / 65) : 0;
-
-          if (finalVal > 0.85 || mouseHit > 0.5) {
-            char = "@";
+        if (onRing) {
+          const angle = Math.atan2(ny, nx);
+          const pulse = Math.sin(angle * 3 + t * 1.5);
+          if (pulse > 0.8) {
+            char = "●";
             color = accent;
-          } else if (finalVal > 0.65) {
-            char = "#";
-            color = primary;
-          } else if (finalVal > 0.45) {
-            char = "=";
-            color = secondary;
-          } else if (finalVal > 0.25) {
-            char = "-";
-            color = dim;
           } else {
             char = "·";
-            color = dim;
-          }
-        } else if (c % 5 === 0 && r % 3 === 0) {
-          char = "·";
-          color = dim;
-        }
-
-        if (char !== " ") {
-          this.ctx.fillStyle = color;
-          this.ctx.fillText(char, x, y);
-        }
-      }
-    }
-
-    this.drawTelemetryTag("NEURAL_EMBED // DIM=1536", 12, 10, accent);
-  }
-
-  /* --------------------------------------------------------------------------
-     4. Gerima: Modular Hexagonal Architecture Lattice & Bus Routing
-     -------------------------------------------------------------------------- */
-  renderGerimaHexArchitecture(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const x = c * charW;
-        const y = r * charH;
-
-        // Isometric hexagonal grid math
-        const hexGrid = (c * 2 + (r % 2) * 3) % 8;
-        const busPulse = Math.sin(c * 0.3 - t * 3) + Math.cos(r * 0.4 + t * 2);
-
-        const dx = (x - this.mouseX);
-        const dy = (y - this.mouseY);
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const mouseRipple = dist < 70 ? (1 - dist / 70) * 1.5 : 0;
-
-        let char = " ";
-        let color = dim;
-
-        if (hexGrid === 0 || hexGrid === 1) {
-          if (busPulse > 1.2 || mouseRipple > 0.6) {
-            char = "█";
-            color = accent;
-          } else {
-            char = "▓";
             color = primary;
           }
-        } else if (hexGrid === 2 || hexGrid === 7) {
-          char = "░";
+        } else if (onInnerRing) {
+          char = "·";
           color = secondary;
-        } else if (r % 4 === 0 && busPulse > 0.8) {
-          char = "→";
-          color = accent;
-        } else if ((r * c) % 11 === 0) {
+        } else if (c % 5 === 0 && r % 4 === 0) {
           char = "·";
           color = dim;
         }
@@ -461,46 +372,49 @@ class ProjectAsciiCanvas {
       }
     }
 
-    this.drawTelemetryTag("HEX_DOMAIN // BUS_DISPATCH", 12, 10, accent);
+    this.drawTelemetryTag("NEURAL_EMBED // DIM=1536", 14, 12, accent);
   }
 
   /* --------------------------------------------------------------------------
-     5. Enzira Fast Track: Low-Latency Track Stream & Packet Buffers
+     4. Gerima: Clean Modular Hexagonal Domain Matrix
      -------------------------------------------------------------------------- */
-  renderFastTrackOscilloscope(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
-    const midY = Math.floor(rows / 2);
+  renderGerimaHexArchitecture(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
+    const midR = Math.floor(rows / 2);
+    const node1C = Math.floor(cols * 0.25);
+    const node2C = Math.floor(cols * 0.50);
+    const node3C = Math.floor(cols * 0.75);
+    const nodeCols = [node1C, node2C, node3C];
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const x = c * charW;
         const y = r * charH;
 
-        // High frequency oscilloscope line
-        const osc = Math.sin(c * 0.4 + t * 4) * Math.cos(c * 0.1 - t) * 4;
-        const onLine = Math.abs((r - midY) - osc) < 1.0;
-
-        // Moving data packets along track
-        const packetPos = (c + Math.floor(t * 8)) % 16;
-        const isPacket = (r === midY || r === midY - 1) && packetPos < 3;
-
-        const dx = (x - this.mouseX);
-        const dy = (y - this.mouseY);
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const mouseHit = dist < 65 ? (1 - dist / 65) : 0;
-
         let char = " ";
         let color = dim;
 
-        if (isPacket || mouseHit > 0.6) {
-          char = "█";
-          color = accent;
-        } else if (onLine) {
-          char = "=";
-          color = primary;
-        } else if (Math.abs(r - midY) < 3) {
-          char = "-";
-          color = secondary;
-        } else if (c % 4 === 0 && r % 4 === 0) {
+        const isBusLine = (r === midR);
+        const isNode = nodeCols.some(nc => Math.abs(c - nc) <= 2 && Math.abs(r - midR) <= 2);
+
+        if (isNode) {
+          const isCenter = nodeCols.some(nc => c === nc && r === midR);
+          if (isCenter) {
+            char = "◆";
+            color = accent;
+          } else {
+            char = "□";
+            color = primary;
+          }
+        } else if (isBusLine) {
+          const pulse = Math.sin(c * 0.25 - t * 2);
+          if (pulse > 0.8) {
+            char = "─";
+            color = accent;
+          } else {
+            char = "·";
+            color = secondary;
+          }
+        } else if (c % 6 === 0 && r % 4 === 0) {
           char = "·";
           color = dim;
         }
@@ -512,7 +426,51 @@ class ProjectAsciiCanvas {
       }
     }
 
-    this.drawTelemetryTag("FAST_TRACK // AUDIO_STREAM", 12, 10, accent);
+    this.drawTelemetryTag("HEX_DOMAIN // BUS_DISPATCH", 14, 12, accent);
+  }
+
+  /* --------------------------------------------------------------------------
+     5. Enzira Fast-Track: Minimalist Audio Frequency Line & Sweep
+     -------------------------------------------------------------------------- */
+  renderFastTrackOscilloscope(t, cols, rows, charW, charH, primary, secondary, dim, accent) {
+    const midY = rows * 0.55;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * charW;
+        const y = r * charH;
+
+        const wave = Math.sin(c * 0.2 + t * 1.5) * Math.cos(c * 0.08) * (rows * 0.25);
+        const onWave = Math.abs((r - midY) - wave) < 0.8;
+
+        let char = " ";
+        let color = dim;
+
+        if (onWave) {
+          const packetGlance = Math.sin(c * 0.15 - t * 2.5);
+          if (packetGlance > 0.85) {
+            char = "■";
+            color = accent;
+          } else {
+            char = "─";
+            color = primary;
+          }
+        } else if (r === Math.floor(rows * 0.85) && c % 3 === 0) {
+          char = "·";
+          color = secondary;
+        } else if (r % 5 === 0 && c % 6 === 0) {
+          char = "·";
+          color = dim;
+        }
+
+        if (char !== " ") {
+          this.ctx.fillStyle = color;
+          this.ctx.fillText(char, x, y);
+        }
+      }
+    }
+
+    this.drawTelemetryTag("FAST_TRACK // AUDIO_STREAM", 14, 12, accent);
   }
 
   /* --------------------------------------------------------------------------
