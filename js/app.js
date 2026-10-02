@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=5.0';
+} from './data.js?v=7.0';
 
-import { TechKnot3D } from './tech-knot.js?v=5.0';
-import { getTechLogo } from './tech-logos.js?v=5.0';
-import { AsciiDitherEngine } from './ascii-dither.js?v=5.0';
+import { TechKnot3D } from './tech-knot.js?v=7.0';
+import { getTechLogo } from './tech-logos.js?v=7.0';
+import { AsciiDitherEngine } from './ascii-dither.js?v=7.0';
 
 // Engines & Subsystems
 const asciiEngine = new AsciiDitherEngine();
