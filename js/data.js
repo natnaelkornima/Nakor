@@ -1,0 +1,344 @@
+/**
+ * Natnael Kornima — Portfolio Structured Data
+ * Grounded in authentic engineering experience and actual repository data.
+ */
+
+export const profileData = {
+  name: "Natnael Kornima",
+  title: "Full-Stack Engineer & Systems Builder",
+  location: "Addis Ababa / Remote",
+  status: "Available for engineering roles & technical collaborations",
+  statusShort: "Available for opportunities",
+  bio: "I design and engineer scalable web applications, robust distributed backends, and AI-assisted workflows. Bridging thoughtful client-side ergonomics with reliable, deterministic backend infrastructure.",
+  positioning: "Building robust web platforms and intelligent systems from high-throughput APIs to deliberate user interfaces.",
+  email: "natnaelkornima78@gmail.com",
+  github: "https://github.com/natnaelkornima",
+  githubUsername: "natnaelkornima",
+  linkedin: "https://linkedin.com/in/natnaelkornima",
+  resumeUrl: "#resume",
+  stats: [
+    { label: "Public Repositories", value: "26+" },
+    { label: "Core Stack", value: "TS / Python / Node" },
+    { label: "Focus", value: "Full-Stack & AI Systems" },
+  ]
+};
+
+export const aboutData = {
+  narrative: [
+    "I approach software development with an engineering mindset grounded in first principles: understanding the problem deeply, choosing the appropriate architectural constraints, and building software that is maintainable, performant, and resilient under load.",
+    "My work spans the entire stack—from developing responsive, accessible interfaces in TypeScript and React to designing event-driven backend services with Node.js, Fastify, and Python. In the AI era, I treat machine learning not as an elusive black box or marketing buzzword, but as a practical system component: optimizing model inference, orchestrating retrieval pipelines (RAG), and embedding deterministic safeguards around non-deterministic model outputs.",
+    "I believe great software is born out of relentless craft, clear abstractions, and continuous technical curiosity."
+  ],
+  engineeringPrinciples: [
+    {
+      title: "Deterministic Over Clever",
+      description: "Code should be predictable, observable, and easy to reason about. Explicit architecture beats implicit magic every time."
+    },
+    {
+      title: "End-to-End Ownership",
+      description: "From data modeling and indexing in PostgreSQL to client-side bundle budgets and perceptual latency on low-bandwidth networks."
+    },
+    {
+      title: "Pragmatic AI Integration",
+      description: "Treating LLMs and neural models as probabilistic microservices that require strict schema validation, caching, and fallback guarantees."
+    }
+  ],
+  currentlyExploring: [
+    "Distributed event streaming & CDC pipelines",
+    "Local model quantization & Edge inference (ONNX / vLLM)",
+    "Advanced vector search indexing & hybrid sparse-dense retrieval",
+    "Rust for performance-critical systems microservices"
+  ]
+};
+
+export const projectsData = [
+  {
+    id: "nazazi",
+    title: "Nazazi SMS & School Management Platform",
+    category: "Full Stack",
+    featured: true,
+    tagline: "High-throughput communication and institutional management suite.",
+    summary: "An integrated School Information System (SIS) paired with an automated, high-deliverability SMS dispatch and notification gateway.",
+    problem: "Educational institutions require instant, reliable communication with thousands of guardians simultaneously, often facing throttled SMS APIs, failed deliveries, and fragmented student record tracking.",
+    solution: "Architected a decoupled event-driven notification queue with BullMQ and Redis that handles burst traffic, automatic exponential retries, delivery webhook reconciliations, and role-based student record administration.",
+    schematicFlow: ["Ingest API (Fastify)", "BullMQ / Redis Queue", "Postgres Idempotency Check", "Telco SMS Gateway"],
+    techStack: ["TypeScript", "Next.js", "Node.js", "Fastify", "PostgreSQL", "Redis", "BullMQ"],
+    keyDecisions: [
+      "Decoupled SMS ingestion from delivery workers to guarantee sub-100ms API response times during mass broadcasts.",
+      "Implemented idempotent dispatch tracking in PostgreSQL to strictly prevent duplicate billing or duplicate message transmission.",
+      "Engineered comprehensive audit logging and CSV batch ingestion with streaming transformations to avoid memory spikes."
+    ],
+    github: "https://github.com/natnaelkornima/nazazi",
+    liveDemo: null,
+    metrics: "Sub-100ms Ingestion · Zero Duplicate Dispatches"
+  },
+  {
+    id: "enzira-lms",
+    title: "Enzira Begena E-Learning Platform",
+    category: "Full Stack",
+    featured: true,
+    tagline: "Dedicated cultural music curriculum & multimedia streaming platform.",
+    summary: "A bespoke Learning Management System designed specifically for indigenous acoustic instrument education with interactive notation, audio analysis, and progress tracking.",
+    problem: "Traditional LMS templates fail to cater to specialized non-Western musical structures and acoustic pedagogy, lacking responsive audio-visual synchronization and nuanced milestone evaluations.",
+    solution: "Built a customized web platform featuring modular lesson sequences, interactive fretboard/string visualizations, responsive multimedia streaming, and structured instructor review workflows.",
+    schematicFlow: ["Web Audio API Engine", "Interactive Notation State", "Video Buffer Stream", "Relational Curriculum DB"],
+    techStack: ["TypeScript", "React", "Next.js", "Node.js", "PostgreSQL", "Web Audio API"],
+    keyDecisions: [
+      "Custom audio player state machine leveraging the Web Audio API for precise loop and tempo adjustment without pitch alteration.",
+      "Normalized relational schema in PostgreSQL for multi-tier curriculum levels, student submissions, and grading rubrics.",
+      "Optimized static asset delivery and video chunk buffering for seamless playback over varied network bandwidths."
+    ],
+    github: "https://github.com/natnaelkornima/Enzira_begena_LMS",
+    liveDemo: null,
+    metrics: "Low Latency Audio · Progressive Offline Caching"
+  },
+  {
+    id: "nutrigenius",
+    title: "NutriGenius AI Dietary Intelligence",
+    category: "AI",
+    featured: true,
+    tagline: "Context-aware nutritional analysis engine using structured LLM reasoning.",
+    summary: "An AI-powered nutritional advisory application that parses unstructured meal records and generates personalized dietary breakdowns with clinical constraint checking.",
+    problem: "Most nutritional apps require tedious manual ingredient weighing and static lookup tables that fail on complex cultural dishes and contextual dietary restrictions.",
+    solution: "Developed an ingestion pipeline that translates natural language meal descriptions into structured nutritional JSON schemas using few-shot prompt chaining, calibrated against nutritional databases.",
+    schematicFlow: ["Natural Language Ingest", "Context & Vector Grounding", "LLM Reasoning Core", "Pydantic Schema Guardrails"],
+    techStack: ["Python", "FastAPI", "JavaScript", "LangChain / LLM APIs", "NumPy", "Tailwind CSS"],
+    keyDecisions: [
+      "Enforced strict JSON Schema validation with Pydantic on model outputs to eliminate hallucinations in macro calculations.",
+      "Integrated vector similarity retrieval over verified nutritional reference tables for accurate calorie and micronutrient grounding.",
+      "Lightweight client interface providing instant nutritional macro dials and historical dietary trends."
+    ],
+    github: "https://github.com/natnaelkornima/NutriGenius",
+    liveDemo: null,
+    metrics: "Deterministic Output · Grounded Context Verification"
+  },
+  {
+    id: "gerima",
+    title: "Gerima Application Architecture",
+    category: "Backend",
+    featured: false,
+    tagline: "Modular TypeScript service foundation for secure data operations.",
+    summary: "A structured full-stack TypeScript application implementing clean hexagonal architecture, strict authentication layers, and relational storage patterns.",
+    problem: "Fast-growing projects frequently suffer from architectural drift and leaky abstraction layers between persistence and transport domains.",
+    solution: "Built a production-grade template with clean separation of domain entities, repository interfaces, controller validation, and automated contract tests.",
+    techStack: ["TypeScript", "Node.js", "Express", "PostgreSQL", "Jest"],
+    keyDecisions: [
+      "Strict dependency inversion allowing interchangeable storage drivers without modifying business logic.",
+      "Comprehensive JWT authentication flow with cryptographically secured refresh tokens and revocations."
+    ],
+    github: "https://github.com/natnaelkornima/Gerima",
+    liveDemo: null,
+    metrics: "Hexagonal Architecture · 100% Contract Test Suite"
+  },
+  {
+    id: "enzira-fast-track",
+    title: "Enzira Fast Track Interactive",
+    category: "Frontend",
+    featured: false,
+    tagline: "Lightweight, responsive curriculum runner with low latency.",
+    summary: "An optimized frontend application focusing on rapid onboarding, streamlined lesson access, and client-side performance.",
+    problem: "Learners in regions with intermittent mobile connectivity experience drop-offs due to bloated client bundles.",
+    solution: "Constructed an ultra-lean client application with optimistic UI updates, aggressive client-side caching, and minimal runtime overhead.",
+    techStack: ["JavaScript", "HTML5", "CSS3", "Service Workers", "IndexedDB"],
+    keyDecisions: [
+      "Offline-first asset caching enabling students to continue modules without continuous internet connection.",
+      "Pure CSS responsive layouts keeping the total bundle payload under 45KB."
+    ],
+    github: "https://github.com/natnaelkornima/Enzira_fast_track",
+    liveDemo: null,
+    metrics: "< 45KB Initial Payload · Full Offline Capability"
+  }
+];
+
+export const skillsData = {
+  categories: [
+    {
+      name: "Frontend Engineering",
+      description: "Constructing accessible, resilient, and responsive client architectures.",
+      skills: [
+        { name: "TypeScript", level: "Core", note: "Type safety, generics, strict mode", rel: "typescript" },
+        { name: "JavaScript (ESNext)", level: "Core", note: "Async/await, DOM APIs, event loops", rel: "typescript" },
+        { name: "React", level: "Core", note: "Hooks, state management, concurrent features", rel: "typescript" },
+        { name: "Next.js", level: "Proficient", note: "App Router, SSR, Server Components", rel: "typescript" },
+        { name: "Tailwind CSS & CSS Systems", level: "Proficient", note: "Responsive design, CSS variables, tokens", rel: "design" },
+        { name: "HTML5 & Web Accessibility", level: "Core", note: "Semantic structure, WCAG standards, ARIA", rel: "design" }
+      ]
+    },
+    {
+      name: "Backend & Systems",
+      description: "Designing deterministic APIs, distributed services, and data pipelines.",
+      skills: [
+        { name: "Node.js & Fastify / Express", level: "Core", note: "REST APIs, middleware, worker pools", rel: "typescript" },
+        { name: "Python & FastAPI", level: "Proficient", note: "Async endpoints, Pydantic schemas, microservices", rel: "python" },
+        { name: "PostgreSQL", level: "Core", note: "Schema design, relational modeling, indexing", rel: "data" },
+        { name: "Redis", level: "Proficient", note: "Caching layer, pub/sub, message queuing", rel: "data" },
+        { name: "Authentication & Security", level: "Core", note: "JWT, RBAC, OAuth2, input sanitization", rel: "systems" }
+      ]
+    },
+    {
+      name: "AI & Machine Learning Systems",
+      description: "Pragmatic engineering around probabilistic models and pipelines.",
+      skills: [
+        { name: "Python Scientific Stack", level: "Proficient", note: "NumPy, Pandas, Matplotlib, scikit-learn", rel: "python" },
+        { name: "PyTorch & Transformers", level: "Familiar", note: "Model architectures, fine-tuning, embeddings", rel: "ai" },
+        { name: "LLM Orchestration & APIs", level: "Proficient", note: "Few-shot prompting, structured output validation", rel: "ai" },
+        { name: "RAG & Vector Retrieval", level: "Proficient", note: "Semantic search, chunking strategies, embeddings", rel: "ai" }
+      ]
+    },
+    {
+      name: "Infrastructure & Engineering Tools",
+      description: "Deployment, containerization, and developer workflow automation.",
+      skills: [
+        { name: "Linux & Shell Scripting", level: "Core", note: "System administration, process management, bash", rel: "systems" },
+        { name: "Docker & Containerization", level: "Proficient", note: "Dockerfile optimization, multi-stage builds", rel: "systems" },
+        { name: "Git & Version Control", level: "Core", note: "Branching strategies, code review, git hooks", rel: "systems" },
+        { name: "CI/CD & Deployment", level: "Proficient", note: "Automated testing, GitHub Actions, cloud hosts", rel: "systems" }
+      ]
+    }
+  ]
+};
+
+export const architectureData = {
+  webApplication: {
+    title: "Modern Full-Stack Web Architecture",
+    description: "How I architect production systems for low latency, high availability, and deterministic observability.",
+    layers: [
+      {
+        step: "Layer 01",
+        layer: "Client & Edge Layer",
+        tech: "Next.js / TypeScript / Service Workers",
+        detail: "Edge routing, optimistic UI updates, asset caching, responsive hydration."
+      },
+      {
+        step: "Layer 02",
+        layer: "API Gateway & Security",
+        tech: "Fastify / Node.js / Reverse Proxy",
+        detail: "Rate limiting, JWT validation, schema validation, CORS, request tracing."
+      },
+      {
+        step: "Layer 03",
+        layer: "Application Logic & Queues",
+        tech: "Node.js / Python Services + BullMQ",
+        detail: "Domain entities, asynchronous background queues, webhook integrations."
+      },
+      {
+        step: "Layer 04",
+        layer: "Data Persistence & Caching",
+        tech: "PostgreSQL + Redis Cluster",
+        detail: "ACID persistence, relational integrity, cached query invalidation, pub/sub."
+      }
+    ]
+  },
+  aiPipeline: {
+    title: "Production AI Engineering Pipeline",
+    description: "Bridging non-deterministic language models with strict software engineering requirements.",
+    layers: [
+      {
+        step: "Phase 01",
+        layer: "Input Sanitization & Gate",
+        tech: "Python / FastAPI Middleware",
+        detail: "Input scrubbing, token boundary checks, rate limiting, and prompt injection defense."
+      },
+      {
+        step: "Phase 02",
+        layer: "Context Retrieval (RAG)",
+        tech: "Embeddings + Vector Index",
+        detail: "Semantic similarity search over verified knowledge corpora with metadata filtering."
+      },
+      {
+        step: "Phase 03",
+        layer: "Model Inference & Reasoning",
+        tech: "Transformers / LLM APIs / Local Models",
+        detail: "Prompt assembly, few-shot conditioning, structured output schema generation."
+      },
+      {
+        step: "Phase 04",
+        layer: "Deterministic Validation",
+        tech: "Pydantic / Zod Guardrails",
+        detail: "Strict schema verification, fallback execution, and deterministic downstream ingestion."
+      }
+    ]
+  }
+};
+
+export const experienceData = [
+  {
+    period: "2024 — Present",
+    role: "Full-Stack Software Engineer",
+    company: "Independent Engineering & Client Systems",
+    location: "Addis Ababa / Remote",
+    highlights: [
+      "Engineered the Nazazi SMS & Student Information Platform, decoupling asynchronous broadcast pipelines from real-time admin queries using Redis queues.",
+      "Designed and deployed the Enzira Begena LMS tailored for multimedia acoustic training, reducing video streaming buffering latency with optimized asset delivery.",
+      "Integrated machine learning analysis endpoints with FastAPI and structured validation pipelines in NutriGenius.",
+      "Implemented automated CI/CD testing pipelines and containerized deployment workflows using Docker and Linux."
+    ],
+    technologies: ["TypeScript", "Next.js", "Node.js", "Python", "FastAPI", "PostgreSQL", "Redis", "Docker"]
+  },
+  {
+    period: "2023 — 2024",
+    role: "Software Developer & Systems Builder",
+    company: "Technical Project Development",
+    location: "Addis Ababa",
+    highlights: [
+      "Developed robust backend REST services with Express and PostgreSQL, focusing on relational data integrity and secure auth flows.",
+      "Built clean, responsive client-side web applications adhering to WCAG accessibility guidelines and mobile-first principles.",
+      "Explored deep learning fundamentals with PyTorch, analyzing transformer tokenization and sequence classification."
+    ],
+    technologies: ["JavaScript", "TypeScript", "React", "Node.js", "PostgreSQL", "Python", "Git"]
+  }
+];
+
+export const educationData = [
+  {
+    institution: "Higher Education / University",
+    program: "Computer Science & Software Engineering Focus",
+    period: "Ongoing / Completed",
+    highlights: [
+      "Core coursework in Data Structures, Algorithms, Database Systems, Computer Networks, and Operating Systems.",
+      "Independent research in system architectures, asynchronous workflows, and modern web systems."
+    ]
+  }
+];
+
+export const githubShowcaseData = {
+  username: "natnaelkornima",
+  profileUrl: "https://github.com/natnaelkornima",
+  publicRepos: 26,
+  languages: [
+    { name: "TypeScript", percentage: 54, color: "#3178c6" },
+    { name: "Python", percentage: 28, color: "#3572A5" },
+    { name: "JavaScript", percentage: 14, color: "#f1e05a" },
+    { name: "Shell / HTML / CSS", percentage: 4, color: "#89e051" }
+  ],
+  pinnedRepos: [
+    {
+      name: "nazazi",
+      description: "Automated SMS notification suite and school information system.",
+      language: "TypeScript",
+      stars: 0,
+      url: "https://github.com/natnaelkornima/nazazi"
+    },
+    {
+      name: "Enzira_begena_LMS",
+      description: "Dedicated acoustic instrument learning management system.",
+      language: "TypeScript",
+      stars: 0,
+      url: "https://github.com/natnaelkornima/Enzira_begena_LMS"
+    },
+    {
+      name: "NutriGenius",
+      description: "Intelligent dietary analysis engine with structured schema validation.",
+      language: "JavaScript / Python",
+      stars: 0,
+      url: "https://github.com/natnaelkornima/NutriGenius"
+    },
+    {
+      name: "Gerima",
+      description: "Hexagonal architecture TypeScript service foundation.",
+      language: "TypeScript",
+      stars: 0,
+      url: "https://github.com/natnaelkornima/Gerima"
+    }
+  ]
+};
