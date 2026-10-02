@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=8.0';
+} from './data.js?v=9.0';
 
-import { TechKnot3D } from './tech-knot.js?v=8.0';
-import { getTechLogo } from './tech-logos.js?v=8.0';
-import { AsciiDitherEngine } from './ascii-dither.js?v=8.0';
+import { TechKnot3D } from './tech-knot.js?v=9.0';
+import { getTechLogo } from './tech-logos.js?v=9.0';
+import { AsciiDitherEngine } from './ascii-dither.js?v=9.0';
 
 // Engines & Subsystems
 const asciiEngine = new AsciiDitherEngine();
@@ -561,52 +561,71 @@ function initArchitectureTabs() {
 }
 
 /* ==========================================================================
-   Skills Matrix (With Semantic Relationship Highlighting)
+   Skills Matrix (With Semantic Relationship Highlighting & Prominent Logos)
    ========================================================================== */
 function renderSkills() {
   const container = document.getElementById('skills-container');
   if (!container) return;
 
-  container.innerHTML = skillsData.categories.map(cat => `
+  const categoryKickoffs = [
+    '01 // CLIENT ARCHITECTURE',
+    '02 // DISTRIBUTED SERVICES',
+    '03 // MACHINE INTELLIGENCE',
+    '04 // DEVOPS & INFRASTRUCTURE'
+  ];
+
+  container.innerHTML = skillsData.categories.map((cat, cIdx) => `
     <div class="skill-category-card">
       <div class="skill-category-header">
+        <div class="skill-category-meta">
+          <span class="skill-category-kicker font-mono">${categoryKickoffs[cIdx] || `DOMAIN 0${cIdx + 1}`}</span>
+          <span class="skill-category-count font-mono">${cat.skills.length} TECHS</span>
+        </div>
         <h3 class="skill-category-name">${cat.name}</h3>
         <p class="skill-category-desc">${cat.description}</p>
       </div>
-      <div class="skills-list">
-        ${cat.skills.map(s => `
-          <div class="skill-row" data-rel="${s.rel || 'general'}">
-            <div class="skill-title-block">
-              <span class="skill-icon">${getTechLogo(s.name)}</span>
-              <div>
-                <span class="skill-name">${s.name}</span>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">${s.note}</p>
+
+      <div class="skills-card-grid">
+        ${cat.skills.map(s => {
+          const levelLower = s.level.toLowerCase();
+          return `
+            <div class="skill-card spotlight-card" data-rel="${s.rel || 'general'}" tabindex="0" role="region" aria-label="${s.name} - ${s.level}">
+              <div class="skill-icon-tile" aria-hidden="true">
+                ${getTechLogo(s.name)}
+              </div>
+              <div class="skill-card-content">
+                <div class="skill-card-header">
+                  <h4 class="skill-card-title">${s.name}</h4>
+                  <span class="skill-level-chip skill-level-${levelLower} font-mono">${s.level}</span>
+                </div>
+                <p class="skill-card-note">${s.note}</p>
               </div>
             </div>
-            <span class="skill-level-badge">${s.level}</span>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     </div>
   `).join('');
 
   // Semantic relationship highlight events
-  const rows = container.querySelectorAll('.skill-row');
-  rows.forEach(row => {
-    row.addEventListener('mouseenter', () => {
-      const rel = row.getAttribute('data-rel');
+  const cards = container.querySelectorAll('.skill-card');
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const rel = card.getAttribute('data-rel');
       if (!rel || rel === 'general') return;
-      rows.forEach(r => {
-        if (r.getAttribute('data-rel') === rel) {
-          r.classList.add('rel-highlighted');
+      cards.forEach(c => {
+        if (c.getAttribute('data-rel') === rel) {
+          c.classList.add('rel-highlighted');
         }
       });
     });
 
-    row.addEventListener('mouseleave', () => {
-      rows.forEach(r => r.classList.remove('rel-highlighted'));
+    card.addEventListener('mouseleave', () => {
+      cards.forEach(c => c.classList.remove('rel-highlighted'));
     });
   });
+
+  attachSpotlightListeners();
 }
 
 /* ==========================================================================
