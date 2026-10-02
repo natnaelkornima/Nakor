@@ -17,6 +17,10 @@ import {
 
 import { TechKnot3D } from './tech-knot.js';
 import { getTechLogo } from './tech-logos.js';
+import { AsciiDitherEngine } from './ascii-dither.js';
+
+// Engines & Subsystems
+const asciiEngine = new AsciiDitherEngine();
 
 // DOM Elements
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -276,6 +280,13 @@ function attachSpotlightListeners() {
   });
 }
 
+function getBentoSpan(index, total) {
+  if (total === 1) return 'full';
+  if (total === 2) return 'half';
+  const pattern = ['wide', 'narrow', 'narrow', 'wide', 'full'];
+  return pattern[index % pattern.length];
+}
+
 function renderProjects(filter = 'all') {
   if (!projectListEl) return;
 
@@ -288,118 +299,84 @@ function renderProjects(filter = 'all') {
   setTimeout(() => {
     projectListEl.innerHTML = '';
 
-    const featured = filtered.filter(p => p.featured);
-    const secondary = filtered.filter(p => !p.featured);
+    const bentoGrid = document.createElement('div');
+    bentoGrid.className = 'projects-bento-grid';
 
-    // Render Featured Projects (Large Asymmetric Cards with Pipeline Strip)
-    featured.forEach(project => {
+    filtered.forEach((project, index) => {
+      const span = getBentoSpan(index, filtered.length);
       const card = document.createElement('article');
-      card.className = 'project-featured spotlight-card';
+      card.className = 'bento-card spotlight-card';
+      card.setAttribute('data-span', span);
+      card.setAttribute('data-id', project.id);
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `View system specifications and details for ${project.title}`);
+
       card.innerHTML = `
-        <div class="project-meta-row">
-          <span class="project-category-badge">${project.category}</span>
-          <span class="font-mono text-xs text-muted">${project.metrics || ''}</span>
-        </div>
-        <h3 class="project-title">${project.title}</h3>
-        <p class="project-tagline">${project.tagline}</p>
-        
-        <!-- Live Architecture Flow Strip -->
-        ${project.schematicFlow ? `
-          <div class="project-schematic-strip" aria-label="Pipeline schematic flow">
-            <span style="font-weight: 600; color: var(--text-primary); margin-right: 0.25rem;">ARCHITECTURE:</span>
-            ${project.schematicFlow.map((step, idx) => `
-              <span class="schematic-pill">${step}</span>
-              ${idx < project.schematicFlow.length - 1 ? '<span class="schematic-arrow">→</span>' : ''}
-            `).join('')}
-          </div>
-        ` : ''}
-
-        <div class="project-breakdown-grid">
-          <div class="breakdown-block">
-            <h4>The Problem & Context</h4>
-            <p>${project.problem}</p>
-          </div>
-          <div class="breakdown-block">
-            <h4>Engineering Solution</h4>
-            <p>${project.solution}</p>
-          </div>
+        <div class="bento-visual-header">
+          <canvas class="bento-ascii-canvas" data-project-id="${project.id}" aria-hidden="true"></canvas>
+          <div class="bento-visual-overlay"></div>
+          <span class="bento-visual-badge">
+            <span class="bento-pulse-dot"></span>
+            ${project.category}
+          </span>
+          <span class="bento-metric-chip font-mono">${project.metrics || 'SYSTEM SPEC'}</span>
         </div>
 
-        <div class="project-stack-pills">
-          ${project.techStack.map(t => `<span class="stack-pill">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
-        </div>
+        <div class="bento-body">
+          <div class="bento-title-row">
+            <h3 class="bento-title">${project.title}</h3>
+            <span class="bento-expand-icon" aria-hidden="true">↗</span>
+          </div>
 
-        <div class="project-actions-row">
-          <button class="btn btn-secondary view-deep-dive-btn magnetic-item" data-id="${project.id}">
-            <span>Architecture Deep Dive</span>
-            <span class="btn-arrow">↗</span>
-          </button>
-          ${project.github ? `
-            <a href="${project.github}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item" aria-label="View source code for ${project.title} on GitHub">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-              <span>Source Code</span>
-            </a>
-          ` : ''}
-          ${project.liveDemo ? `
-            <a href="${project.liveDemo}" target="_blank" rel="noopener noreferrer" class="btn btn-primary magnetic-item">
-              <span>Live System</span>
-              <span class="btn-arrow">↗</span>
-            </a>
-          ` : ''}
+          <p class="bento-desc">${project.tagline}</p>
+
+          <div class="bento-stack project-stack-pills">
+            ${project.techStack.map(t => `<span class="stack-pill">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
+          </div>
+
+          <div class="bento-footer">
+            <button class="bento-detail-btn view-deep-dive-btn" data-id="${project.id}" type="button">
+              <span>System Spec & Details</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+
+            ${project.github ? `
+              <a href="${project.github}" target="_blank" rel="noopener noreferrer" class="bento-github-btn" aria-label="GitHub repository for ${project.title}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                <span>Code</span>
+              </a>
+            ` : ''}
+          </div>
         </div>
       `;
-      projectListEl.appendChild(card);
-    });
 
-    // Render Secondary Projects Grid
-    if (secondary.length > 0) {
-      const secondaryGrid = document.createElement('div');
-      secondaryGrid.className = 'projects-secondary-grid';
-
-      secondary.forEach(project => {
-        const card = document.createElement('article');
-        card.className = 'project-secondary-card spotlight-card';
-        card.innerHTML = `
-          <div>
-            <div class="project-meta-row" style="margin-bottom: 0.75rem;">
-              <span class="project-category-badge">${project.category}</span>
-            </div>
-            <h3 class="secondary-title">${project.title}</h3>
-            <p class="secondary-summary">${project.summary}</p>
-          </div>
-
-          <div>
-            <div class="project-stack-pills" style="margin-bottom: 1.25rem;">
-              ${project.techStack.map(t => `<span class="stack-pill">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
-            </div>
-            <div class="project-actions-row">
-              <button class="btn btn-secondary view-deep-dive-btn magnetic-item" data-id="${project.id}" style="padding: 0.5rem 1rem;">
-                <span>Architecture Details</span>
-              </button>
-              ${project.github ? `
-                <a href="${project.github}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item" style="padding: 0.5rem 1rem;">
-                  <span>Source</span>
-                </a>
-              ` : ''}
-            </div>
-          </div>
-        `;
-        secondaryGrid.appendChild(card);
+      // Entire card click opens modal drawer, except when clicking the GitHub link
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        openProjectDrawer(project.id);
       });
 
-      projectListEl.appendChild(secondaryGrid);
-    }
+      // Keyboard accessibility (Enter or Space opens drawer)
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('a')) return;
+          e.preventDefault();
+          openProjectDrawer(project.id);
+        }
+      });
 
-    // Reattach listeners
+      bentoGrid.appendChild(card);
+    });
+
+    projectListEl.appendChild(bentoGrid);
+
+    // Mount ASCII Dither canvas simulations
+    asciiEngine.mountAll();
+
+    // Reattach spotlight and magnetic listeners
     attachSpotlightListeners();
     initMagneticButtons();
-
-    document.querySelectorAll('.view-deep-dive-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const id = e.currentTarget.getAttribute('data-id');
-        openProjectDrawer(id);
-      });
-    });
 
     projectListEl.style.opacity = '1';
   }, 120);
@@ -424,50 +401,69 @@ function openProjectDrawer(projectId) {
   if (!project || !projectDrawerContent || !projectDrawerOverlay) return;
 
   projectDrawerContent.innerHTML = `
-    <div style="margin-bottom: 1.5rem;">
+    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
       <span class="project-category-badge">${project.category}</span>
+      <span class="font-mono text-xs text-muted">${project.metrics || 'SYSTEM SPEC'}</span>
     </div>
+
     <h2 style="font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em;">${project.title}</h2>
-    <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem;">${project.tagline}</p>
+    <p style="font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 1.75rem; line-height: 1.6;">${project.tagline}</p>
+
+    <!-- Schematic Architecture Pipeline Flow -->
+    ${project.schematicFlow ? `
+      <div style="margin-bottom: 2rem;">
+        <h3 style="font-size: 0.82rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">System Architecture Pipeline</h3>
+        <div class="project-schematic-strip" aria-label="Pipeline schematic flow" style="margin-bottom: 0;">
+          <span style="font-weight: 600; color: var(--text-primary); margin-right: 0.25rem;">FLOW:</span>
+          ${project.schematicFlow.map((step, idx) => `
+            <span class="schematic-pill">${step}</span>
+            ${idx < project.schematicFlow.length - 1 ? '<span class="schematic-arrow">→</span>' : ''}
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
 
     <div style="margin-bottom: 2rem;">
-      <h3 style="font-size: 0.9rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Problem Statement</h3>
+      <h3 style="font-size: 0.82rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Problem & Context</h3>
       <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary);">${project.problem}</p>
     </div>
 
     <div style="margin-bottom: 2rem;">
-      <h3 style="font-size: 0.9rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Engineering Solution</h3>
+      <h3 style="font-size: 0.82rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Engineering Solution</h3>
       <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary);">${project.solution}</p>
     </div>
 
-    <div style="margin-bottom: 2rem;">
-      <h3 style="font-size: 0.9rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Key Architecture Decisions</h3>
-      <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-        ${project.keyDecisions.map(d => `
-          <li style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); padding-left: 1.25rem; position: relative;">
-            <span style="position: absolute; left: 0; color: var(--accent);">▸</span>
-            ${d}
-          </li>
-        `).join('')}
-      </ul>
-    </div>
+    ${project.keyDecisions && project.keyDecisions.length ? `
+      <div style="margin-bottom: 2rem;">
+        <h3 style="font-size: 0.82rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Key Architecture Decisions</h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; padding: 0;">
+          ${project.keyDecisions.map(d => `
+            <li style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); padding-left: 1.25rem; position: relative;">
+              <span style="position: absolute; left: 0; color: var(--accent);">▸</span>
+              ${d}
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+    ` : ''}
 
     <div style="margin-bottom: 2.5rem;">
-      <h3 style="font-size: 0.9rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Technology Stack</h3>
+      <h3 style="font-size: 0.82rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem;">Technology Stack</h3>
       <div class="project-stack-pills">
         ${project.techStack.map(t => `<span class="stack-pill" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
       </div>
     </div>
 
-    <div style="display: flex; gap: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem;">
+    <div style="display: flex; gap: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; flex-wrap: wrap;">
       ${project.github ? `
-        <a href="${project.github}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+        <a href="${project.github}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           <span>View on GitHub</span>
           <span class="btn-arrow">↗</span>
         </a>
       ` : ''}
       ${project.liveDemo ? `
-        <a href="${project.liveDemo}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+        <a href="${project.liveDemo}" target="_blank" rel="noopener noreferrer" class="btn btn-primary magnetic-item">
           <span>Live Demo</span>
           <span class="btn-arrow">↗</span>
         </a>
@@ -477,6 +473,7 @@ function openProjectDrawer(projectId) {
 
   projectDrawerOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  initMagneticButtons();
 }
 
 function closeProjectDrawer() {
