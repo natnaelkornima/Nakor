@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js';
+} from './data.js?v=4.0';
 
-import { TechKnot3D } from './tech-knot.js';
-import { getTechLogo } from './tech-logos.js';
-import { AsciiDitherEngine } from './ascii-dither.js';
+import { TechKnot3D } from './tech-knot.js?v=4.0';
+import { getTechLogo } from './tech-logos.js?v=4.0';
+import { AsciiDitherEngine } from './ascii-dither.js?v=4.0';
 
 // Engines & Subsystems
 const asciiEngine = new AsciiDitherEngine();
@@ -735,7 +735,7 @@ function initCopyEmail() {
 /* ==========================================================================
    Initialization
    ========================================================================== */
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   initTheme();
   themeToggleBtn?.addEventListener('click', toggleTheme);
   
@@ -759,4 +759,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize 3D Procedural Tech Knot
   new TechKnot3D('hero-tech-knot-canvas');
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}

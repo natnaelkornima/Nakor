@@ -116,11 +116,13 @@ class ProjectAsciiCanvas {
 
   resize() {
     const rect = this.canvas.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
+    const w = rect.width || this.canvas.parentElement?.clientWidth || this.card.clientWidth || 360;
+    const h = rect.height || this.canvas.parentElement?.clientHeight || 200;
+    if (w === 0 || h === 0) return;
     
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.width = rect.width;
-    this.height = rect.height;
+    this.width = w;
+    this.height = h;
     this.canvas.width = Math.floor(this.width * this.dpr);
     this.canvas.height = Math.floor(this.height * this.dpr);
 
@@ -163,6 +165,11 @@ class ProjectAsciiCanvas {
   }
 
   render() {
+    if (!this.width || !this.height) {
+      this.resize();
+      if (!this.width || !this.height) return;
+    }
+
     if (this.isReducedMotion) {
       this.drawProjectSchematic(0);
       return;
