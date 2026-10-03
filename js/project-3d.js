@@ -213,6 +213,8 @@ class Base3DCanvas {
       scale: scale,
       visible: zOffset > 10
     };
+  }
+
   get isLight() {
     return document.documentElement.getAttribute('data-theme') === 'light';
   }

@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=9.9';
+} from './data.js?v=10.0';
 
-import { TechKnot3D } from './tech-knot.js?v=9.9';
-import { getTechLogo } from './tech-logos.js?v=9.9';
-import { Project3DEngine } from './project-3d.js?v=9.9';
+import { TechKnot3D } from './tech-knot.js?v=10.0';
+import { getTechLogo } from './tech-logos.js?v=10.0';
+import { Project3DEngine } from './project-3d.js?v=10.0';
 
 // Engines & Subsystems
 const project3DEngine = new Project3DEngine();
