@@ -13,14 +13,14 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=9.0';
+} from './data.js?v=9.3';
 
-import { TechKnot3D } from './tech-knot.js?v=9.0';
-import { getTechLogo } from './tech-logos.js?v=9.0';
-import { AsciiDitherEngine } from './ascii-dither.js?v=9.0';
+import { TechKnot3D } from './tech-knot.js?v=9.3';
+import { getTechLogo } from './tech-logos.js?v=9.3';
+import { Project3DEngine } from './project-3d.js?v=9.3';
 
 // Engines & Subsystems
-const asciiEngine = new AsciiDitherEngine();
+const project3DEngine = new Project3DEngine();
 
 // DOM Elements
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -362,8 +362,8 @@ function renderProjects(filter = 'all') {
 
     projectListEl.appendChild(bentoGrid);
 
-    // Mount ASCII Dither canvas simulations
-    asciiEngine.mountAll();
+    // Mount Real-Time Procedural 3D Canvas Simulations
+    project3DEngine.mountAll();
 
     // Reattach spotlight and magnetic listeners
     attachSpotlightListeners();
@@ -606,24 +606,6 @@ function renderSkills() {
       </div>
     </div>
   `).join('');
-
-  // Semantic relationship highlight events
-  const cards = container.querySelectorAll('.skill-card');
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      const rel = card.getAttribute('data-rel');
-      if (!rel || rel === 'general') return;
-      cards.forEach(c => {
-        if (c.getAttribute('data-rel') === rel) {
-          c.classList.add('rel-highlighted');
-        }
-      });
-    });
-
-    card.addEventListener('mouseleave', () => {
-      cards.forEach(c => c.classList.remove('rel-highlighted'));
-    });
-  });
 
   attachSpotlightListeners();
 }
