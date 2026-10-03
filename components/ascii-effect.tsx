@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { forwardRef, useMemo, useRef } from "react"
 import { Effect, BlendFunction } from "postprocessing"
 import { Uniform, Vector2 } from "three"
@@ -268,7 +269,7 @@ class AsciiEffectImpl extends Effect {
         ["mouseGlowIntensity", new Uniform(postfx.mouseGlowIntensity || 1.5)],
         ["vignetteIntensity", new Uniform(postfx.vignetteIntensity || 0)],
         ["vignetteRadius", new Uniform(postfx.vignetteRadius || 0.8)],
-        ["colorPalette", new Uniform(postfx.colorPalette || 0)],
+        ["colorPalette", new Uniform(typeof postfx.colorPalette === 'string' ? ({ original: 0, green: 1, amber: 2, cyan: 3, blue: 4 }[postfx.colorPalette] ?? 0) : (postfx.colorPalette || 0))],
         ["curvature", new Uniform(postfx.curvature || 0)],
         ["aberrationStrength", new Uniform(postfx.aberrationStrength || 0)],
         ["noiseIntensity", new Uniform(postfx.noiseIntensity || 0)],
@@ -292,7 +293,9 @@ class AsciiEffectImpl extends Effect {
   }
 
   setSize(width, height) {
-    this.uniforms.get("resolution").value.set(width, height)
+    if (width > 0 && height > 0) {
+      this.uniforms.get("resolution").value.set(width, height)
+    }
   }
 
   update(renderer, inputBuffer, deltaTime) {
@@ -315,6 +318,18 @@ class AsciiEffectImpl extends Effect {
     this.uniforms.get("colorMode").value = _colorMode
     this.uniforms.get("asciiStyle").value = _asciiStyle
     this.uniforms.get("mousePos").value = _mousePos
+
+    const resUniform = this.uniforms.get("resolution")
+    if (resUniform) {
+      if (inputBuffer && inputBuffer.width > 0 && inputBuffer.height > 0) {
+        resUniform.value.set(inputBuffer.width, inputBuffer.height)
+      } else if (renderer) {
+        const size = renderer.getSize(new Vector2())
+        if (size.x > 0 && size.y > 0) {
+          resUniform.value.set(size.x, size.y)
+        }
+      }
+    }
   }
 }
 

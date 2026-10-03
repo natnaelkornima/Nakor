@@ -263,83 +263,83 @@
       </div>
     </section>
 
-    <!-- Architecture & AI Engineering Section (Unified) -->
+    <!-- Architecture & AI Engineering Section (Stacked Clean Layout: Paradigm Top, Blueprint Bottom) -->
     <section id="architecture" class="section-wrapper section-wrapper--bordered">
       <div class="container">
+        <!-- Section Header -->
         <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 03. Architecture &amp; Systems</span>
+          <span class="section-label">// 03. SYSTEM THINKING</span>
           <h2 class="section-title">Engineering Architecture &amp; AI Systems</h2>
-          <p class="section-subtitle">How I structure resilient client-server services, distributed event queues, and deterministic AI inference pipelines.</p>
+          <p class="section-subtitle">How I structure distributed client-server systems and production AI inference pipelines.</p>
         </div>
 
-        <!-- Segmented Tab Switcher -->
-        <div class="arch-controls-wrap reveal-on-scroll delay-1">
-          <div class="architecture-tabs segmented-control" role="tablist" aria-label="Architecture Perspectives">
-            <button id="tab-web-arch" class="arch-tab-btn active" role="tab" aria-selected="true">
-              <span class="tab-indicator-dot" aria-hidden="true"></span>
-              Full-Stack Web Flow
-            </button>
-            <button id="tab-ai-arch" class="arch-tab-btn" role="tab" aria-selected="false">
-              <span class="tab-indicator-dot" aria-hidden="true"></span>
-              AI Inference &amp; RAG Pipeline
-            </button>
-          </div>
-        </div>
-
-        <!-- Interactive Pipeline Blueprint -->
-        <div class="architecture-diagram-container reveal-on-scroll delay-2">
-          <div class="arch-meta-header">
-            <div class="arch-meta-title-group">
-              <span class="arch-sys-kicker font-mono">// PIPELINE BLUEPRINT</span>
-              <h3 id="arch-title" class="arch-main-title">Modern Full-Stack Web Architecture</h3>
-              <p id="arch-description" class="arch-sub-desc">How I architect production systems for low latency, high availability, and deterministic observability.</p>
+        <div class="shadcn-arch-container reveal-on-scroll delay-1">
+          <!-- TOP BLOCK: Modern Paradigm -->
+          <div class="shadcn-arch-block">
+            <div class="shadcn-block-header">
+              <span class="shadcn-kicker font-mono">// MODERN PARADIGM</span>
+              <h3 class="shadcn-title">Building in the AI Era</h3>
+              <blockquote class="shadcn-blockquote">
+                &ldquo;In production, AI models are non-deterministic APIs. Resilient engineering wraps them in strict validation fences, semantic retrieval grounding, and fallback circuits.&rdquo;
+              </blockquote>
             </div>
-          </div>
 
-          <!-- Architecture Grid Flow (Rendered dynamically by js/app.js) -->
-          <div id="arch-diagram-flow" class="arch-flow-wrapper">
-            <!-- Rendered dynamically by js/app.js -->
-          </div>
-        </div>
-
-        <!-- Integrated Production AI Guardrails & Principles -->
-        <div id="ai-engineering" class="arch-ai-principles reveal-on-scroll delay-3">
-          <div class="arch-ai-thesis-banner">
-            <div class="arch-ai-thesis-badge font-mono">
-              <span class="cue-dot"></span>
-              <span>PRODUCTION AI PHILOSOPHY</span>
-            </div>
-            <p class="arch-ai-thesis-text">
-              &ldquo;Machine learning models provide extraordinary perceptual and generative capabilities, but in production, they are fundamentally non-deterministic APIs. High-performing engineering requires structuring rigorous validation fences, semantic retrieval grounding, and fallback circuits around model outputs.&rdquo;
-            </p>
-          </div>
-
-          <div class="arch-ai-pillars-grid">
-            <div class="arch-pillar-card spotlight-card">
-              <div class="arch-pillar-header">
-                <span class="arch-pillar-num font-mono">#01</span>
-                <span class="arch-pillar-tag font-mono">TYPE SAFETY</span>
+            <div class="shadcn-pillars-grid">
+              <div class="shadcn-pillar-item">
+                <div class="shadcn-pillar-meta font-mono">
+                  <span class="shadcn-pillar-num">01</span>
+                  <span class="shadcn-pillar-tag">TYPE INTEGRITY</span>
+                </div>
+                <h4 class="shadcn-pillar-title">Structured Schema Enforcement</h4>
+                <p class="shadcn-pillar-desc">Mandating strict Pydantic and Zod validation on model generation outputs to prevent parsing errors and guarantee type safety down the stack.</p>
               </div>
-              <h4 class="arch-pillar-title">Structured Schema Enforcement</h4>
-              <p class="arch-pillar-desc">Mandating strict Pydantic and Zod validation on model generation outputs to prevent parsing errors and guarantee type safety down the stack.</p>
+
+              <div class="shadcn-pillar-item">
+                <div class="shadcn-pillar-meta font-mono">
+                  <span class="shadcn-pillar-num">02</span>
+                  <span class="shadcn-pillar-tag">GROUNDING</span>
+                </div>
+                <h4 class="shadcn-pillar-title">Grounding via Vector Retrieval (RAG)</h4>
+                <p class="shadcn-pillar-desc">Coupling domain knowledge corpora with dense vector embeddings to eliminate hallucination in domain-critical queries.</p>
+              </div>
+
+              <div class="shadcn-pillar-item">
+                <div class="shadcn-pillar-meta font-mono">
+                  <span class="shadcn-pillar-num">03</span>
+                  <span class="shadcn-pillar-tag">EFFICIENCY</span>
+                </div>
+                <h4 class="shadcn-pillar-title">Cost &amp; Latency Optimization</h4>
+                <p class="shadcn-pillar-desc">Implementing aggressive semantic caching in Redis and selecting tiered model sizes based on task complexity.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider Separator -->
+          <hr class="shadcn-divider" />
+
+          <!-- BOTTOM BLOCK: Pipeline Blueprint -->
+          <div class="shadcn-arch-block">
+            <div class="shadcn-block-header">
+              <div class="shadcn-header-row">
+                <span class="shadcn-kicker font-mono">// PIPELINE BLUEPRINT</span>
+                <!-- Segmented Tabs -->
+                <div class="shadcn-tabs font-mono" role="tablist" aria-label="Pipeline Architecture">
+                  <button id="tab-ai-arch" class="shadcn-tab-btn active" role="tab" aria-selected="true">
+                    AI Inference &amp; RAG
+                  </button>
+                  <button id="tab-web-arch" class="shadcn-tab-btn" role="tab" aria-selected="false">
+                    Full-Stack Web Flow
+                  </button>
+                </div>
+              </div>
+
+              <h3 id="arch-title" class="shadcn-title">Production AI Inference &amp; RAG Pipeline</h3>
+              <p id="arch-description" class="shadcn-desc">Bridging non-deterministic language models with strict software engineering requirements, type safety, and vector grounding.</p>
             </div>
 
-            <div class="arch-pillar-card spotlight-card">
-              <div class="arch-pillar-header">
-                <span class="arch-pillar-num font-mono">#02</span>
-                <span class="arch-pillar-tag font-mono">GROUNDING</span>
-              </div>
-              <h4 class="arch-pillar-title">Grounding via Vector Retrieval (RAG)</h4>
-              <p class="arch-pillar-desc">Coupling domain knowledge corpora with dense vector embeddings to eliminate hallucination in domain-critical queries.</p>
-            </div>
-
-            <div class="arch-pillar-card spotlight-card">
-              <div class="arch-pillar-header">
-                <span class="arch-pillar-num font-mono">#03</span>
-                <span class="arch-pillar-tag font-mono">EFFICIENCY</span>
-              </div>
-              <h4 class="arch-pillar-title">Cost &amp; Latency Optimization</h4>
-              <p class="arch-pillar-desc">Implementing aggressive semantic caching in Redis and selecting tiered model sizes based on task complexity.</p>
+            <!-- Dynamic Sequential Stepper Flow -->
+            <div id="arch-diagram-flow" class="shadcn-pipeline-flow">
+              <!-- Dynamically populated by js/app.js -->
             </div>
           </div>
         </div>
@@ -777,6 +777,6 @@
   </footer>
 
   <!-- Application Logic -->
-  <script type="module" src="js/app.js?v=10.3"></script>
+  <script type="module" src="js/app.js?v=15.0"></script>
 </body>
 </html>

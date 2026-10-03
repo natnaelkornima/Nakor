@@ -17,10 +17,11 @@ import {
 
 import { TechKnot3D } from './tech-knot.js?v=10.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
-import { Project3DEngine } from './project-3d.js?v=10.0';
+import { AsciiDitherEngine } from './ascii-dither.js?v=11.0';
+import './first-card-bundle.js?v=14.0';
 
 // Engines & Subsystems
-const project3DEngine = new Project3DEngine();
+const asciiDitherEngine = new AsciiDitherEngine();
 
 // DOM Elements
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -263,13 +264,12 @@ function renderProjects(filter = 'all') {
 
       card.innerHTML = `
         <div class="bento-visual-header">
-          <canvas class="bento-ascii-canvas" data-project-id="${project.id}" aria-hidden="true"></canvas>
+          ${project.id === 'nazazi' ? `
+            <div class="bento-ascii-react-container" data-project-id="${project.id}" style="width: 100%; height: 100%; position: absolute; inset: 0; background: #000000; border-radius: inherit; overflow: hidden;"></div>
+          ` : `
+            <canvas class="bento-ascii-canvas" data-project-id="${project.id}" aria-hidden="true"></canvas>
+          `}
           <div class="bento-visual-overlay"></div>
-          <span class="bento-visual-badge">
-            <span class="bento-pulse-dot"></span>
-            ${project.category}
-          </span>
-          <span class="bento-metric-chip font-mono">${project.metrics || 'SYSTEM SPEC'}</span>
         </div>
 
         <div class="bento-body">
@@ -332,8 +332,18 @@ function renderProjects(filter = 'all') {
       projectListEl.appendChild(card);
     });
 
-    // Mount 3D Canvas Simulations
-    project3DEngine.mountAll();
+    // Mount Nazazi React Three Fiber exact ASCII effect
+    const nazaziMountEl = projectListEl.querySelector('.bento-ascii-react-container[data-project-id="nazazi"]');
+    if (nazaziMountEl && typeof window.mountNazaziScene === 'function') {
+      try {
+        window.mountNazaziScene(nazaziMountEl);
+      } catch (err) {
+        console.error('Error mounting Nazazi scene:', err);
+      }
+    }
+
+    // Mount ASCII & Dither Canvas Simulations for remaining projects
+    asciiDitherEngine.mountAll();
 
     // Reattach spotlight and magnetic listeners
     attachSpotlightListeners();
@@ -641,9 +651,16 @@ function openProjectDrawer(projectId) {
   if (!project || !projectDrawerContent || !projectDrawerOverlay) return;
 
   projectDrawerContent.innerHTML = `
-    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
-      <span class="project-category-badge">${project.category}</span>
-      <span class="font-mono text-xs text-muted">${project.metrics || 'SYSTEM SPEC'}</span>
+    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+      <span class="project-category-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; border-radius: var(--radius-full); background: rgba(56, 189, 248, 0.12); color: var(--accent-primary); border: 1px solid rgba(56, 189, 248, 0.3);">
+        <span class="bento-pulse-dot" style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-primary); display: inline-block;"></span>
+        ${project.category}
+      </span>
+      ${project.metrics ? `
+        <span class="font-mono text-xs" style="color: var(--text-primary); background: var(--bg-surface-elevated); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); border: 1px solid var(--border-strong); font-weight: 500;">
+          ${project.metrics}
+        </span>
+      ` : ''}
     </div>
 
     <h2 style="font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em;">${project.title}</h2>
@@ -740,12 +757,12 @@ function initDrawerEvents() {
 /* ==========================================================================
    Architecture Visualizer Tabs (Interactive Node Exploration)
    ========================================================================== */
-function renderArchitectureFlow(type = 'web') {
-  if (!archDiagramEl || !archTitleEl || !archDescEl) return;
+function renderArchitectureFlow(type = 'ai') {
+  if (!archDiagramEl) return;
 
-  const data = type === 'web' ? architectureData.webApplication : architectureData.aiPipeline;
-  archTitleEl.textContent = data.title;
-  archDescEl.textContent = data.description;
+  const data = type === 'ai' ? architectureData.aiPipeline : architectureData.webApplication;
+  if (archTitleEl) archTitleEl.textContent = data.title;
+  if (archDescEl) archDescEl.textContent = data.description;
 
   const parseTechBadges = (techStr) => {
     return techStr
@@ -754,59 +771,49 @@ function renderArchitectureFlow(type = 'web') {
       .filter(t => t.length > 0);
   };
 
-  const flowTrackLabels = type === 'web' 
-    ? ['01 CLIENT', '02 GATEWAY', '03 COMPUTE', '04 STATE']
-    : ['01 INGRESS', '02 RETRIEVAL', '03 INFERENCE', '04 VALIDATE'];
-
-  const flowTrackHtml = `
-    <div class="arch-flow-track font-mono" aria-hidden="true">
-      ${flowTrackLabels.map((lbl, i) => `
-        <span class="arch-flow-point"><span class="flow-dot"></span>${lbl}</span>
-        ${i < 3 ? '<span class="arch-flow-arrow">──────→</span>' : ''}
-      `).join('')}
-    </div>
-  `;
-
-  archDiagramEl.innerHTML = flowTrackHtml + `
-    <div class="arch-nodes-grid">
-      ${data.layers.map((layer, idx) => {
-        const techs = parseTechBadges(layer.tech);
-        return `
-          <div class="arch-node spotlight-card" data-idx="${idx}" tabindex="0" role="region" aria-label="${layer.layer || layer.step}">
-            <div class="arch-node-top">
-              <span class="arch-node-step font-mono">${layer.step || `Layer 0${idx + 1}`}</span>
-              <span class="arch-node-num font-mono">#0${idx + 1}</span>
-            </div>
-            <h4 class="arch-node-title">${layer.layer || layer.step.replace(/^[0-9.]+\s*/, '')}</h4>
-            <div class="arch-tech-badges">
-              ${techs.map(t => `<span class="arch-tech-pill">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
-            </div>
-            <p class="arch-node-detail">${layer.detail}</p>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-
-  attachSpotlightListeners();
+  archDiagramEl.innerHTML = data.layers.map((layer, idx) => {
+    const techs = parseTechBadges(layer.tech);
+    return `
+      <div class="shadcn-step">
+        <div class="shadcn-step-header">
+          <span class="shadcn-step-num font-mono">${layer.step}</span>
+          ${layer.metric ? `<span class="shadcn-step-badge font-mono">${layer.metric}</span>` : ''}
+        </div>
+        <h4 class="shadcn-step-title">${layer.layer}</h4>
+        <div class="shadcn-step-techs font-mono">
+          ${techs.map(t => `<span class="shadcn-tech-tag">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
+        </div>
+        <p class="shadcn-step-desc">${layer.detail}</p>
+      </div>
+      ${idx < data.layers.length - 1 ? `
+        <div class="shadcn-step-arrow" aria-hidden="true">
+          <span>↓</span>
+        </div>
+      ` : ''}
+    `;
+  }).join('');
 }
 
 function initArchitectureTabs() {
   if (!tabWebBtn || !tabAiBtn) return;
 
-  tabWebBtn.addEventListener('click', () => {
-    tabWebBtn.classList.add('active');
-    tabAiBtn.classList.remove('active');
-    renderArchitectureFlow('web');
-  });
-
   tabAiBtn.addEventListener('click', () => {
     tabAiBtn.classList.add('active');
+    tabAiBtn.setAttribute('aria-selected', 'true');
     tabWebBtn.classList.remove('active');
+    tabWebBtn.setAttribute('aria-selected', 'false');
     renderArchitectureFlow('ai');
   });
 
-  renderArchitectureFlow('web');
+  tabWebBtn.addEventListener('click', () => {
+    tabWebBtn.classList.add('active');
+    tabWebBtn.setAttribute('aria-selected', 'true');
+    tabAiBtn.classList.remove('active');
+    tabAiBtn.setAttribute('aria-selected', 'false');
+    renderArchitectureFlow('web');
+  });
+
+  renderArchitectureFlow('ai');
 }
 
 /* ==========================================================================

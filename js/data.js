@@ -229,60 +229,82 @@ export const skillsData = {
 export const architectureData = {
   webApplication: {
     title: "Modern Full-Stack Web Architecture",
-    description: "How I architect production systems for low latency, high availability, and deterministic observability.",
+    description: "Distributed client-server architecture engineered for low-latency hydration, fault isolation, and deterministic caching.",
+    spec: "FLOW: DISTRIBUTED WEB // P99 < 35ms",
+    track: [
+      { step: "01", label: "EDGE CLIENT" },
+      { step: "02", label: "GATEWAY" },
+      { step: "03", label: "QUEUES" },
+      { step: "04", label: "STATE & CACHE" }
+    ],
     layers: [
       {
-        step: "Layer 01",
+        step: "01 // EDGE",
         layer: "Client & Edge Layer",
         tech: "Next.js / TypeScript / Service Workers",
-        detail: "Edge routing, optimistic UI updates, asset caching, responsive hydration."
+        metric: "CACHE 98%",
+        detail: "Edge routing, optimistic UI updates, asset caching, and responsive hydration."
       },
       {
-        step: "Layer 02",
+        step: "02 // GATEWAY",
         layer: "API Gateway & Security",
         tech: "Fastify / Node.js / Reverse Proxy",
-        detail: "Rate limiting, JWT validation, schema validation, CORS, request tracing."
+        metric: "JWT & RATE-LIMIT",
+        detail: "Rate limiting, JWT validation, schema validation, CORS, and request tracing."
       },
       {
-        step: "Layer 03",
+        step: "03 // QUEUES",
         layer: "Application Logic & Queues",
         tech: "Node.js / Python Services + BullMQ",
-        detail: "Domain entities, asynchronous background queues, webhook integrations."
+        metric: "ASYNC CONCURRENCY",
+        detail: "Domain entities, asynchronous background queues, and webhook integrations."
       },
       {
-        step: "Layer 04",
+        step: "04 // STATE",
         layer: "Data Persistence & Caching",
         tech: "PostgreSQL + Redis Cluster",
-        detail: "ACID persistence, relational integrity, cached query invalidation, pub/sub."
+        metric: "ACID GUARANTEED",
+        detail: "ACID persistence, relational integrity, cached query invalidation, and pub/sub."
       }
     ]
   },
   aiPipeline: {
-    title: "Production AI Engineering Pipeline",
-    description: "Bridging non-deterministic language models with strict software engineering requirements.",
+    title: "Production AI Inference & RAG Pipeline",
+    description: "Bridging non-deterministic language models with strict software engineering requirements, type safety, and vector grounding.",
+    spec: "FLOW: DETERMINISTIC RAG // ZERO-HALLUCINATION",
+    track: [
+      { step: "01", label: "SANITIZATION" },
+      { step: "02", label: "VECTOR RAG" },
+      { step: "03", label: "INFERENCE" },
+      { step: "04", label: "VALIDATION" }
+    ],
     layers: [
       {
-        step: "Phase 01",
+        step: "01 // SANITIZE",
         layer: "Input Sanitization & Gate",
         tech: "Python / FastAPI Middleware",
+        metric: "FIREWALL PASS",
         detail: "Input scrubbing, token boundary checks, rate limiting, and prompt injection defense."
       },
       {
-        step: "Phase 02",
+        step: "02 // RETRIEVAL",
         layer: "Context Retrieval (RAG)",
-        tech: "Embeddings + Vector Index",
+        tech: "Embeddings / Vector Index",
+        metric: "TOP-K EMBEDDINGS",
         detail: "Semantic similarity search over verified knowledge corpora with metadata filtering."
       },
       {
-        step: "Phase 03",
+        step: "03 // INFERENCE",
         layer: "Model Inference & Reasoning",
         tech: "Transformers / LLM APIs / Local Models",
-        detail: "Prompt assembly, few-shot conditioning, structured output schema generation."
+        metric: "STRUCTURED JSON",
+        detail: "Prompt assembly, few-shot conditioning, and structured output schema generation."
       },
       {
-        step: "Phase 04",
+        step: "04 // GUARDRAIL",
         layer: "Deterministic Validation",
         tech: "Pydantic / Zod Guardrails",
+        metric: "RUNTIME FENCE",
         detail: "Strict schema verification, fallback execution, and deterministic downstream ingestion."
       }
     ]

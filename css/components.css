@@ -981,6 +981,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  padding: 12px 0;
   z-index: 2;
 }
 
@@ -997,14 +998,16 @@
   transition: none; /* No CSS transition during JS lerp scrub to eliminate lag & jitter */
 }
 
-/* Horizontal Project Card: Longer Height, Medium Sized Width */
+/* Horizontal Project Card: Carefully sized to fit 100% within viewport without any clipping */
+.horizontal-project-card.bento-card,
 .horizontal-project-card {
   display: flex;
   flex-direction: column;
-  width: clamp(340px, 42vw, 500px);
+  width: clamp(340px, 32vw, 410px);
   max-width: calc(100vw - 36px);
-  height: clamp(510px, calc(100vh - 160px), 630px);
-  min-height: unset;
+  height: clamp(430px, calc(100vh - 240px), 520px);
+  max-height: calc(100% - 8px);
+  min-height: 0 !important;
   flex-shrink: 0;
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
@@ -1018,13 +1021,13 @@
   box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.45);
 }
 
-/* Visual Header inside Horizontal Card: Tall, Generous 3D Animation Box */
+/* Visual Header inside Horizontal Card: Longer Height Dither Window with Medium Width */
 .horizontal-project-card .bento-visual-header {
-  flex: 0 0 clamp(230px, 47%, 310px);
-  min-height: 230px;
-  margin: 14px 14px 0 14px;
-  width: calc(100% - 28px);
-  height: auto;
+  flex: 0 0 clamp(210px, 51%, 270px) !important;
+  height: clamp(210px, 51%, 270px) !important;
+  min-height: 0 !important;
+  margin: 12px 12px 0 12px;
+  width: calc(100% - 24px);
   position: relative;
   border-radius: calc(var(--radius-xl) - 4px);
   overflow: hidden;
@@ -1034,10 +1037,12 @@
 .horizontal-project-card .bento-body {
   flex: 1 1 auto;
   min-height: 0;
-  padding: clamp(0.9rem, 2vh, 1.25rem) clamp(1rem, 2.2vw, 1.35rem);
+  padding: 0.75rem 1.15rem 0.9rem 1.15rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 0.3rem;
+  overflow: hidden;
 }
 
 .horizontal-project-card .bento-title {
@@ -1174,14 +1179,18 @@
     justify-content: space-between;
   }
 
+  .horizontal-project-card.bento-card,
   .horizontal-project-card {
-    width: clamp(320px, 76vw, 460px);
-    height: clamp(480px, calc(100vh - 180px), 570px);
+    width: clamp(320px, 76vw, 410px);
+    height: clamp(410px, calc(100vh - 220px), 500px);
+    max-height: calc(100% - 8px);
+    min-height: 0 !important;
   }
 
   .horizontal-project-card .bento-visual-header {
-    flex: 0 0 clamp(200px, 45%, 260px);
-    min-height: 200px;
+    flex: 0 0 clamp(190px, 48%, 250px) !important;
+    height: clamp(190px, 48%, 250px) !important;
+    min-height: 0 !important;
   }
 }
 
@@ -1201,14 +1210,18 @@
     justify-content: flex-end;
   }
 
+  .horizontal-project-card.bento-card,
   .horizontal-project-card {
-    width: clamp(280px, calc(100vw - 36px), 380px);
-    height: clamp(460px, calc(100dvh - 150px), 540px);
+    width: clamp(280px, calc(100vw - 36px), 360px);
+    height: clamp(390px, calc(100dvh - 190px), 480px);
+    max-height: calc(100% - 6px);
+    min-height: 0 !important;
   }
 
   .horizontal-project-card .bento-visual-header {
-    flex: 0 0 clamp(180px, 42%, 230px);
-    min-height: 180px;
+    flex: 0 0 clamp(180px, 46%, 230px) !important;
+    height: clamp(180px, 46%, 230px) !important;
+    min-height: 0 !important;
     margin: 10px 10px 0 10px;
     width: calc(100% - 20px);
   }
@@ -1224,17 +1237,22 @@
     padding-bottom: 0.35rem;
   }
 
+  .horizontal-project-card.bento-card,
   .horizontal-project-card {
-    height: clamp(450px, calc(100vh - 140px), 530px);
+    height: clamp(380px, calc(100vh - 170px), 460px);
+    max-height: calc(100% - 6px);
+    min-height: 0 !important;
   }
 
   .horizontal-project-card .bento-visual-header {
-    flex: 0 0 clamp(190px, 40%, 240px);
-    min-height: 190px;
+    flex: 0 0 clamp(170px, 44%, 220px) !important;
+    height: clamp(170px, 44%, 220px) !important;
+    min-height: 0 !important;
   }
 
   .horizontal-project-card .bento-body {
-    padding: 0.75rem 1rem;
+    padding: 0.65rem 1rem;
+    gap: 0.25rem;
   }
 
   .projects-scroll-cue {
@@ -1713,410 +1731,283 @@
 }
 
 /* ==========================================================================
-   Engineering Architecture Section (Clear, Sleek & Modern Distributed Flow)
+   Stacked Architecture & Modern Paradigm (Shadcn-Inspired Clean Layout)
    ========================================================================== */
-.arch-controls-wrap {
+.shadcn-arch-container {
+  width: 100%;
+  max-width: 820px;
+  margin: var(--space-4) auto 0 auto;
   display: flex;
-  margin-bottom: var(--space-6);
+  flex-direction: column;
 }
 
-.architecture-tabs.segmented-control {
-  display: inline-flex;
-  background: rgba(18, 18, 20, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
-  padding: 0.3rem;
-  gap: 0.35rem;
+.shadcn-arch-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.arch-tab-btn {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  padding: 0.45rem 1.15rem;
-  border-radius: var(--radius-full);
-  border: 1px solid transparent;
-  background: transparent;
-  display: inline-flex;
+.shadcn-block-header {
+  margin-bottom: 1.75rem;
+}
+
+.shadcn-header-row {
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.tab-indicator-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.4;
-  transition: all 0.2s ease;
-}
-
-.arch-tab-btn:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.arch-tab-btn.active {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.arch-tab-btn.active .tab-indicator-dot {
-  background: #38bdf8;
-  opacity: 1;
-  box-shadow: 0 0 8px #38bdf8;
-}
-
-.architecture-diagram-container {
-  background: rgba(18, 18, 20, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-xl);
-  padding: clamp(1.75rem, 3.5vw, 2.75rem);
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.5);
-  position: relative;
-  overflow: hidden;
-}
-
-.architecture-diagram-container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.35), transparent);
-}
-
-.arch-meta-header {
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-5);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.arch-sys-kicker {
-  display: block;
+.shadcn-kicker {
+  display: inline-block;
   font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: var(--accent-primary);
-  margin-bottom: var(--space-2);
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--accent-primary);
 }
 
-.arch-main-title {
+.shadcn-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.shadcn-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.shadcn-blockquote {
+  border-left: 2px solid var(--accent-primary);
+  padding: 0.85rem 1.25rem;
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1.25rem 0 0 0;
+}
+
+/* Shadcn 3-Pillars Grid */
+.shadcn-pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .shadcn-pillars-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.shadcn-pillar-item {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  background: rgba(255, 255, 255, 0.015);
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease;
+}
+
+.shadcn-pillar-item:hover {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.shadcn-pillar-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.72rem;
+}
+
+.shadcn-pillar-num {
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.shadcn-pillar-tag {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+}
+
+.shadcn-pillar-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.01em;
-  margin-bottom: var(--space-2);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.35;
 }
 
-.arch-sub-desc {
-  font-size: 0.92rem;
+.shadcn-pillar-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
   color: var(--text-secondary);
-  line-height: 1.6;
-  max-width: 65ch;
   margin: 0;
 }
 
-/* Directional Pipeline Flow Track */
-.arch-flow-track {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: var(--space-6);
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-md);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+/* Shadcn Divider */
+.shadcn-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 3.5rem 0;
+  width: 100%;
 }
 
-@media (min-width: 900px) {
-  .arch-flow-track {
-    display: flex;
-  }
-}
-
-.arch-flow-point {
+/* Shadcn Segmented Tabs */
+.shadcn-tabs {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+}
+
+.shadcn-tab-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.78rem;
   font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  border-radius: calc(var(--radius-md) - 2px);
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+  font-family: inherit;
 }
 
-.flow-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent-primary);
-  box-shadow: 0 0 6px var(--accent-primary);
+.shadcn-tab-btn:hover {
+  color: var(--text-primary);
 }
 
-.arch-flow-arrow {
-  color: rgba(255, 255, 255, 0.2);
-  letter-spacing: -0.05em;
+.shadcn-tab-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-weight: 600;
 }
 
-/* 4-Column Nodes Grid */
-.arch-nodes-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
-}
-
-@media (min-width: 640px) {
-  .arch-nodes-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .arch-nodes-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-4);
-  }
-}
-
-.arch-node {
-  background: rgba(24, 24, 27, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: var(--radius-lg);
-  padding: 1.35rem;
-  position: relative;
+/* Shadcn Linear Stepper Pipeline Flow */
+.shadcn-pipeline-flow {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  transition: all 0.25s var(--ease-smooth);
-  cursor: pointer;
-  overflow: hidden;
+  margin-top: 1.5rem;
 }
 
-.arch-node::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: transparent;
-  transition: background 0.25s ease;
+.shadcn-step {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.5rem;
+  background: rgba(255, 255, 255, 0.015);
+  transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease;
 }
 
-.arch-node:hover {
-  border-color: rgba(56, 189, 248, 0.35);
-  background: rgba(30, 30, 36, 0.7);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5);
+.shadcn-step:hover {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.025);
 }
 
-.arch-node:hover::before {
-  background: linear-gradient(90deg, var(--accent-primary), #10b981);
-}
-
-.arch-node-top {
+.shadcn-step-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 0.45rem;
+  font-size: 0.72rem;
 }
 
-.arch-node-step {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.shadcn-step-num {
   color: var(--accent-primary);
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
-.arch-node-num {
-  font-size: 0.7rem;
+.shadcn-step-badge {
   color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
 }
 
-.arch-node-title {
+.shadcn-step-title {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem 0;
   line-height: 1.35;
-  margin: 0;
 }
 
-.arch-tech-badges {
+.shadcn-step-techs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.15rem;
-  margin-bottom: 0.25rem;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
 }
 
-.arch-tech-pill {
+.shadcn-tech-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0.22rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
-  white-space: nowrap;
+  transition: border-color var(--duration-fast) ease;
 }
 
-.arch-tech-pill svg {
+.shadcn-tech-tag svg {
   width: 12px;
   height: 12px;
   flex-shrink: 0;
 }
 
-.arch-node-detail {
-  font-size: 0.82rem;
-  color: var(--text-muted);
+.shadcn-step-desc {
+  font-size: 0.86rem;
   line-height: 1.6;
-  margin: 0;
-  margin-top: auto;
-}
-
-/* ==========================================================================
-   Unified Architecture & AI Engineering Principles
-   ========================================================================== */
-.arch-ai-principles {
-  margin-top: clamp(2rem, 4vw, 3rem);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.arch-ai-thesis-banner {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-left: 3px solid var(--accent-primary);
-  border-radius: var(--radius-lg);
-  padding: clamp(1.2rem, 2.5vw, 1.75rem);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.arch-ai-thesis-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  color: var(--accent-primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-}
-
-.arch-ai-thesis-text {
-  font-family: var(--font-heading);
-  font-size: clamp(0.96rem, 1.3vw, 1.08rem);
-  color: var(--text-primary);
-  line-height: 1.65;
-  margin: 0;
-  font-style: italic;
-}
-
-.arch-ai-pillars-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
-}
-
-@media (min-width: 768px) {
-  .arch-ai-pillars-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.arch-pillar-card {
-  background: rgba(24, 24, 27, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: var(--radius-lg);
-  padding: 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  transition: all 0.25s var(--ease-smooth);
-  position: relative;
-  overflow: hidden;
-}
-
-.arch-pillar-card:hover {
-  border-color: rgba(56, 189, 248, 0.4);
-  background: rgba(30, 30, 36, 0.75);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.45);
-}
-
-.arch-pillar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.arch-pillar-num {
-  font-size: 0.75rem;
-  color: var(--accent-primary);
-  font-weight: 600;
-}
-
-.arch-pillar-tag {
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0.2rem 0.5rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.arch-pillar-title {
-  font-family: var(--font-heading);
-  font-size: 1.02rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.35;
-  margin: 0;
-}
-
-.arch-pillar-desc {
-  font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 1.55;
   margin: 0;
 }
 
-[data-theme="light"] .arch-pillar-card {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: var(--border-default);
-}
-
-[data-theme="light"] .arch-pillar-card:hover {
-  background: rgba(255, 255, 255, 0.98);
-  border-color: var(--accent-primary);
-  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.12);
-}
-
-[data-theme="light"] .arch-ai-thesis-banner {
-  background: rgba(240, 246, 255, 0.75);
-  border-color: var(--border-default);
-  border-left-color: var(--accent-primary);
+.shadcn-step-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.85rem 0;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  opacity: 0.5;
 }
 
 /* ==========================================================================
@@ -2808,74 +2699,51 @@
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
 }
 
-/* --- 03. Engineering Architecture Section --- */
-[data-theme="light"] .architecture-tabs.segmented-control {
+/* --- 03. Engineering Architecture & Modern Paradigm (Shadcn Stacked) --- */
+[data-theme="light"] .shadcn-blockquote {
+  background: rgba(0, 0, 0, 0.02);
+  border-left-color: var(--accent-primary);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .shadcn-pillar-item,
+[data-theme="light"] .shadcn-step {
+  background: #ffffff;
+  border-color: var(--border-default);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .shadcn-pillar-item:hover,
+[data-theme="light"] .shadcn-step:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .shadcn-pillar-tag,
+[data-theme="light"] .shadcn-step-badge,
+[data-theme="light"] .shadcn-tech-tag {
   background: var(--bg-surface-elevated);
-  border-color: var(--border-default);
-}
-
-[data-theme="light"] .arch-tab-btn {
-  color: var(--text-muted);
-}
-
-[data-theme="light"] .arch-tab-btn:hover {
-  color: var(--text-primary);
-  background: var(--bg-surface-hover);
-}
-
-[data-theme="light"] .arch-tab-btn.active {
-  color: var(--text-primary);
-  background: #ffffff;
-  border-color: var(--border-default);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .arch-tab-btn.active .tab-indicator-dot {
-  background: #0284c7;
-  opacity: 1;
-  box-shadow: 0 0 6px rgba(2, 132, 199, 0.5);
-}
-
-[data-theme="light"] .architecture-diagram-container {
-  background: #ffffff;
-  border-color: var(--border-default);
-  box-shadow: 0 6px 24px -4px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .architecture-diagram-container::before {
-  background: linear-gradient(90deg, transparent, rgba(2, 132, 199, 0.35), transparent);
-}
-
-[data-theme="light"] .arch-meta-header {
-  border-bottom-color: var(--border-subtle);
-}
-
-[data-theme="light"] .arch-flow-track {
-  background: var(--bg-surface-elevated);
-  border-color: var(--border-subtle);
-  color: var(--text-muted);
-}
-
-[data-theme="light"] .arch-flow-arrow {
-  color: var(--border-strong);
-}
-
-[data-theme="light"] .arch-node {
-  background: var(--bg-surface-elevated);
-  border-color: var(--border-default);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-}
-
-[data-theme="light"] .arch-node:hover {
-  border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .arch-tech-pill {
-  background: #ffffff;
   border-color: var(--border-subtle);
   color: var(--text-secondary);
+}
+
+[data-theme="light"] .shadcn-tabs {
+  background: var(--bg-surface-elevated);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="light"] .shadcn-tab-btn {
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .shadcn-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .shadcn-tab-btn.active {
+  background: #ffffff;
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* --- 04. Technical Stack (Skills Matrix) --- */
