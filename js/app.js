@@ -216,8 +216,18 @@ function attachSpotlightListeners() {
   });
 }
 
+/* ==========================================================================
+   Projects Rendering & Pinned Horizontal Scroll Sequence
+   ========================================================================== */
+let projectsScrollCleanup = null;
+
 function renderProjects(filter = 'all') {
   if (!projectListEl) return;
+
+  if (projectsScrollCleanup) {
+    projectsScrollCleanup();
+    projectsScrollCleanup = null;
+  }
 
   const filtered = filter === 'all' 
     ? projectsData 
@@ -228,13 +238,11 @@ function renderProjects(filter = 'all') {
   setTimeout(() => {
     projectListEl.innerHTML = '';
 
-    const bentoGrid = document.createElement('div');
-    bentoGrid.className = 'projects-bento-grid';
-
-    filtered.forEach((project) => {
+    filtered.forEach((project, idx) => {
       const card = document.createElement('article');
-      card.className = 'bento-card spotlight-card';
+      card.className = 'horizontal-project-card bento-card spotlight-card';
       card.setAttribute('data-id', project.id);
+      card.setAttribute('data-index', idx);
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `View system specifications and details for ${project.title}`);
@@ -276,37 +284,341 @@ function renderProjects(filter = 'all') {
             ` : ''}
           </div>
         </div>
+        <div class="card-shadow-veil" aria-hidden="true"></div>
+        <div class="card-peek-badge" aria-hidden="true">
+          <span>Next System</span>
+          <span aria-hidden="true">→</span>
+        </div>
       `;
 
-      // Entire card click opens modal drawer, except when clicking the GitHub link
+      // Entire card click: if active, opens modal drawer; if peeking, scrolls to card
       card.addEventListener('click', (e) => {
         if (e.target.closest('a')) return;
-        openProjectDrawer(project.id);
-      });
-
-      // Keyboard accessibility (Enter or Space opens drawer)
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          if (e.target.closest('a')) return;
-          e.preventDefault();
+        if (card.classList.contains('is-peeking')) {
+          e.stopPropagation();
+          scrollShowcaseToIndex(idx);
+        } else {
           openProjectDrawer(project.id);
         }
       });
 
-      bentoGrid.appendChild(card);
+      // Keyboard accessibility
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('a')) return;
+          e.preventDefault();
+          if (card.classList.contains('is-peeking')) {
+            scrollShowcaseToIndex(idx);
+          } else {
+            openProjectDrawer(project.id);
+          }
+        }
+      });
+
+      projectListEl.appendChild(card);
     });
 
-    projectListEl.appendChild(bentoGrid);
-
-    // Mount Real-Time Procedural 3D Canvas Simulations
+    // Mount 3D Canvas Simulations
     project3DEngine.mountAll();
 
     // Reattach spotlight and magnetic listeners
     attachSpotlightListeners();
     initMagneticButtons();
 
+    // Initialize Horizontal Scroll Engine
+    initProjectsHorizontalScroll();
+
     projectListEl.style.opacity = '1';
-  }, 120);
+  }, 100);
+}
+
+let scrollShowcaseToIndex = (idx) => {};
+
+function initProjectsHorizontalScroll() {
+  const section = document.getElementById('projects');
+  const viewport = document.getElementById('projects-viewport');
+  const track = document.getElementById('projects-container');
+  const hudActiveNum = document.getElementById('project-active-num');
+  const hudTotalNum = document.getElementById('project-total-num');
+  const hudFill = document.getElementById('projects-hud-fill');
+  const prevBtn = document.getElementById('project-prev-btn');
+  const nextBtn = document.getElementById('project-next-btn');
+
+  if (!section || !viewport || !track) return;
+
+  const cards = Array.from(track.querySelectorAll('.horizontal-project-card'));
+  const totalCards = cards.length;
+
+  if (hudTotalNum) {
+    hudTotalNum.textContent = String(totalCards).padStart(2, '0');
+  }
+
+  // Single card mode: no horizontal scroll required
+  if (totalCards <= 1) {
+    section.style.setProperty('--projects-scroll-height', 'auto');
+    if (cards[0]) {
+      cards[0].style.transform = 'none';
+      cards[0].style.opacity = '1';
+      cards[0].style.filter = 'none';
+      cards[0].classList.add('is-active');
+      cards[0].classList.remove('is-peeking');
+      const veil = cards[0].querySelector('.card-shadow-veil');
+      if (veil) veil.style.opacity = '0';
+    }
+    if (prevBtn) prevBtn.disabled = true;
+    if (nextBtn) nextBtn.disabled = true;
+    if (hudFill) hudFill.style.width = '100%';
+    if (hudActiveNum) hudActiveNum.textContent = '01';
+    scrollShowcaseToIndex = () => {};
+    return;
+  }
+
+  // Calculate section scroll height: (totalCards - 1) * 90vh + 100vh
+  const scrollDistancePerCard = window.innerHeight * 0.9;
+  const totalScrollDistance = (totalCards - 1) * scrollDistancePerCard;
+  const sectionHeight = totalScrollDistance + window.innerHeight;
+  section.style.setProperty('--projects-scroll-height', `${sectionHeight}px`);
+
+  // Align Card 0 with the site's container
+  const headerWrap = section.querySelector('.projects-pinned-header-wrap');
+  let padLeft = 24;
+  if (headerWrap) {
+    const rect = headerWrap.getBoundingClientRect();
+    padLeft = Math.max(rect.left, 24);
+  }
+  track.style.setProperty('--projects-track-pad', `${padLeft}px`);
+
+  let currentVirtualIndex = 0;
+  let targetVirtualIndex = 0;
+  let isTicking = false;
+  let rafId = null;
+
+  function calculateCardStep() {
+    if (cards.length < 2) return cards[0]?.offsetWidth || 600;
+    const step = cards[1].offsetLeft - cards[0].offsetLeft;
+    return step > 0 ? step : (cards[0].offsetWidth + 36);
+  }
+
+  let cardStep = calculateCardStep();
+
+  function updateVisuals(virtualIdx) {
+    const currentActive = Math.round(virtualIdx);
+
+    // Update HUD indicator
+    if (hudActiveNum) {
+      const displayNum = Math.min(Math.max(currentActive + 1, 1), totalCards);
+      hudActiveNum.textContent = String(displayNum).padStart(2, '0');
+    }
+
+    if (hudFill) {
+      const pct = (virtualIdx / (totalCards - 1)) * 100;
+      hudFill.style.width = `${Math.min(Math.max(pct, 12), 100)}%`;
+    }
+
+    if (prevBtn) prevBtn.disabled = virtualIdx <= 0.05;
+    if (nextBtn) nextBtn.disabled = virtualIdx >= (totalCards - 1) - 0.05;
+
+    // Translate the track horizontally
+    const trackX = -virtualIdx * cardStep;
+    track.style.transform = `translate3d(${trackX}px, 0, 0)`;
+
+    // Update each card's scale, opacity, filter, and shadow veil
+    cards.forEach((card, idx) => {
+      const diff = idx - virtualIdx;
+      const absDiff = Math.abs(diff);
+      const veil = card.querySelector('.card-shadow-veil');
+
+      if (absDiff < 0.08) {
+        // Active Center Card: 100% visible, sharp, interactive
+        card.style.transform = 'scale(1) translateZ(0)';
+        card.style.opacity = '1';
+        card.style.filter = 'none';
+        card.style.zIndex = '10';
+        card.classList.add('is-active');
+        card.classList.remove('is-peeking');
+        if (veil) veil.style.opacity = '0';
+      } else if (diff > 0) {
+        // Card to the right (Next card coming up / peeking in shadow)
+        card.classList.remove('is-active');
+        card.classList.add('is-peeking');
+
+        const factor = Math.min(diff, 1);
+        const scale = 1.0 - (0.08 * factor);
+        const opacity = 1.0 - (0.62 * factor); // 0.38 at diff=1
+        const blur = factor * 1.5;
+        const brightness = 1.0 - (0.35 * factor); // 0.65 at diff=1
+
+        // If card is further than 1 step away, fade out gracefully
+        let finalOpacity = opacity;
+        if (diff > 1) {
+          finalOpacity = Math.max(0, 0.38 - (diff - 1) * 0.4);
+        }
+
+        card.style.transform = `scale(${scale.toFixed(3)}) translateZ(0)`;
+        card.style.opacity = finalOpacity.toFixed(3);
+        card.style.filter = `brightness(${brightness.toFixed(2)}) blur(${blur.toFixed(1)}px)`;
+        card.style.zIndex = String(10 - idx);
+        if (veil) veil.style.opacity = (factor * 0.72).toFixed(2);
+      } else {
+        // Card to the left (Previous card exiting to the left in shadow)
+        card.classList.remove('is-active');
+        card.classList.remove('is-peeking');
+
+        const factor = Math.min(absDiff, 1);
+        const scale = 1.0 - (0.08 * factor);
+        const opacity = Math.max(0, 1.0 - (0.75 * factor)); // 0.25 at diff=-1
+        const blur = factor * 2;
+        const brightness = 1.0 - (0.45 * factor); // 0.55 at diff=-1
+
+        card.style.transform = `scale(${scale.toFixed(3)}) translateZ(0)`;
+        card.style.opacity = opacity.toFixed(3);
+        card.style.filter = `brightness(${brightness.toFixed(2)}) blur(${blur.toFixed(1)}px)`;
+        card.style.zIndex = String(5 - Math.round(absDiff));
+        if (veil) veil.style.opacity = (factor * 0.8).toFixed(2);
+      }
+    });
+  }
+
+  function onScroll() {
+    const rect = section.getBoundingClientRect();
+    const scrollTravel = section.offsetHeight - window.innerHeight;
+
+    if (scrollTravel <= 0) {
+      updateVisuals(0);
+      return;
+    }
+
+    const scrolled = -rect.top;
+    const progress = Math.min(Math.max(scrolled / scrollTravel, 0), 1);
+    targetVirtualIndex = progress * (totalCards - 1);
+
+    if (!isTicking) {
+      isTicking = true;
+      rafLoop();
+    }
+  }
+
+  function rafLoop() {
+    const delta = targetVirtualIndex - currentVirtualIndex;
+    if (Math.abs(delta) < 0.001) {
+      currentVirtualIndex = targetVirtualIndex;
+      updateVisuals(currentVirtualIndex);
+      isTicking = false;
+      return;
+    }
+
+    currentVirtualIndex += delta * 0.2;
+    updateVisuals(currentVirtualIndex);
+    rafId = requestAnimationFrame(rafLoop);
+  }
+
+  // Smooth scroll helper to navigate directly to any card index
+  scrollShowcaseToIndex = (targetIdx) => {
+    targetIdx = Math.min(Math.max(targetIdx, 0), totalCards - 1);
+    const scrollTravel = section.offsetHeight - window.innerHeight;
+    const targetProgress = targetIdx / (totalCards - 1);
+    const targetScrollY = section.offsetTop + (targetProgress * scrollTravel);
+
+    window.scrollTo({
+      top: targetScrollY,
+      behavior: 'smooth'
+    });
+  };
+
+  const onPrevClick = () => {
+    const current = Math.round(targetVirtualIndex);
+    scrollShowcaseToIndex(current - 1);
+  };
+
+  const onNextClick = () => {
+    const current = Math.round(targetVirtualIndex);
+    scrollShowcaseToIndex(current + 1);
+  };
+
+  prevBtn?.addEventListener('click', onPrevClick);
+  nextBtn?.addEventListener('click', onNextClick);
+
+  // Keyboard navigation when section is in viewport
+  function onKeyDown(e) {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120 && rect.bottom >= window.innerHeight * 0.4) {
+      if (e.key === 'ArrowRight') {
+        const current = Math.round(targetVirtualIndex);
+        if (current < totalCards - 1) {
+          e.preventDefault();
+          scrollShowcaseToIndex(current + 1);
+        }
+      } else if (e.key === 'ArrowLeft') {
+        const current = Math.round(targetVirtualIndex);
+        if (current > 0) {
+          e.preventDefault();
+          scrollShowcaseToIndex(current - 1);
+        }
+      }
+    }
+  }
+
+  // Touch Swipe on mobile
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  function onTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }
+
+  function onTouchEnd(e) {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    // Only trigger if horizontal swipe is more pronounced than vertical scroll
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+      const current = Math.round(targetVirtualIndex);
+      if (diffX > 0 && current < totalCards - 1) {
+        scrollShowcaseToIndex(current + 1);
+      } else if (diffX < 0 && current > 0) {
+        scrollShowcaseToIndex(current - 1);
+      }
+    }
+  }
+
+  viewport.addEventListener('touchstart', onTouchStart, { passive: true });
+  viewport.addEventListener('touchend', onTouchEnd, { passive: true });
+
+  window.addEventListener('keydown', onKeyDown);
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  function onResize() {
+    cardStep = calculateCardStep();
+    if (headerWrap) {
+      const rect = headerWrap.getBoundingClientRect();
+      padLeft = Math.max(rect.left, 24);
+      track.style.setProperty('--projects-track-pad', `${padLeft}px`);
+    }
+    const currentDistance = (totalCards - 1) * (window.innerHeight * 0.9);
+    section.style.setProperty('--projects-scroll-height', `${currentDistance + window.innerHeight}px`);
+    onScroll();
+  }
+
+  window.addEventListener('resize', onResize, { passive: true });
+
+  // Cleanup handler for filter switches
+  projectsScrollCleanup = () => {
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onResize);
+    window.removeEventListener('keydown', onKeyDown);
+    viewport.removeEventListener('touchstart', onTouchStart);
+    viewport.removeEventListener('touchend', onTouchEnd);
+    prevBtn?.removeEventListener('click', onPrevClick);
+    nextBtn?.removeEventListener('click', onNextClick);
+    if (rafId) cancelAnimationFrame(rafId);
+  };
+
+  // Initial calculation and visual render
+  cardStep = calculateCardStep();
+  onScroll();
 }
 
 function initProjectFilters() {
@@ -553,54 +865,86 @@ function renderGitHubShowcase() {
   const container = document.getElementById('github-showcase-container');
   if (!container) return;
 
+  const getRepoLangHtml = (langStr) => {
+    if (!langStr) return '';
+    const items = langStr.split(' / ');
+    return items.map(name => {
+      const logo = getTechLogo(name.trim());
+      return `<span class="github-repo-lang-item">${logo ? logo : ''}<span>${name.trim()}</span></span>`;
+    }).join('<span style="color: var(--text-muted); opacity: 0.4; margin: 0 0.2rem;">/</span>');
+  };
+
   container.innerHTML = `
-    <div style="background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-xl); padding: clamp(1.5rem, 4vw, 2.5rem); box-shadow: var(--shadow-sm);">
-      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-        <div>
-          <span class="font-mono text-xs text-muted">PROFILE: github.com/${githubShowcaseData.username}</span>
-          <h3 style="font-size: 1.4rem; font-weight: 700; margin-top: 0.25rem;">${githubShowcaseData.publicRepos} Public Repositories</h3>
+    <div class="github-panel">
+      <!-- Top Profile Meta Bar -->
+      <div class="github-header-bar">
+        <div class="github-profile-meta">
+          <div class="github-avatar-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </div>
+          <div class="github-profile-text">
+            <div class="github-profile-handle-row">
+              <span class="github-profile-handle">@${githubShowcaseData.username}</span>
+              <span class="github-badge-repo-count">
+                <span class="repo-dot"></span>
+                <span>${githubShowcaseData.publicRepos} Repositories</span>
+              </span>
+            </div>
+            <span class="github-profile-sub font-mono">github.com/${githubShowcaseData.username}</span>
+          </div>
         </div>
-        <a href="${githubShowcaseData.profileUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item" style="padding: 0.5rem 1.1rem;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        <a href="${githubShowcaseData.profileUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item" style="padding: 0.55rem 1.15rem; font-size: 0.85rem;" aria-label="Open GitHub Profile of Natnael Kornima">
           <span>View GitHub</span>
           <span class="btn-arrow">↗</span>
         </a>
       </div>
 
       <!-- Languages Progress Distribution Bar -->
-      <div style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <span>PRIMARY CODEBASE DISTRIBUTION</span>
+      <div class="github-distribution-section">
+        <div class="github-distribution-header">
+          <span class="github-distribution-title">Primary Codebase Distribution</span>
         </div>
-        <div style="height: 8px; width: 100%; border-radius: var(--radius-full); overflow: hidden; display: flex; background: var(--bg-subtle);">
+        <div class="github-distribution-bar" role="progressbar" aria-label="Codebase Language Breakdown">
           ${githubShowcaseData.languages.map(lang => `
-            <div style="width: ${lang.percentage}%; background-color: ${lang.color}; height: 100%;" title="${lang.name}: ${lang.percentage}%"></div>
+            <div class="github-distribution-segment" style="width: ${lang.percentage}%; background-color: ${lang.color};" title="${lang.name}: ${lang.percentage}%"></div>
           `).join('')}
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary);">
+        <div class="github-languages-list">
           ${githubShowcaseData.languages.map(lang => `
-            <div style="display: flex; align-items: center; gap: 0.4rem;">
-              <span style="width: 8px; height: 8px; border-radius: var(--radius-full); background-color: ${lang.color};"></span>
-              <span>${lang.name} (${lang.percentage}%)</span>
+            <div class="github-lang-pill">
+              <span class="github-lang-dot" style="background-color: ${lang.color};"></span>
+              <span>${lang.name}</span>
+              <span class="github-lang-pct font-mono">(${lang.percentage}%)</span>
             </div>
           `).join('')}
         </div>
       </div>
 
-      <!-- Highlighted Public Repositories Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <!-- Highlighted Public Repositories Grid (2x2) -->
+      <div class="github-repos-grid">
         ${githubShowcaseData.pinnedRepos.map(repo => `
-          <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="spotlight-card" style="padding: 1.25rem; border-radius: var(--radius-md); text-decoration: none; display: flex; flex-direction: column; justify-content: space-between; background: var(--bg-surface-elevated);">
+          <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="github-repo-card spotlight-card" aria-label="Repository ${repo.name} on GitHub">
             <div>
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                <span style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--accent);">${repo.name}</span>
-                <span class="btn-arrow" style="font-size: 0.8rem; color: var(--text-muted);">↗</span>
+              <div class="github-repo-top">
+                <div class="github-repo-name-group">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="github-repo-icon" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                  <span class="github-repo-name">${repo.name}</span>
+                </div>
+                <div class="github-repo-right-meta">
+                  <span class="github-repo-badge">Public</span>
+                  <span class="github-repo-arrow" aria-hidden="true">↗</span>
+                </div>
               </div>
-              <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;">${repo.description}</p>
+              <p class="github-repo-desc">${repo.description}</p>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">
-              <span style="width: 6px; height: 6px; border-radius: var(--radius-full); background: var(--accent);"></span>
-              <span>${repo.language}</span>
+            <div class="github-repo-footer">
+              <div class="github-repo-lang-group">
+                ${getRepoLangHtml(repo.language)}
+              </div>
+              <span class="github-repo-branch font-mono">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
+                <span>main</span>
+              </span>
             </div>
           </a>
         `).join('')}

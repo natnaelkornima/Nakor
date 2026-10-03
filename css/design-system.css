@@ -10,7 +10,7 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-  /* Color Palette — Dark Mode (Default) */
+  /* Color Palette — Dark Mode (Default) — Monochrome */
   --bg-base: #09090b;
   --bg-surface: #121215;
   --bg-surface-elevated: #18181b;
@@ -20,23 +20,23 @@
   --border-subtle: #1e1e23;
   --border-default: #2a2a30;
   --border-strong: #3f3f48;
-  --border-focus: #38bdf8;
+  --border-focus: #a1a1aa;
 
   --text-primary: #fafafa;
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
   --text-inverse: #09090b;
 
-  --accent: #38bdf8;
-  --accent-primary: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.12);
-  --accent-border: rgba(56, 189, 248, 0.28);
-  --accent-glow: rgba(56, 189, 248, 0.2);
-  --accent-hover: #7dd3fc;
+  --accent: #a1a1aa;
+  --accent-primary: #a1a1aa;
+  --accent-soft: rgba(161, 161, 170, 0.12);
+  --accent-border: rgba(161, 161, 170, 0.28);
+  --accent-glow: rgba(161, 161, 170, 0.15);
+  --accent-hover: #d4d4d8;
 
-  --status-active: #10b981;
-  --status-active-bg: rgba(16, 185, 129, 0.12);
-  --status-active-border: rgba(16, 185, 129, 0.3);
+  --status-active: #a1a1aa;
+  --status-active-bg: rgba(161, 161, 170, 0.12);
+  --status-active-border: rgba(161, 161, 170, 0.3);
 
   /* Technical Grid Pattern */
   --grid-dot-color: rgba(255, 255, 255, 0.05);
@@ -109,7 +109,7 @@
   --duration-slow: 540ms;
 }
 
-/* Light Mode Overrides */
+/* Light Mode Overrides — Monochrome */
 [data-theme="light"] {
   --bg-base: #fafafc;
   --bg-surface: #ffffff;
@@ -120,23 +120,23 @@
   --border-subtle: #e8e8ed;
   --border-default: #dadbe2;
   --border-strong: #bcbeca;
-  --border-focus: #0284c7;
+  --border-focus: #4b4d58;
 
   --text-primary: #09090b;
   --text-secondary: #4b4d58;
   --text-muted: #6e7080;
   --text-inverse: #fafafa;
 
-  --accent: #0284c7;
-  --accent-primary: #0284c7;
-  --accent-soft: rgba(2, 132, 199, 0.1);
-  --accent-border: rgba(2, 132, 199, 0.35);
-  --accent-glow: rgba(2, 132, 199, 0.15);
-  --accent-hover: #0369a1;
+  --accent: #4b4d58;
+  --accent-primary: #4b4d58;
+  --accent-soft: rgba(75, 77, 88, 0.1);
+  --accent-border: rgba(75, 77, 88, 0.25);
+  --accent-glow: rgba(75, 77, 88, 0.12);
+  --accent-hover: #3a3b44;
 
-  --status-active: #059669;
-  --status-active-bg: rgba(5, 150, 105, 0.12);
-  --status-active-border: rgba(5, 150, 105, 0.35);
+  --status-active: #4b4d58;
+  --status-active-bg: rgba(75, 77, 88, 0.1);
+  --status-active-border: rgba(75, 77, 88, 0.3);
 
   --grid-dot-color: rgba(0, 0, 0, 0.05);
 
@@ -172,8 +172,33 @@ body {
   line-height: 1.65;
   overflow-x: hidden;
   position: relative;
-  transition: background-color var(--duration-base) var(--ease-smooth),
-    color var(--duration-base) var(--ease-smooth);
+}
+
+/* Global smooth theme transition — applies to every element */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    opacity 0.3s ease;
+}
+
+/* Don't let the global transition interfere with animations or interactive transforms */
+.reveal-on-scroll,
+.magnetic-item,
+.btn-arrow,
+.nav-link,
+.filter-btn,
+.bento-card,
+canvas {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 /* Ambient Background Technical Grid (Subtle depth) */
