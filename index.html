@@ -23,8 +23,8 @@
   <meta name="theme-color" content="#09090b">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/design-system.css?v=9.6">
-  <link rel="stylesheet" href="css/components.css?v=9.6">
+  <link rel="stylesheet" href="css/design-system.css?v=9.9">
+  <link rel="stylesheet" href="css/components.css?v=9.9">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -195,90 +195,56 @@
     <section id="about" class="section-wrapper section-wrapper--bordered">
       <div class="container">
         <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 01. Engineering Mindset</span>
-          <h2 class="section-title">About & Philosophy</h2>
-          <p class="section-subtitle">How I reason about software architecture, engineering tradeoffs, and building lasting digital products.</p>
+          <span class="section-label">// 01. Background & Principles</span>
+          <h2 class="section-title">Engineering Approach</h2>
+          <p class="section-subtitle">How I think about code quality, architectural tradeoffs, and delivering software that lasts.</p>
         </div>
 
-        <div class="about-hero-split reveal-on-scroll">
-          <!-- Left: Editorial Narrative -->
-          <div class="about-editorial">
-            <p class="about-lead-text">
-              I approach software development with an engineering mindset grounded in <em>first principles</em>: understanding the problem deeply, choosing the appropriate architectural constraints, and building software that is maintainable, performant, and resilient under load.
+        <div class="about-grid reveal-on-scroll delay-1">
+          <!-- Left: Narrative -->
+          <div class="about-narrative">
+            <p class="about-lead">
+              I'm a full-stack engineer who values <strong>clarity over cleverness</strong>. I build web applications and backend systems designed to be dependable, easy to maintain, and fast on real-world networks.
             </p>
-            <p class="about-sub-text">
-              My work spans the entire stack—from developing responsive, accessible interfaces in TypeScript and React to designing event-driven backend services with Node.js, Fastify, and Python. In the AI era, I treat machine learning not as an elusive black box or marketing buzzword, but as a practical system component: optimizing model inference, orchestrating retrieval pipelines (RAG), and embedding deterministic safeguards around non-deterministic model outputs.
+            <p class="about-body">
+              My work spans writing clean, accessible interfaces in TypeScript and React to designing event-driven backend services and APIs in Node.js, Fastify, and Python. Rather than reaching for premature abstractions or over-complicated microservices, I prioritize understanding the domain deeply and choosing the simplest architecture that solves the problem.
             </p>
-            <p class="about-ethos-text">
-              I believe great software is born out of relentless craft, clear abstractions, and continuous technical curiosity.
+            <p class="about-body">
+              When working with machine learning and LLMs, I treat them as external services with real latency and failure modes: wrapping outputs in strict schema validation, implementing semantic caching, and building deterministic fallbacks so production systems stay resilient.
             </p>
           </div>
 
-          <!-- Right: Sleek Systems Research Radar -->
-          <div class="about-radar-panel">
-            <div class="radar-header">
-              <div class="radar-title-wrap">
-                <span class="radar-pulse-dot" aria-hidden="true"></span>
-                <span class="radar-title font-mono">SYS_RESEARCH // ACTIVE VECTORS</span>
-              </div>
-              <span class="radar-status-badge font-mono">05 DOMAINS</span>
+          <!-- Right: Concrete Production Standards -->
+          <div class="about-standards-panel">
+            <div class="standards-header">
+              <span class="standards-kicker font-mono">Core Standards</span>
+              <span class="standards-caption font-mono">Production Mindset</span>
             </div>
-            <ul class="radar-list" role="list">
-              <li class="radar-item">
-                <span class="radar-item-idx font-mono">01</span>
-                <span class="radar-item-text">Event-Driven Microservices</span>
-                <span class="radar-item-sub font-mono">Kafka / CDC</span>
-              </li>
-              <li class="radar-item">
-                <span class="radar-item-idx font-mono">02</span>
-                <span class="radar-item-text">Edge Inference &amp; Quantization</span>
-                <span class="radar-item-sub font-mono">ONNX / vLLM</span>
-              </li>
-              <li class="radar-item">
-                <span class="radar-item-idx font-mono">03</span>
-                <span class="radar-item-text">Hybrid Vector Search</span>
-                <span class="radar-item-sub font-mono">Dense + Sparse</span>
-              </li>
-              <li class="radar-item">
-                <span class="radar-item-idx font-mono">04</span>
-                <span class="radar-item-text">Relational Optimization</span>
-                <span class="radar-item-sub font-mono">Postgres Query Plan</span>
-              </li>
-              <li class="radar-item">
-                <span class="radar-item-idx font-mono">05</span>
-                <span class="radar-item-text">Distributed Cache Invalidation</span>
-                <span class="radar-item-sub font-mono">Redis / Pub-Sub</span>
-              </li>
-            </ul>
-          </div>
-        </div>
 
-        <!-- Tier 2: 3-Column Core Principles Bento -->
-        <div class="principles-block reveal-on-scroll delay-1">
-          <div class="principles-bar-header">
-            <span class="font-mono principles-kicker">// CORE ARCHITECTURAL PILLARS</span>
-          </div>
-          <div class="principles-grid">
-            <div class="principle-card">
-              <div class="principle-header-row">
-                <span class="principle-index font-mono">01 // DETERMINISM</span>
+            <div class="standards-list">
+              <div class="standard-item">
+                <div class="standard-index font-mono">01</div>
+                <div class="standard-content">
+                  <h3 class="standard-title">Readable, maintainable code</h3>
+                  <p class="standard-desc">Code is read far more often than it's written. I favor explicit logic, thoughtful naming, and modular structures that teammates can easily understand and extend.</p>
+                </div>
               </div>
-              <h3 class="principle-title">Deterministic Over Clever</h3>
-              <p class="principle-desc">Code should be predictable, observable, and easy to reason about. Explicit architecture beats implicit magic every time.</p>
-            </div>
-            <div class="principle-card">
-              <div class="principle-header-row">
-                <span class="principle-index font-mono">02 // OWNERSHIP</span>
+
+              <div class="standard-item">
+                <div class="standard-index font-mono">02</div>
+                <div class="standard-content">
+                  <h3 class="standard-title">End-to-end performance</h3>
+                  <p class="standard-desc">From indexed relational queries in PostgreSQL to lean client bundles and zero layout shifts on mobile devices, performance is treated as a core product feature.</p>
+                </div>
               </div>
-              <h3 class="principle-title">End-to-End Ownership</h3>
-              <p class="principle-desc">From data modeling and indexing in PostgreSQL to client-side bundle budgets and perceptual latency on low-bandwidth networks.</p>
-            </div>
-            <div class="principle-card">
-              <div class="principle-header-row">
-                <span class="principle-index font-mono">03 // PRAGMATISM</span>
+
+              <div class="standard-item">
+                <div class="standard-index font-mono">03</div>
+                <div class="standard-content">
+                  <h3 class="standard-title">Disciplined system design</h3>
+                  <p class="standard-desc">Idempotent background queues, comprehensive error boundaries, and strict type safety across every API integration and model endpoint.</p>
+                </div>
               </div>
-              <h3 class="principle-title">Pragmatic AI Integration</h3>
-              <p class="principle-desc">Treating LLMs and neural models as probabilistic microservices that require strict schema validation, caching, and fallback guarantees.</p>
             </div>
           </div>
         </div>
@@ -1006,6 +972,6 @@
   </footer>
 
   <!-- Application Logic -->
-  <script type="module" src="js/app.js?v=9.6"></script>
+  <script type="module" src="js/app.js?v=9.9"></script>
 </body>
 </html>

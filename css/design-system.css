@@ -28,6 +28,7 @@
   --text-inverse: #09090b;
 
   --accent: #38bdf8;
+  --accent-primary: #38bdf8;
   --accent-soft: rgba(56, 189, 248, 0.12);
   --accent-border: rgba(56, 189, 248, 0.28);
   --accent-glow: rgba(56, 189, 248, 0.2);
@@ -127,6 +128,7 @@
   --text-inverse: #fafafa;
 
   --accent: #0284c7;
+  --accent-primary: #0284c7;
   --accent-soft: rgba(2, 132, 199, 0.1);
   --accent-border: rgba(2, 132, 199, 0.35);
   --accent-glow: rgba(2, 132, 199, 0.15);

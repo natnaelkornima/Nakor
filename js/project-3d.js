@@ -213,24 +213,32 @@ class Base3DCanvas {
       scale: scale,
       visible: zOffset > 10
     };
+  get isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
   }
 
   drawGridBackground(accentRgb = '56, 189, 248') {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.width, this.height);
 
+    const isLight = this.isLight;
     // Deep architectural background with subtle radial gradient
     const grad = ctx.createRadialGradient(
       this.width / 2, this.height / 2, 10,
       this.width / 2, this.height / 2, Math.max(this.width, this.height) * 0.7
     );
-    grad.addColorStop(0, 'rgba(12, 16, 24, 0.95)');
-    grad.addColorStop(1, 'rgba(6, 6, 8, 1)');
+    if (isLight) {
+      grad.addColorStop(0, 'rgba(248, 250, 254, 0.98)');
+      grad.addColorStop(1, 'rgba(235, 239, 246, 1)');
+    } else {
+      grad.addColorStop(0, 'rgba(12, 16, 24, 0.95)');
+      grad.addColorStop(1, 'rgba(6, 6, 8, 1)');
+    }
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, this.width, this.height);
 
     // Subtle technical grid
-    ctx.strokeStyle = `rgba(${accentRgb}, 0.035)`;
+    ctx.strokeStyle = isLight ? 'rgba(0, 0, 0, 0.04)' : `rgba(${accentRgb}, 0.035)`;
     ctx.lineWidth = 1;
     const gridSize = 24;
     for (let x = 0; x < this.width; x += gridSize) {
@@ -591,8 +599,9 @@ class NutriGeniusNeural3D extends Base3DCanvas {
     // 5. Render Primary Nutrition Centroid Clusters
     projClusters.forEach(c => {
       ctx.save();
-      ctx.fillStyle = c.orig.color;
-      ctx.shadowColor = c.orig.color;
+      const nodeColor = (c.orig.color === '#ffffff' && this.isLight) ? '#0f172a' : c.orig.color;
+      ctx.fillStyle = nodeColor;
+      ctx.shadowColor = nodeColor;
       ctx.shadowBlur = 10;
       ctx.beginPath();
       ctx.arc(c.x, c.y, Math.max(3, c.scale * c.orig.size), 0, Math.PI * 2);
@@ -601,7 +610,7 @@ class NutriGeniusNeural3D extends Base3DCanvas {
 
       // Cluster Label Pill
       ctx.font = '500 9px monospace';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.fillStyle = this.isLight ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.7)';
       ctx.fillText(c.orig.name, c.x + 8, c.y + 3);
     });
   }
@@ -767,8 +776,8 @@ class FastTrackGyroscope3D extends Base3DCanvas {
       ctx.stroke();
 
       ctx.save();
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#38bdf8';
+      ctx.fillStyle = this.isLight ? '#0284c7' : '#ffffff';
+      ctx.shadowColor = this.isLight ? 'rgba(2, 132, 199, 0.4)' : '#38bdf8';
       ctx.shadowBlur = 8;
       ctx.beginPath();
       ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
