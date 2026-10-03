@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=9.3';
+} from './data.js?v=9.5';
 
-import { TechKnot3D } from './tech-knot.js?v=9.3';
-import { getTechLogo } from './tech-logos.js?v=9.3';
-import { Project3DEngine } from './project-3d.js?v=9.3';
+import { TechKnot3D } from './tech-knot.js?v=9.5';
+import { getTechLogo } from './tech-logos.js?v=9.5';
+import { Project3DEngine } from './project-3d.js?v=9.5';
 
 // Engines & Subsystems
 const project3DEngine = new Project3DEngine();
@@ -44,10 +44,6 @@ const archDiagramEl = document.getElementById('arch-diagram-flow');
 const archTitleEl = document.getElementById('arch-title');
 const archDescEl = document.getElementById('arch-description');
 
-// Cursor Elements
-const cursorDot = document.getElementById('cursor-dot');
-const cursorRing = document.getElementById('cursor-ring');
-const scrollProgressBar = document.getElementById('scroll-progress-bar');
 const timelineFillBar = document.getElementById('timeline-fill-bar');
 const telemetryChip = document.getElementById('hero-telemetry-chip');
 
@@ -87,76 +83,18 @@ function updateThemeIcon() {
 }
 
 /* ==========================================================================
-   Smooth Precision Cursor (Hardware-Accelerated)
+   Header Scroll State
    ========================================================================== */
-function initPrecisionCursor() {
-  if (!cursorDot || !cursorRing) return;
-  if (window.matchMedia('(hover: none)').matches) return;
-
-  let mouseX = -100;
-  let mouseY = -100;
-  let ringX = -100;
-  let ringY = -100;
-  let isMoving = false;
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-    if (!isMoving) {
-      isMoving = true;
-      requestAnimationFrame(renderRing);
-    }
-  }, { passive: true });
-
-  function renderRing() {
-    ringX += (mouseX - ringX) * 0.18;
-    ringY += (mouseY - ringY) * 0.18;
-    cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-
-    if (Math.abs(mouseX - ringX) > 0.1 || Math.abs(mouseY - ringY) > 0.1) {
-      requestAnimationFrame(renderRing);
-    } else {
-      isMoving = false;
-    }
-  }
-
-  // Hover states on interactive targets
-  const interactiveTargets = 'a, button, .filter-btn, .arch-node, .skill-row, .spotlight-card, input, textarea';
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.closest(interactiveTargets)) {
-      cursorRing.classList.add('cursor-hover');
-    }
-  });
-
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest(interactiveTargets)) {
-      cursorRing.classList.remove('cursor-hover');
-    }
-  });
-
-  document.addEventListener('mousedown', () => cursorRing.classList.add('cursor-active'));
-  document.addEventListener('mouseup', () => cursorRing.classList.remove('cursor-active'));
-}
-
-/* ==========================================================================
-   Scroll Progress & Scroll Reveals
-   ========================================================================== */
-function initScrollProgress() {
+function initHeaderScroll() {
+  const header = document.querySelector('.site-header');
   window.addEventListener('scroll', () => {
-    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = totalHeight > 0 ? window.scrollY / totalHeight : 0;
-    if (scrollProgressBar) {
-      scrollProgressBar.style.transform = `scaleX(${progress})`;
-    }
-
-    // Header scroll background
-    const header = document.querySelector('.site-header');
     if (window.scrollY > 20) {
       header?.classList.add('scrolled');
     } else {
       header?.classList.remove('scrolled');
     }
+  }, { passive: true });
+}
 
     // Experience timeline fill
     if (timelineFillBar) {
@@ -763,8 +701,7 @@ function initApp() {
   initTheme();
   themeToggleBtn?.addEventListener('click', toggleTheme);
   
-  initPrecisionCursor();
-  initScrollProgress();
+  initHeaderScroll();
   initScrollReveals();
   initActiveNavObserver();
   initMobileNav();
