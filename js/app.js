@@ -13,11 +13,11 @@ import {
   experienceData,
   educationData,
   githubShowcaseData
-} from './data.js?v=9.5';
+} from './data.js?v=9.6';
 
-import { TechKnot3D } from './tech-knot.js?v=9.5';
-import { getTechLogo } from './tech-logos.js?v=9.5';
-import { Project3DEngine } from './project-3d.js?v=9.5';
+import { TechKnot3D } from './tech-knot.js?v=9.6';
+import { getTechLogo } from './tech-logos.js?v=9.6';
+import { Project3DEngine } from './project-3d.js?v=9.6';
 
 // Engines & Subsystems
 const project3DEngine = new Project3DEngine();
@@ -83,7 +83,7 @@ function updateThemeIcon() {
 }
 
 /* ==========================================================================
-   Header Scroll State
+   Header Scroll State & Timeline Scroll
    ========================================================================== */
 function initHeaderScroll() {
   const header = document.querySelector('.site-header');
@@ -93,8 +93,6 @@ function initHeaderScroll() {
     } else {
       header?.classList.remove('scrolled');
     }
-  }, { passive: true });
-}
 
     // Experience timeline fill
     if (timelineFillBar) {

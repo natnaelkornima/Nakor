@@ -943,7 +943,7 @@
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  min-height: 520px;
+  min-height: 570px;
   box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
   transition: border-color var(--duration-fast) ease,
               transform var(--duration-base) var(--ease-spring),
@@ -956,12 +956,12 @@
   box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.5);
 }
 
-/* Bento Visual Header (Framed Inner Box for 3D Viewport) */
+/* Bento Visual Header (Framed Inner Box for 3D Viewport - Expanded Height) */
 .bento-visual-header {
   position: relative;
-  margin: 12px 12px 0 12px;
-  width: calc(100% - 24px);
-  height: 224px;
+  margin: 14px 14px 0 14px;
+  width: calc(100% - 28px);
+  height: 275px;
   background: rgba(8, 8, 12, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
@@ -1047,10 +1047,14 @@
 }
 
 @media (max-width: 480px) {
+  .bento-card {
+    min-height: 540px;
+  }
+
   .bento-visual-header {
     margin: 10px 10px 0 10px;
     width: calc(100% - 20px);
-    height: 200px;
+    height: 235px;
   }
 }
 
