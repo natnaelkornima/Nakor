@@ -24,7 +24,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/design-system.css?v=10.1">
-  <link rel="stylesheet" href="css/components.css?v=10.2">
+  <link rel="stylesheet" href="css/components.css?v=10.3">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -67,8 +67,7 @@
         <ul class="nav-links">
           <li><a href="#about" class="nav-link">About</a></li>
           <li><a href="#projects" class="nav-link">Projects</a></li>
-          <li><a href="#architecture" class="nav-link">Architecture</a></li>
-          <li><a href="#ai-engineering" class="nav-link">AI Systems</a></li>
+          <li><a href="#architecture" class="nav-link">Architecture &amp; AI</a></li>
           <li><a href="#skills" class="nav-link">Skills</a></li>
           <li><a href="#github" class="nav-link">Code</a></li>
           <li><a href="#experience" class="nav-link">Experience</a></li>
@@ -91,8 +90,7 @@
   <div id="mobile-menu" class="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
     <a href="#about" class="mobile-nav-link">About</a>
     <a href="#projects" class="mobile-nav-link">Projects</a>
-    <a href="#architecture" class="mobile-nav-link">Architecture</a>
-    <a href="#ai-engineering" class="mobile-nav-link">AI Systems</a>
+    <a href="#architecture" class="mobile-nav-link">Architecture &amp; AI</a>
     <a href="#skills" class="mobile-nav-link">Skills</a>
     <a href="#github" class="mobile-nav-link">Code</a>
     <a href="#experience" class="mobile-nav-link">Experience</a>
@@ -265,13 +263,13 @@
       </div>
     </section>
 
-    <!-- Architecture Visualizer Section -->
+    <!-- Architecture & AI Engineering Section (Unified) -->
     <section id="architecture" class="section-wrapper section-wrapper--bordered">
       <div class="container">
         <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 03. System Thinking</span>
-          <h2 class="section-title">Engineering Architecture</h2>
-          <p class="section-subtitle">How I structure distributed client-server systems and production AI inference pipelines.</p>
+          <span class="section-label">// 03. Architecture &amp; Systems</span>
+          <h2 class="section-title">Engineering Architecture &amp; AI Systems</h2>
+          <p class="section-subtitle">How I structure resilient client-server services, distributed event queues, and deterministic AI inference pipelines.</p>
         </div>
 
         <!-- Segmented Tab Switcher -->
@@ -288,6 +286,7 @@
           </div>
         </div>
 
+        <!-- Interactive Pipeline Blueprint -->
         <div class="architecture-diagram-container reveal-on-scroll delay-2">
           <div class="arch-meta-header">
             <div class="arch-meta-title-group">
@@ -297,56 +296,50 @@
             </div>
           </div>
 
-          <!-- Architecture Grid Flow -->
+          <!-- Architecture Grid Flow (Rendered dynamically by js/app.js) -->
           <div id="arch-diagram-flow" class="arch-flow-wrapper">
             <!-- Rendered dynamically by js/app.js -->
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- AI Era Section -->
-    <section id="ai-engineering" class="section-wrapper section-wrapper--bordered">
-      <div class="container">
-        <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 04. Modern Paradigm</span>
-          <h2 class="section-title">Building in the AI Era</h2>
-          <p class="section-subtitle">A pragmatic engineering perspective on integrating modern machine intelligence into production software.</p>
-        </div>
-
-        <div class="ai-section-content">
-          <div class="ai-statement-card reveal-on-scroll">
-            <blockquote class="ai-quote">
-              "I understand AI as a foundational component of modern software engineering, not as a buzzword or marketing panacea."
-            </blockquote>
-            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
-              Machine learning models provide extraordinary perceptual and generative capabilities, but in production, they are fundamentally non-deterministic APIs. High-performing engineering requires structuring rigorous validation fences, semantic retrieval grounding, and fallback circuits around model outputs.
+        <!-- Integrated Production AI Guardrails & Principles -->
+        <div id="ai-engineering" class="arch-ai-principles reveal-on-scroll delay-3">
+          <div class="arch-ai-thesis-banner">
+            <div class="arch-ai-thesis-badge font-mono">
+              <span class="cue-dot"></span>
+              <span>PRODUCTION AI PHILOSOPHY</span>
+            </div>
+            <p class="arch-ai-thesis-text">
+              &ldquo;Machine learning models provide extraordinary perceptual and generative capabilities, but in production, they are fundamentally non-deterministic APIs. High-performing engineering requires structuring rigorous validation fences, semantic retrieval grounding, and fallback circuits around model outputs.&rdquo;
             </p>
           </div>
 
-          <div class="ai-pillars reveal-on-scroll delay-1">
-            <div class="principle-card ai-pillar-item">
-              <span class="ai-pillar-dot"></span>
-              <div class="ai-pillar-text">
-                <h3>Structured Schema Enforcement</h3>
-                <p>Mandating strict Pydantic and Zod validation on model generation outputs to prevent parsing errors and guarantee type safety down the stack.</p>
+          <div class="arch-ai-pillars-grid">
+            <div class="arch-pillar-card spotlight-card">
+              <div class="arch-pillar-header">
+                <span class="arch-pillar-num font-mono">#01</span>
+                <span class="arch-pillar-tag font-mono">TYPE SAFETY</span>
               </div>
+              <h4 class="arch-pillar-title">Structured Schema Enforcement</h4>
+              <p class="arch-pillar-desc">Mandating strict Pydantic and Zod validation on model generation outputs to prevent parsing errors and guarantee type safety down the stack.</p>
             </div>
 
-            <div class="principle-card ai-pillar-item">
-              <span class="ai-pillar-dot"></span>
-              <div class="ai-pillar-text">
-                <h3>Grounding via Vector Retrieval (RAG)</h3>
-                <p>Coupling domain knowledge corpora with dense vector embeddings to eliminate hallucination in domain-critical queries.</p>
+            <div class="arch-pillar-card spotlight-card">
+              <div class="arch-pillar-header">
+                <span class="arch-pillar-num font-mono">#02</span>
+                <span class="arch-pillar-tag font-mono">GROUNDING</span>
               </div>
+              <h4 class="arch-pillar-title">Grounding via Vector Retrieval (RAG)</h4>
+              <p class="arch-pillar-desc">Coupling domain knowledge corpora with dense vector embeddings to eliminate hallucination in domain-critical queries.</p>
             </div>
 
-            <div class="principle-card ai-pillar-item">
-              <span class="ai-pillar-dot"></span>
-              <div class="ai-pillar-text">
-                <h3>Cost & Latency Optimization</h3>
-                <p>Implementing aggressive semantic caching in Redis and selecting tiered model sizes based on task complexity.</p>
+            <div class="arch-pillar-card spotlight-card">
+              <div class="arch-pillar-header">
+                <span class="arch-pillar-num font-mono">#03</span>
+                <span class="arch-pillar-tag font-mono">EFFICIENCY</span>
               </div>
+              <h4 class="arch-pillar-title">Cost &amp; Latency Optimization</h4>
+              <p class="arch-pillar-desc">Implementing aggressive semantic caching in Redis and selecting tiered model sizes based on task complexity.</p>
             </div>
           </div>
         </div>
@@ -357,7 +350,7 @@
     <section id="skills" class="section-wrapper section-wrapper--bordered">
       <div class="container">
         <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 05. Technical Stack</span>
+          <span class="section-label">// 04. Technical Stack</span>
           <h2 class="section-title">Capabilities & Tools</h2>
           <p class="section-subtitle">Core languages, frameworks, and engineering tools powering production systems.</p>
         </div>
@@ -678,7 +671,7 @@
     <section id="github" class="section-wrapper section-wrapper--bordered">
       <div class="container">
         <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 06. Open Source & Code</span>
+          <span class="section-label">// 05. Open Source & Code</span>
           <h2 class="section-title">GitHub Activity & Repositories</h2>
           <p class="section-subtitle">Authentic codebases, public repositories, and language distribution.</p>
         </div>
@@ -693,7 +686,7 @@
     <section id="experience" class="section-wrapper section-wrapper--bordered">
       <div class="container">
         <div class="section-header reveal-on-scroll">
-          <span class="section-label">// 07. Track Record</span>
+          <span class="section-label">// 06. Track Record</span>
           <h2 class="section-title">Experience & Background</h2>
           <p class="section-subtitle">Chronological record of engineering systems, software projects, and education.</p>
         </div>
@@ -721,7 +714,7 @@
     <section id="contact" class="section-wrapper">
       <div class="container">
         <div class="contact-card reveal-on-scroll">
-          <span class="section-label">// 08. Initiation</span>
+          <span class="section-label">// 07. Initiation</span>
           <h2 class="contact-headline">Let's build something useful.</h2>
           <p class="contact-subtext">
             I am currently open to engineering roles, ambitious software products, and technical collaborations. Whether you need a full-stack engineer or a systems builder, feel free to reach out.
@@ -784,6 +777,6 @@
   </footer>
 
   <!-- Application Logic -->
-  <script type="module" src="js/app.js?v=10.2"></script>
+  <script type="module" src="js/app.js?v=10.3"></script>
 </body>
 </html>
