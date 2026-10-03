@@ -912,43 +912,14 @@
 .projects-hud {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
-  padding: 0.35rem 0.75rem;
+  padding: 0.35rem 0.65rem;
   border-radius: var(--radius-full);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-}
-
-.projects-counter {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-}
-
-.hud-label {
-  color: var(--accent-primary);
-  font-weight: 600;
-}
-
-.hud-nums {
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.hud-nums strong {
-  color: var(--text-primary);
-  font-size: 0.85rem;
-}
-
-.hud-sep {
-  color: var(--text-muted);
 }
 
 .projects-hud-progress {
@@ -1017,22 +988,22 @@
 .projects-horizontal-track {
   display: flex;
   align-items: center;
-  gap: clamp(24px, 3.5vw, 44px);
+  gap: clamp(24px, 3.2vw, 42px);
   width: max-content;
   padding-left: var(--projects-track-pad, clamp(1.5rem, 6vw, 10vw));
   padding-right: clamp(4rem, 15vw, 25vw);
   will-change: transform;
   transform: translate3d(0, 0, 0);
-  transition: transform 0.05s linear;
+  transition: none; /* No CSS transition during JS lerp scrub to eliminate lag & jitter */
 }
 
-/* Horizontal Project Card */
+/* Horizontal Project Card: Longer Height, Medium Sized Width */
 .horizontal-project-card {
   display: flex;
   flex-direction: column;
-  width: clamp(320px, 58vw, 700px);
-  max-width: calc(100vw - 40px);
-  height: clamp(440px, calc(100vh - 220px), 560px);
+  width: clamp(340px, 42vw, 500px);
+  max-width: calc(100vw - 36px);
+  height: clamp(510px, calc(100vh - 160px), 630px);
   min-height: unset;
   flex-shrink: 0;
   background: var(--bg-surface);
@@ -1042,41 +1013,47 @@
   cursor: pointer;
   position: relative;
   transform-origin: center center;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
   box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.45);
 }
 
-/* Visual Header inside Horizontal Card */
+/* Visual Header inside Horizontal Card: Tall, Generous 3D Animation Box */
 .horizontal-project-card .bento-visual-header {
-  flex: 0 0 clamp(180px, 42%, 260px);
-  margin: 12px 12px 0 12px;
-  width: calc(100% - 24px);
+  flex: 0 0 clamp(230px, 47%, 310px);
+  min-height: 230px;
+  margin: 14px 14px 0 14px;
+  width: calc(100% - 28px);
   height: auto;
+  position: relative;
+  border-radius: calc(var(--radius-xl) - 4px);
+  overflow: hidden;
 }
 
 /* Body inside Horizontal Card */
 .horizontal-project-card .bento-body {
   flex: 1 1 auto;
   min-height: 0;
-  padding: clamp(0.9rem, 2vh, 1.25rem) clamp(1rem, 2.5vw, 1.35rem);
+  padding: clamp(0.9rem, 2vh, 1.25rem) clamp(1rem, 2.2vw, 1.35rem);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .horizontal-project-card .bento-title {
-  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  font-size: clamp(1.1rem, 1.5vw, 1.32rem);
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .horizontal-project-card .bento-desc {
-  font-size: clamp(0.85rem, 1.2vw, 0.92rem);
+  font-size: clamp(0.84rem, 1.1vw, 0.92rem);
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.55rem;
 }
 
 /* Shadow Veil for the peeking right shadow project */
@@ -1198,8 +1175,13 @@
   }
 
   .horizontal-project-card {
-    width: clamp(290px, 78vw, 540px);
-    height: clamp(430px, calc(100vh - 240px), 520px);
+    width: clamp(320px, 76vw, 460px);
+    height: clamp(480px, calc(100vh - 180px), 570px);
+  }
+
+  .horizontal-project-card .bento-visual-header {
+    flex: 0 0 clamp(200px, 45%, 260px);
+    min-height: 200px;
   }
 }
 
@@ -1216,16 +1198,19 @@
 
   .projects-hud {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 
   .horizontal-project-card {
-    width: calc(100vw - 44px);
-    height: clamp(400px, calc(100dvh - 210px), 480px);
+    width: clamp(280px, calc(100vw - 36px), 380px);
+    height: clamp(460px, calc(100dvh - 150px), 540px);
   }
 
   .horizontal-project-card .bento-visual-header {
-    flex: 0 0 clamp(150px, 36%, 190px);
+    flex: 0 0 clamp(180px, 42%, 230px);
+    min-height: 180px;
+    margin: 10px 10px 0 10px;
+    width: calc(100% - 20px);
   }
 }
 
@@ -1240,11 +1225,12 @@
   }
 
   .horizontal-project-card {
-    height: clamp(380px, calc(100vh - 170px), 460px);
+    height: clamp(450px, calc(100vh - 140px), 530px);
   }
 
   .horizontal-project-card .bento-visual-header {
-    flex: 0 0 clamp(140px, 34%, 180px);
+    flex: 0 0 clamp(190px, 40%, 240px);
+    min-height: 190px;
   }
 
   .horizontal-project-card .bento-body {

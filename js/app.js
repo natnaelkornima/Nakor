@@ -231,7 +231,21 @@ function renderProjects(filter = 'all') {
 
   const filtered = filter === 'all' 
     ? projectsData 
-    : projectsData.filter(p => p.category.toLowerCase().replace(/\s+/g, '-') === filter.toLowerCase());
+    : projectsData.filter(p => {
+        const target = filter.toLowerCase().trim();
+        if (p.categories && Array.isArray(p.categories)) {
+          if (p.categories.some(c => {
+            const norm = c.toLowerCase().replace(/[\s&]+/g, '-');
+            return norm === target || norm.includes(target) || (target === 'ai' && (norm.includes('ai') || norm.includes('ml')));
+          })) {
+            return true;
+          }
+        }
+        const cat = (p.category || '').toLowerCase().replace(/[\s&]+/g, '-');
+        if (cat === target || cat.includes(target)) return true;
+        if (target === 'ai' && (cat.includes('ai') || cat.includes('ml'))) return true;
+        return false;
+      });
 
   projectListEl.style.opacity = '0';
 
@@ -338,8 +352,6 @@ function initProjectsHorizontalScroll() {
   const section = document.getElementById('projects');
   const viewport = document.getElementById('projects-viewport');
   const track = document.getElementById('projects-container');
-  const hudActiveNum = document.getElementById('project-active-num');
-  const hudTotalNum = document.getElementById('project-total-num');
   const hudFill = document.getElementById('projects-hud-fill');
   const prevBtn = document.getElementById('project-prev-btn');
   const nextBtn = document.getElementById('project-next-btn');
@@ -349,33 +361,18 @@ function initProjectsHorizontalScroll() {
   const cards = Array.from(track.querySelectorAll('.horizontal-project-card'));
   const totalCards = cards.length;
 
-  if (hudTotalNum) {
-    hudTotalNum.textContent = String(totalCards).padStart(2, '0');
-  }
-
-  // Single card mode: no horizontal scroll required
-  if (totalCards <= 1) {
+  if (totalCards === 0) {
     section.style.setProperty('--projects-scroll-height', 'auto');
-    if (cards[0]) {
-      cards[0].style.transform = 'none';
-      cards[0].style.opacity = '1';
-      cards[0].style.filter = 'none';
-      cards[0].classList.add('is-active');
-      cards[0].classList.remove('is-peeking');
-      const veil = cards[0].querySelector('.card-shadow-veil');
-      if (veil) veil.style.opacity = '0';
-    }
     if (prevBtn) prevBtn.disabled = true;
     if (nextBtn) nextBtn.disabled = true;
-    if (hudFill) hudFill.style.width = '100%';
-    if (hudActiveNum) hudActiveNum.textContent = '01';
+    if (hudFill) hudFill.style.width = '0%';
     scrollShowcaseToIndex = () => {};
     return;
   }
 
-  // Calculate section scroll height: (totalCards - 1) * 90vh + 100vh
-  const scrollDistancePerCard = window.innerHeight * 0.9;
-  const totalScrollDistance = (totalCards - 1) * scrollDistancePerCard;
+  // Calculate section scroll height: generous pacing so horizontal scroll does not fly past too fast
+  const scrollDistancePerCard = window.innerHeight * 1.5;
+  const totalScrollDistance = Math.max(totalCards - 1, 0.5) * scrollDistancePerCard;
   const sectionHeight = totalScrollDistance + window.innerHeight;
   section.style.setProperty('--projects-scroll-height', `${sectionHeight}px`);
 
@@ -394,9 +391,9 @@ function initProjectsHorizontalScroll() {
   let rafId = null;
 
   function calculateCardStep() {
-    if (cards.length < 2) return cards[0]?.offsetWidth || 600;
+    if (cards.length < 2) return cards[0]?.offsetWidth || 480;
     const step = cards[1].offsetLeft - cards[0].offsetLeft;
-    return step > 0 ? step : (cards[0].offsetWidth + 36);
+    return step > 0 ? step : (cards[0].offsetWidth + 32);
   }
 
   let cardStep = calculateCardStep();
@@ -404,35 +401,28 @@ function initProjectsHorizontalScroll() {
   function updateVisuals(virtualIdx) {
     const currentActive = Math.round(virtualIdx);
 
-    // Update HUD indicator
-    if (hudActiveNum) {
-      const displayNum = Math.min(Math.max(currentActive + 1, 1), totalCards);
-      hudActiveNum.textContent = String(displayNum).padStart(2, '0');
-    }
-
     if (hudFill) {
-      const pct = (virtualIdx / (totalCards - 1)) * 100;
-      hudFill.style.width = `${Math.min(Math.max(pct, 12), 100)}%`;
+      const pct = totalCards > 1 ? (virtualIdx / (totalCards - 1)) * 100 : 100;
+      hudFill.style.width = `${Math.min(Math.max(pct, 15), 100)}%`;
     }
 
-    if (prevBtn) prevBtn.disabled = virtualIdx <= 0.05;
-    if (nextBtn) nextBtn.disabled = virtualIdx >= (totalCards - 1) - 0.05;
+    if (prevBtn) prevBtn.disabled = totalCards <= 1 || virtualIdx <= 0.05;
+    if (nextBtn) nextBtn.disabled = totalCards <= 1 || virtualIdx >= (totalCards - 1) - 0.05;
 
-    // Translate the track horizontally
+    // Translate the track horizontally with sub-pixel hardware acceleration
     const trackX = -virtualIdx * cardStep;
-    track.style.transform = `translate3d(${trackX}px, 0, 0)`;
+    track.style.transform = `translate3d(${trackX.toFixed(2)}px, 0, 0)`;
 
-    // Update each card's scale, opacity, filter, and shadow veil
+    // Update each card's scale, opacity, and shadow veil (pure GPU composite layers, no expensive filters)
     cards.forEach((card, idx) => {
       const diff = idx - virtualIdx;
       const absDiff = Math.abs(diff);
       const veil = card.querySelector('.card-shadow-veil');
 
-      if (absDiff < 0.08) {
+      if (absDiff < 0.06) {
         // Active Center Card: 100% visible, sharp, interactive
-        card.style.transform = 'scale(1) translateZ(0)';
+        card.style.transform = 'scale(1) translate3d(0, 0, 0)';
         card.style.opacity = '1';
-        card.style.filter = 'none';
         card.style.zIndex = '10';
         card.classList.add('is-active');
         card.classList.remove('is-peeking');
@@ -443,38 +433,31 @@ function initProjectsHorizontalScroll() {
         card.classList.add('is-peeking');
 
         const factor = Math.min(diff, 1);
-        const scale = 1.0 - (0.08 * factor);
-        const opacity = 1.0 - (0.62 * factor); // 0.38 at diff=1
-        const blur = factor * 1.5;
-        const brightness = 1.0 - (0.35 * factor); // 0.65 at diff=1
+        const scale = 1.0 - (0.06 * factor);
+        const opacity = 1.0 - (0.55 * factor); // 0.45 at diff=1
 
-        // If card is further than 1 step away, fade out gracefully
         let finalOpacity = opacity;
         if (diff > 1) {
-          finalOpacity = Math.max(0, 0.38 - (diff - 1) * 0.4);
+          finalOpacity = Math.max(0, 0.45 - (diff - 1) * 0.45);
         }
 
-        card.style.transform = `scale(${scale.toFixed(3)}) translateZ(0)`;
+        card.style.transform = `scale(${scale.toFixed(3)}) translate3d(0, 0, 0)`;
         card.style.opacity = finalOpacity.toFixed(3);
-        card.style.filter = `brightness(${brightness.toFixed(2)}) blur(${blur.toFixed(1)}px)`;
         card.style.zIndex = String(10 - idx);
-        if (veil) veil.style.opacity = (factor * 0.72).toFixed(2);
+        if (veil) veil.style.opacity = (factor * 0.78).toFixed(2);
       } else {
         // Card to the left (Previous card exiting to the left in shadow)
         card.classList.remove('is-active');
         card.classList.remove('is-peeking');
 
         const factor = Math.min(absDiff, 1);
-        const scale = 1.0 - (0.08 * factor);
-        const opacity = Math.max(0, 1.0 - (0.75 * factor)); // 0.25 at diff=-1
-        const blur = factor * 2;
-        const brightness = 1.0 - (0.45 * factor); // 0.55 at diff=-1
+        const scale = 1.0 - (0.06 * factor);
+        const opacity = Math.max(0, 1.0 - (0.7 * factor));
 
-        card.style.transform = `scale(${scale.toFixed(3)}) translateZ(0)`;
+        card.style.transform = `scale(${scale.toFixed(3)}) translate3d(0, 0, 0)`;
         card.style.opacity = opacity.toFixed(3);
-        card.style.filter = `brightness(${brightness.toFixed(2)}) blur(${blur.toFixed(1)}px)`;
         card.style.zIndex = String(5 - Math.round(absDiff));
-        if (veil) veil.style.opacity = (factor * 0.8).toFixed(2);
+        if (veil) veil.style.opacity = (factor * 0.85).toFixed(2);
       }
     });
   }
@@ -490,7 +473,7 @@ function initProjectsHorizontalScroll() {
 
     const scrolled = -rect.top;
     const progress = Math.min(Math.max(scrolled / scrollTravel, 0), 1);
-    targetVirtualIndex = progress * (totalCards - 1);
+    targetVirtualIndex = totalCards > 1 ? progress * (totalCards - 1) : 0;
 
     if (!isTicking) {
       isTicking = true;
@@ -500,14 +483,14 @@ function initProjectsHorizontalScroll() {
 
   function rafLoop() {
     const delta = targetVirtualIndex - currentVirtualIndex;
-    if (Math.abs(delta) < 0.001) {
+    if (Math.abs(delta) < 0.0008) {
       currentVirtualIndex = targetVirtualIndex;
       updateVisuals(currentVirtualIndex);
       isTicking = false;
       return;
     }
 
-    currentVirtualIndex += delta * 0.2;
+    currentVirtualIndex += delta * 0.12;
     updateVisuals(currentVirtualIndex);
     rafId = requestAnimationFrame(rafLoop);
   }
@@ -622,11 +605,29 @@ function initProjectsHorizontalScroll() {
 }
 
 function initProjectFilters() {
+  const section = document.getElementById('projects');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
+      if (btn.classList.contains('active')) return;
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
       const filter = btn.getAttribute('data-filter') || 'all';
+
+      // If user is currently looking at or past the projects section, smoothly reposition to section start
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < 60) {
+          window.scrollTo({
+            top: section.offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      }
+
       renderProjects(filter);
     });
   });
