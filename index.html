@@ -24,7 +24,8 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/design-system.css?v=12.0">
-  <link rel="stylesheet" href="css/components.css?v=20.0">
+  <link rel="stylesheet" href="css/components.css?v=21.0">
+  <link rel="stylesheet" href="css/text-loop.css">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -319,11 +320,16 @@
         <div class="section-header reveal-on-scroll">
           <span class="section-label">// 04. Technical Stack</span>
           <h2 class="section-title">Capabilities & Tools</h2>
-          <p class="section-subtitle">Core languages, frameworks, and engineering tools powering production systems.</p>
         </div>
 
-        <div id="skills-container" class="tech-stack-container reveal-on-scroll delay-1">
-          <!-- Tech stack logos rendered dynamically via js/app.js -->
+        <div class="tech-stack-lead-wrapper reveal-on-scroll delay-1">
+          <p class="tech-stack-lead-text">
+            I build modern digital systems across four areas: <strong>frontend development</strong> for responsive and accessible user experiences, <strong>backend engineering</strong> for reliable APIs and distributed services, <strong>AI & machine learning</strong> for practical intelligent systems, and <strong>DevOps & infrastructure</strong> for deployment, automation, and efficient development workflows.
+          </p>
+        </div>
+
+        <div id="skills-container" class="tech-carousel-container reveal-on-scroll delay-2">
+          <!-- Logo carousel rendered dynamically via js/app.js -->
         </div>
       </div>
     </section>
@@ -660,8 +666,11 @@
     </div>
   </footer>
 
+  <!-- GSAP Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
   <!-- Application Logic -->
-  <script type="module" src="js/app.js?v=27.0"></script>
+  <script type="module" src="js/app.js?v=28.0"></script>
 </body>
 </html>
 

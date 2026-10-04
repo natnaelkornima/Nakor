@@ -18,6 +18,12 @@ import {
 import { HackerTyper } from './hacker-typer.js?v=1.0';
 import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
+import { initTextLoop } from './text-loop.js';
+
+// Expose TextLoop globally for component integration
+if (typeof window !== 'undefined') {
+  window.TextLoop = { init: initTextLoop };
+}
 
 
 // DOM Elements
@@ -740,52 +746,113 @@ function initDrawerEvents() {
 }
 
 /* ==========================================================================
-   Skills Matrix (With Semantic Relationship Highlighting & Prominent Logos)
+   Technical Stack Carousel (Continuous Sleek Infinite Logo Carousel)
    ========================================================================== */
 function renderSkills() {
   const container = document.getElementById('skills-container');
   if (!container) return;
 
-  container.className = 'tech-stack-container';
+  container.className = 'tech-carousel-container';
 
-  container.innerHTML = skillsData.categories.map((cat, cIdx) => `
-    <div class="tech-stack-group" role="region" aria-label="${cat.name}">
-      <div class="tech-group-header">
-        <div class="tech-group-meta">
-          <span class="tech-group-kicker font-mono">
-            <span class="live-dot" style="background: var(--accent);"></span>
-            ${cat.kicker}
-          </span>
-          <span class="tech-group-count font-mono">${cat.count}</span>
-        </div>
-        <h3 class="tech-group-name">${cat.name}</h3>
-        <p class="tech-group-desc">${cat.description}</p>
+  // Semantic category mapping for clean badges
+  const catMap = {
+    "Frontend Engineering": "Frontend",
+    "Backend & Systems": "Backend",
+    "AI & Machine Learning Systems": "AI / ML",
+    "Infrastructure & Engineering Tools": "DevOps"
+  };
+
+  const allSkills = [];
+  skillsData.categories.forEach(cat => {
+    const tag = catMap[cat.name] || 'Core';
+    cat.skills.forEach(s => {
+      allSkills.push({ ...s, tag });
+    });
+  });
+
+  // Balanced split across two parallel tracks
+  const row1Skills = [
+    ...allSkills.filter(s => s.tag === 'Frontend'),
+    ...allSkills.filter(s => s.tag === 'Backend')
+  ];
+  const row2Skills = [
+    ...allSkills.filter(s => s.tag === 'AI / ML'),
+    ...allSkills.filter(s => s.tag === 'DevOps')
+  ];
+
+  const buildCardHtml = (s) => `
+    <div 
+      class="tech-carousel-card" 
+      role="listitem"
+      tabindex="0"
+      aria-label="${s.name}"
+      style="--tech-color: ${s.color}; --tech-glow: ${s.glow};"
+    >
+      <div class="tech-carousel-icon" aria-hidden="true">
+        ${getTechLogo(s.logo || s.name)}
       </div>
+      <span class="tech-carousel-name">${s.name}</span>
+      <span class="tech-carousel-category-tag font-mono">${s.tag}</span>
+    </div>
+  `;
 
-      <div class="tech-logo-cluster" role="list">
-        ${cat.skills.map((s, sIdx) => {
-          const delay = ((sIdx % 6) * 0.28).toFixed(2);
-          const duration = (3.8 + (sIdx % 4) * 0.5).toFixed(1);
-          return `
-            <div 
-              class="tech-logo-pod" 
-              role="listitem"
-              tabindex="0"
-              aria-label="${s.name}"
-              style="--tech-color: ${s.color}; --tech-glow: ${s.glow}; --pod-delay: ${delay}s; --pod-duration: ${duration}s;"
-            >
-              <div class="tech-logo-icon" aria-hidden="true">
-                ${getTechLogo(s.logo || s.name)}
-              </div>
-              <div class="tech-logo-tooltip font-mono" role="tooltip">
-                ${s.name}
-              </div>
-            </div>
-          `;
-        }).join('')}
+  // Render 2 rows with duplicated items for mathematically seamless infinite looping
+  container.innerHTML = `
+    <div class="tech-carousel-row" role="region" aria-label="Frontend and Backend Stack">
+      <div class="tech-carousel-track track-1" role="list">
+        ${[...row1Skills, ...row1Skills].map(buildCardHtml).join('')}
       </div>
     </div>
-  `).join('');
+    <div class="tech-carousel-row" role="region" aria-label="AI, Systems, and Infrastructure Stack">
+      <div class="tech-carousel-track track-2" role="list">
+        ${[...row2Skills, ...row2Skills].map(buildCardHtml).join('')}
+      </div>
+    </div>
+  `;
+
+  const track1 = container.querySelector('.track-1');
+  const track2 = container.querySelector('.track-2');
+  if (!track1 || !track2) return;
+
+  const prefersReduced =
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReduced) return;
+
+  // Animate smoothly from right to left using GSAP
+  const gsapLib = window.gsap;
+  if (gsapLib) {
+    const tween1 = gsapLib.to(track1, {
+      xPercent: -50,
+      duration: 32,
+      ease: 'none',
+      repeat: -1
+    });
+
+    const tween2 = gsapLib.to(track2, {
+      xPercent: -50,
+      duration: 38,
+      ease: 'none',
+      repeat: -1
+    });
+
+    const pause = () => {
+      tween1.pause();
+      tween2.pause();
+    };
+
+    const resume = () => {
+      tween1.resume();
+      tween2.resume();
+    };
+
+    container.addEventListener('pointerenter', pause);
+    container.addEventListener('pointerleave', resume);
+  } else {
+    // High-performance CSS fallback
+    track1.style.animation = 'techCarouselScroll 32s linear infinite';
+    track2.style.animation = 'techCarouselScroll 38s linear infinite';
+  }
 }
 
 /* ==========================================================================

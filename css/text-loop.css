@@ -1,0 +1,35 @@
+/* ==========================================================================
+   TextLoop Component Styles (React Bits / GSAP)
+   ========================================================================== */
+
+.text-loop {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-loop-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.text-loop-text {
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--font-heading, inherit);
+  text-anchor: start;
+}
+
+.text-loop-measure {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  font-family: var(--font-heading, inherit);
+}

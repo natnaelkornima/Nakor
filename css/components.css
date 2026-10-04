@@ -2146,234 +2146,154 @@
 
 /* ==========================================================================
 /* ==========================================================================
-   Technical Stack Section (Clean, Card-Free Animated Logo Clusters)
+/* ==========================================================================
+   Technical Stack Section (Lead Statement & Continuous Smooth Logo Carousel)
    ========================================================================== */
-.tech-stack-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(2.5rem, 5vw, 4rem);
-  width: 100%;
+.tech-stack-lead-wrapper {
+  max-width: 920px;
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
 }
 
-@media (min-width: 900px) {
-  .tech-stack-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(3rem, 5vw, 4.5rem);
-  }
-}
-
-/* Individual Classification Track / Lane (Card-Free) */
-.tech-stack-group {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding-top: var(--space-2);
-}
-
-.tech-group-header {
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--border-subtle);
-  position: relative;
-}
-
-.tech-group-header::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 48px;
-  height: 1px;
-  background: var(--accent);
-}
-
-.tech-group-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 0.45rem;
-}
-
-.tech-group-kicker {
-  font-family: var(--font-mono);
-  font-size: clamp(0.68rem, 2vw, 0.72rem);
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  font-weight: 600;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.tech-group-count {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  padding: 0.16rem 0.55rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
-  border-radius: 9999px;
-  white-space: nowrap;
-}
-
-.tech-group-name {
-  font-family: var(--font-heading);
-  font-size: clamp(1.15rem, 3vw, 1.35rem);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.25rem;
-  letter-spacing: -0.015em;
-  line-height: 1.25;
-}
-
-.tech-group-desc {
-  font-size: clamp(0.8rem, 2.2vw, 0.85rem);
+.tech-stack-lead-text {
+  font-size: clamp(1.08rem, 2.2vw, 1.28rem);
+  line-height: 1.75;
   color: var(--text-secondary);
-  line-height: 1.5;
+  letter-spacing: -0.01em;
   margin: 0;
 }
 
-/* Floating Animated Logo Cluster */
-.tech-logo-cluster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(0.75rem, 2vw, 1.15rem);
-  align-items: center;
-  padding-top: 0.5rem;
-}
-
-/* Premium Floating Logo Pod */
-.tech-logo-pod {
-  width: clamp(52px, 6vw, 62px);
-  height: clamp(52px, 6vw, 62px);
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.028);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  position: relative;
-  cursor: pointer;
-  touch-action: manipulation;
+.tech-stack-lead-text strong {
   color: var(--text-primary);
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--accent);
+  padding-bottom: 1px;
+}
+
+/* Continuous Logo Carousel Stage */
+.tech-carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  /* Premium edge fade mask on left and right */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.tech-carousel-row {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  user-select: none;
+}
+
+.tech-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Individual Tech Carousel Card */
+.tech-carousel-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px; /* Uniform 5px border-radius */
+  background: var(--bg-surface, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  white-space: nowrap;
+  cursor: pointer;
   outline: none;
-
-  /* Ambient organic floating animation */
-  animation: techLogoFloat var(--pod-duration, 4s) ease-in-out infinite;
-  animation-delay: var(--pod-delay, 0s);
-
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.28s ease,
-              background-color 0.28s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              background 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes techLogoFloat {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
+.tech-carousel-card:hover,
+.tech-carousel-card:focus-visible {
+  transform: translateY(-3px) scale(1.03);
+  border-color: var(--tech-color, var(--accent));
+  background: rgba(255, 255, 255, 0.065);
+  box-shadow: 0 10px 24px -4px var(--tech-glow, rgba(0, 255, 102, 0.35)),
+              0 0 0 1px var(--tech-color, var(--accent));
+  z-index: 5;
 }
 
-.tech-logo-icon {
+.tech-carousel-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.tech-logo-pod svg,
-.tech-logo-pod .tech-icon {
-  width: 28px !important;
-  height: 28px !important;
-  display: block;
   flex-shrink: 0;
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.25s ease;
+  width: 26px;
+  height: 26px;
 }
 
-/* Hover & Focus State */
-.tech-logo-pod:hover,
-.tech-logo-pod:focus-visible {
-  animation-play-state: paused;
-  transform: translateY(-8px) scale(1.14);
-  background: rgba(255, 255, 255, 0.065);
-  border-color: var(--tech-color, var(--accent));
-  box-shadow: 0 14px 28px -4px var(--tech-glow, rgba(56, 189, 248, 0.4)),
-              0 0 0 1px var(--tech-color, var(--accent)),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  z-index: 10;
+.tech-carousel-icon svg,
+.tech-carousel-icon .tech-icon {
+  width: 24px !important;
+  height: 24px !important;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  transition: transform 0.2s ease;
 }
 
-.tech-logo-pod:hover svg,
-.tech-logo-pod:focus-visible svg {
+.tech-carousel-card:hover .tech-carousel-icon svg {
   transform: scale(1.1);
-  filter: drop-shadow(0 4px 10px var(--tech-glow, rgba(0, 0, 0, 0.5)));
 }
 
-.tech-logo-pod:active {
-  transform: translateY(-4px) scale(1.08);
-}
-
-/* Sleek Monospace Floating Tooltip */
-.tech-logo-tooltip {
-  position: absolute;
-  bottom: calc(100% + 9px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  background: rgba(15, 15, 18, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #fafafa;
+.tech-carousel-name {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  padding: 0.28rem 0.65rem;
-  border-radius: 6px;
-  white-space: nowrap;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 25;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
 }
 
-.tech-logo-tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 4px;
-  border-style: solid;
-  border-color: rgba(15, 15, 18, 0.96) transparent transparent transparent;
+.tech-carousel-category-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0.12rem 0.45rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+  margin-left: 0.25rem;
 }
 
-.tech-logo-pod:hover .tech-logo-tooltip,
-.tech-logo-pod:focus-visible .tech-logo-tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* Accessibility: reduce motion respect */
-@media (prefers-reduced-motion: reduce) {
-  .tech-logo-pod {
-    animation: none;
+@keyframes techCarouselScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
+
+.tech-carousel-container:hover .tech-carousel-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-carousel-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 
 /* ==========================================================================
    Experience & Education Timeline (Scroll-Fill)
