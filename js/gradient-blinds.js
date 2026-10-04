@@ -81,6 +81,7 @@ export class GradientBlinds {
     this.renderer = new Renderer({
       dpr: Math.min(this.options.dpr, 2),
       alpha: true,
+      premultipliedAlpha: true,
       antialias: true
     });
 
@@ -187,7 +188,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
       uvMod.x += sin(a) * w;
       uvMod.y += cos(b) * w;
     }
-    float t = uvMod.x;
+
+    // Smoothly flows from left to right along the diagonal
+    float t = mix(uv0.x, uvMod.x, 0.35);
     if (uMirror > 0.5) {
       t = 1.0 - abs(1.0 - 2.0 * fract(t));
     }
@@ -198,7 +201,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float r = max(uSpotlightRadius, 1e-4);
     float dn = d / r;
     float spot = (1.0 - 2.0 * pow(dn, uSpotlightSoftness)) * uSpotlightOpacity;
-    vec3 cir = vec3(spot);
+
+    // Ambient glow so diagonal blinds are beautifully present across the width,
+    // and smoothly transition from left to right with no black box
+    float ambient = 0.22 * (0.8 + 0.4 * uv0.x);
+    vec3 cir = vec3(max(spot, ambient - 0.45));
+
     float blindCount = max(uBlindCount, 1.0);
     float stripePhase = uvMod.x * blindCount;
     float stripe = fract(stripePhase);
@@ -211,25 +219,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 revealSignal = cir + base - ran;
 
     vec3 col;
+    float alpha = 0.0;
     if (uLightMode > 0.5) {
         float peak = max(base.r, max(base.g, base.b));
         vec3 pigment = base / max(peak, 0.0001);
         float neutral = min(pigment.r, min(pigment.g, pigment.b));
         pigment = max(pigment - vec3(neutral * 0.72), vec3(0.0));
         pigment /= max(max(pigment.r, max(pigment.g, pigment.b)), 0.0001);
-        pigment = mix(pigment, pigment * pigment, 0.12) * 0.72;
+        pigment = mix(pigment, pigment * pigment, 0.12) * 0.85;
         vec3 revealed = clamp(revealSignal, 0.0, 1.0);
         float coverage = max(revealed.r, max(revealed.g, revealed.b));
-        col = mix(vec3(1.0), pigment, coverage);
+        col = pigment;
         float grain = max(rand(gl_FragCoord.xy + iTime) - 0.5, 0.0);
-        float grainAmount = grain * uNoise * mix(0.12, 0.18, coverage);
+        float grainAmount = grain * uNoise * mix(0.08, 0.15, coverage);
         col = clamp(col - vec3(grainAmount), 0.0, 1.0);
+        // Alpha transparency so light theme background shines through
+        alpha = smoothstep(0.03, 0.85, coverage);
     } else {
-        col = revealSignal;
-        col += (rand(gl_FragCoord.xy + iTime) - 0.5) * uNoise;
+        vec3 lit = max(revealSignal, vec3(0.0));
+        col = lit;
+        float intensity = clamp(max(lit.r, max(lit.g, lit.b)), 0.0, 1.0);
+        col += (rand(gl_FragCoord.xy + iTime) - 0.5) * uNoise * intensity;
+        col = max(col, vec3(0.0));
+        // Zero black background: unlit areas are 100% transparent.
+        // Portfolio website background & dot pattern show through with genuine alpha.
+        alpha = smoothstep(0.02, 0.85, intensity);
     }
 
-    fragColor = vec4(col, 1.0);
+    fragColor = vec4(col * alpha, alpha);
 }
 
 void main() {
@@ -268,11 +285,14 @@ void main() {
       uLightMode: { value: isLight ? 1 : 0 }
     };
 
-    // 4. Program & Mesh
+    // 4. Program & Mesh with transparency
     this.program = new Program(gl, {
       vertex,
       fragment,
-      uniforms: this.uniforms
+      uniforms: this.uniforms,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false
     });
 
     this.geometry = new Triangle(gl);

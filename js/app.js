@@ -15,7 +15,7 @@ import {
   githubShowcaseData
 } from './data.js?v=10.0';
 
-import { GradientBlinds } from './gradient-blinds.js?v=1.0';
+import { GradientBlinds } from './gradient-blinds.js?v=2.0';
 import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
 
@@ -1111,20 +1111,20 @@ function initApp() {
   initCopyEmail();
   initConnectAndCallActions();
 
-  // Initialize Interactive WebGL Gradient Blinds
+  // Initialize Interactive WebGL Gradient Blinds (Large, Diagonal, Smooth Left-to-Right Transition)
   new GradientBlinds('#hero-blinds-container', {
     gradientColors: ['#FF9FFC', '#5227FF'],
-    angle: 0,
-    noise: 0.3,
-    blindCount: 12,
-    blindMinWidth: 50,
-    spotlightRadius: 0.5,
-    spotlightSoftness: 1,
-    spotlightOpacity: 1,
+    angle: 45, // Diagonal blinds
+    noise: 0.18,
+    blindCount: 10, // Larger, wider architectural blinds
+    blindMinWidth: 60,
+    spotlightRadius: 0.8, // Generous spotlight illumination
+    spotlightSoftness: 1.15,
+    spotlightOpacity: 1.0,
     mouseDampening: 0.15,
     distortAmount: 0,
-    shineDirection: 'left',
-    mixBlendMode: 'lighten'
+    shineDirection: 'right', // Bevel shine smoothly flows towards the right
+    mixBlendMode: 'normal' // Standard alpha compositing preserves website background
   });
 
   // Initialize Kinetic Architectural Typography TechText for Footer Brandmark
