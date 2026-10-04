@@ -15,7 +15,7 @@ import {
   githubShowcaseData
 } from './data.js?v=10.0';
 
-import { HeroAsciiDither } from './hero-ascii-dither.js?v=1.0';
+import { GradientBlinds } from './gradient-blinds.js?v=1.0';
 import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
 
@@ -1111,8 +1111,21 @@ function initApp() {
   initCopyEmail();
   initConnectAndCallActions();
 
-  // Initialize Living ASCII & Dither Creation Artwork Canvas
-  new HeroAsciiDither('hero-creation-canvas');
+  // Initialize Interactive WebGL Gradient Blinds
+  new GradientBlinds('#hero-blinds-container', {
+    gradientColors: ['#FF9FFC', '#5227FF'],
+    angle: 0,
+    noise: 0.3,
+    blindCount: 12,
+    blindMinWidth: 50,
+    spotlightRadius: 0.5,
+    spotlightSoftness: 1,
+    spotlightOpacity: 1,
+    mouseDampening: 0.15,
+    distortAmount: 0,
+    shineDirection: 'left',
+    mixBlendMode: 'lighten'
+  });
 
   // Initialize Kinetic Architectural Typography TechText for Footer Brandmark
   new TechText('#footer-nakor-container', {
