@@ -754,58 +754,47 @@ function renderSkills() {
 
   container.className = 'tech-carousel-container';
 
-  // Semantic category mapping for clean badges
-  const catMap = {
-    "Frontend Engineering": "Frontend",
-    "Backend & Systems": "Backend",
-    "AI & Machine Learning Systems": "AI / ML",
-    "Infrastructure & Engineering Tools": "DevOps"
-  };
-
   const allSkills = [];
   skillsData.categories.forEach(cat => {
-    const tag = catMap[cat.name] || 'Core';
     cat.skills.forEach(s => {
-      allSkills.push({ ...s, tag });
+      allSkills.push(s);
     });
   });
 
   // Balanced split across two parallel tracks
-  const row1Skills = [
-    ...allSkills.filter(s => s.tag === 'Frontend'),
-    ...allSkills.filter(s => s.tag === 'Backend')
-  ];
-  const row2Skills = [
-    ...allSkills.filter(s => s.tag === 'AI / ML'),
-    ...allSkills.filter(s => s.tag === 'DevOps')
-  ];
+  const mid = Math.ceil(allSkills.length / 2);
+  const row1Skills = allSkills.slice(0, mid);
+  const row2Skills = allSkills.slice(mid);
 
-  const buildCardHtml = (s) => `
+  // Pure logo pod: contains ONLY the authentic SVG brand logo and a hover tooltip
+  const buildLogoPodHtml = (s) => `
     <div 
-      class="tech-carousel-card" 
+      class="tech-logo-pod" 
       role="listitem"
       tabindex="0"
       aria-label="${s.name}"
       style="--tech-color: ${s.color}; --tech-glow: ${s.glow};"
     >
-      <div class="tech-carousel-icon" aria-hidden="true">
+      <div class="tech-logo-icon" aria-hidden="true">
         ${getTechLogo(s.logo || s.name)}
       </div>
-      <span class="tech-carousel-name">${s.name}</span>
-      <span class="tech-carousel-category-tag font-mono">${s.tag}</span>
+      <div class="tech-logo-tooltip font-mono" role="tooltip">${s.name}</div>
     </div>
   `;
 
-  // Render 2 rows with duplicated items for mathematically seamless infinite looping
+  // 4x repetition ensures 100% gap-free, mathematical seamless infinite looping on any display width
+  const row1Items = [...row1Skills, ...row1Skills, ...row1Skills, ...row1Skills];
+  const row2Items = [...row2Skills, ...row2Skills, ...row2Skills, ...row2Skills];
+
   container.innerHTML = `
-    <div class="tech-carousel-row" role="region" aria-label="Frontend and Backend Stack">
+    <div class="tech-carousel-row" role="region" aria-label="Technical Stack Stream 1">
       <div class="tech-carousel-track track-1" role="list">
-        ${[...row1Skills, ...row1Skills].map(buildCardHtml).join('')}
+        ${row1Items.map(buildLogoPodHtml).join('')}
       </div>
     </div>
-    <div class="tech-carousel-row" role="region" aria-label="AI, Systems, and Infrastructure Stack">
+    <div class="tech-carousel-row" role="region" aria-label="Technical Stack Stream 2">
       <div class="tech-carousel-track track-2" role="list">
-        ${[...row2Skills, ...row2Skills].map(buildCardHtml).join('')}
+        ${row2Items.map(buildLogoPodHtml).join('')}
       </div>
     </div>
   `;
@@ -819,19 +808,19 @@ function renderSkills() {
 
   if (prefersReduced) return;
 
-  // Animate smoothly from right to left using GSAP
+  // Animate smoothly from right to left using GSAP at fluid velocity
   const gsapLib = window.gsap;
   if (gsapLib) {
     const tween1 = gsapLib.to(track1, {
       xPercent: -50,
-      duration: 32,
+      duration: 20,
       ease: 'none',
       repeat: -1
     });
 
     const tween2 = gsapLib.to(track2, {
       xPercent: -50,
-      duration: 38,
+      duration: 24,
       ease: 'none',
       repeat: -1
     });
@@ -850,8 +839,8 @@ function renderSkills() {
     container.addEventListener('pointerleave', resume);
   } else {
     // High-performance CSS fallback
-    track1.style.animation = 'techCarouselScroll 32s linear infinite';
-    track2.style.animation = 'techCarouselScroll 38s linear infinite';
+    track1.style.animation = 'techCarouselScroll 20s linear infinite';
+    track2.style.animation = 'techCarouselScroll 24s linear infinite';
   }
 }
 
