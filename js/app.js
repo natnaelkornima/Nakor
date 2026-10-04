@@ -17,11 +17,7 @@ import {
 
 import { TechKnot3D } from './tech-knot.js?v=10.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
-import { AsciiDitherEngine } from './ascii-dither.js?v=11.0';
-import './first-card-bundle.js?v=14.0';
 
-// Engines & Subsystems
-const asciiDitherEngine = new AsciiDitherEngine();
 
 // DOM Elements
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -264,11 +260,13 @@ function renderProjects(filter = 'all') {
 
       card.innerHTML = `
         <div class="bento-visual-header">
-          ${project.id === 'nazazi' ? `
-            <div class="bento-ascii-react-container" data-project-id="${project.id}" style="width: 100%; height: 100%; position: absolute; inset: 0; background: #000000; border-radius: inherit; overflow: hidden;"></div>
-          ` : `
-            <canvas class="bento-ascii-canvas" data-project-id="${project.id}" aria-hidden="true"></canvas>
-          `}
+          <img 
+            src="${project.image}" 
+            alt="${project.title} Preview" 
+            class="bento-project-img" 
+            loading="lazy" 
+            decoding="async" 
+          />
           <div class="bento-visual-overlay"></div>
         </div>
 
@@ -332,19 +330,6 @@ function renderProjects(filter = 'all') {
       projectListEl.appendChild(card);
     });
 
-    // Mount Nazazi React Three Fiber exact ASCII effect
-    const nazaziMountEl = projectListEl.querySelector('.bento-ascii-react-container[data-project-id="nazazi"]');
-    if (nazaziMountEl && typeof window.mountNazaziScene === 'function') {
-      try {
-        window.mountNazaziScene(nazaziMountEl);
-      } catch (err) {
-        console.error('Error mounting Nazazi scene:', err);
-      }
-    }
-
-    // Mount ASCII & Dither Canvas Simulations for remaining projects
-    asciiDitherEngine.mountAll();
-
     // Reattach spotlight and magnetic listeners
     attachSpotlightListeners();
     initMagneticButtons();
@@ -386,14 +371,17 @@ function initProjectsHorizontalScroll() {
   const sectionHeight = totalScrollDistance + window.innerHeight;
   section.style.setProperty('--projects-scroll-height', `${sectionHeight}px`);
 
-  // Align Card 0 with the site's container
-  const headerWrap = section.querySelector('.projects-pinned-header-wrap');
-  let padLeft = 24;
-  if (headerWrap) {
-    const rect = headerWrap.getBoundingClientRect();
-    padLeft = Math.max(rect.left, 24);
+  // Center the first card horizontally in the middle of the viewport at the start
+  function updateTrackPadding() {
+    const firstCard = cards[0];
+    const cardWidth = firstCard ? firstCard.offsetWidth : 440;
+    const vpWidth = viewport.clientWidth || window.innerWidth;
+    const centerOffset = Math.max(Math.round((vpWidth - cardWidth) / 2), 24);
+    track.style.setProperty('--projects-track-pad-left', `${centerOffset}px`);
+    track.style.setProperty('--projects-track-pad-right', `${centerOffset}px`);
+    return centerOffset;
   }
-  track.style.setProperty('--projects-track-pad', `${padLeft}px`);
+  updateTrackPadding();
 
   let currentVirtualIndex = 0;
   let targetVirtualIndex = 0;
@@ -403,7 +391,7 @@ function initProjectsHorizontalScroll() {
   function calculateCardStep() {
     if (cards.length < 2) return cards[0]?.offsetWidth || 480;
     const step = cards[1].offsetLeft - cards[0].offsetLeft;
-    return step > 0 ? step : (cards[0].offsetWidth + 32);
+    return step > 0 ? step : (cards[0].offsetWidth + 80);
   }
 
   let cardStep = calculateCardStep();
@@ -584,13 +572,9 @@ function initProjectsHorizontalScroll() {
   window.addEventListener('scroll', onScroll, { passive: true });
 
   function onResize() {
+    updateTrackPadding();
     cardStep = calculateCardStep();
-    if (headerWrap) {
-      const rect = headerWrap.getBoundingClientRect();
-      padLeft = Math.max(rect.left, 24);
-      track.style.setProperty('--projects-track-pad', `${padLeft}px`);
-    }
-    const currentDistance = (totalCards - 1) * (window.innerHeight * 0.9);
+    const currentDistance = Math.max(totalCards - 1, 0.5) * scrollDistancePerCard;
     section.style.setProperty('--projects-scroll-height', `${currentDistance + window.innerHeight}px`);
     onScroll();
   }
@@ -651,6 +635,13 @@ function openProjectDrawer(projectId) {
   if (!project || !projectDrawerContent || !projectDrawerOverlay) return;
 
   projectDrawerContent.innerHTML = `
+    ${project.image ? `
+      <div class="drawer-hero-img-wrap" style="width: 100%; height: clamp(200px, 30vh, 260px); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1.5rem; border: 1px solid var(--border-default); background: #090d16; position: relative;">
+        <img src="${project.image}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" />
+        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9, 9, 11, 0.45), transparent); pointer-events: none;"></div>
+      </div>
+    ` : ''}
+
     <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
       <span class="project-category-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; border-radius: var(--radius-full); background: rgba(56, 189, 248, 0.12); color: var(--accent-primary); border: 1px solid rgba(56, 189, 248, 0.3);">
         <span class="bento-pulse-dot" style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-primary); display: inline-block;"></span>
@@ -1045,6 +1036,89 @@ function initCopyEmail() {
 }
 
 /* ==========================================================================
+   Book a Call Modal Dialog & Phone Actions
+   ========================================================================== */
+function initBookCallModal() {
+  const modal = document.getElementById('book-call-modal');
+  const closeBtn = document.getElementById('book-call-close-btn');
+  const heroBtn = document.getElementById('hero-book-call-btn');
+  const navBtn = document.getElementById('nav-book-call-btn');
+  const mobileBtn = document.getElementById('mobile-book-call-btn');
+  const copyPhoneBtn = document.getElementById('copy-phone-btn');
+  const copyPhoneText = document.getElementById('copy-phone-text');
+  const modalCopyBtns = document.querySelectorAll('.modal-copy-phone-btn');
+
+  const openModal = () => {
+    if (!modal) return;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    if (!modal) return;
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // Open triggers
+  heroBtn?.addEventListener('click', openModal);
+  navBtn?.addEventListener('click', openModal);
+  mobileBtn?.addEventListener('click', () => {
+    // Close mobile nav drawer if open
+    mobileNavToggle?.setAttribute('aria-expanded', 'false');
+    mobileMenu?.classList.remove('active');
+    openModal();
+  });
+
+  // Close triggers
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('open')) {
+      closeModal();
+    }
+  });
+
+  // In-page Phone Copy
+  copyPhoneBtn?.addEventListener('click', () => {
+    const numToCopy = profileData.phoneDisplay || profileData.phone;
+    navigator.clipboard.writeText(numToCopy).then(() => {
+      showToast(`Copied phone number (${numToCopy})`);
+      if (copyPhoneText) {
+        copyPhoneText.textContent = '✓ Copied';
+        setTimeout(() => {
+          copyPhoneText.textContent = 'Copy';
+        }, 2200);
+      }
+    }).catch(() => {
+      showToast(numToCopy);
+    });
+  });
+
+  // Modal Phone Copy
+  modalCopyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const numToCopy = profileData.phoneDisplay || profileData.phone;
+      navigator.clipboard.writeText(numToCopy).then(() => {
+        showToast(`Copied phone number (${numToCopy})`);
+        const originalText = btn.innerHTML;
+        btn.textContent = '✓ Copied';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+        }, 2200);
+      }).catch(() => {
+        showToast(numToCopy);
+      });
+    });
+  });
+}
+
+/* ==========================================================================
    Initialization
    ========================================================================== */
 function initApp() {
@@ -1067,6 +1141,7 @@ function initApp() {
   renderExperience();
   renderEducation();
   initCopyEmail();
+  initBookCallModal();
 
   // Initialize 3D Procedural Tech Knot
   new TechKnot3D('hero-tech-knot-canvas');
@@ -1077,3 +1152,4 @@ if (document.readyState === 'loading') {
 } else {
   initApp();
 }
+
