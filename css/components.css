@@ -320,8 +320,11 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
   aspect-ratio: 1 / 1;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 #hero-tech-knot-canvas,
@@ -329,27 +332,29 @@
   width: 100%;
   height: 100%;
   display: block;
-  border-radius: 5px !important;
-  cursor: crosshair;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  cursor: pointer;
   user-select: none;
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.35);
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-surface);
-  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  filter: drop-shadow(0 14px 38px rgba(37, 99, 235, 0.28));
+  transition: filter var(--duration-fast) ease;
 }
 
 #hero-creation-canvas:hover {
-  border-color: var(--accent);
-  box-shadow: 0 12px 36px -4px rgba(56, 189, 248, 0.25);
+  filter: drop-shadow(0 18px 48px rgba(56, 189, 248, 0.45));
 }
 
 [data-theme="light"] #hero-creation-canvas {
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 12px 30px rgba(29, 78, 216, 0.18));
 }
 
 [data-theme="light"] #hero-creation-canvas:hover {
-  border-color: var(--accent);
-  box-shadow: 0 12px 32px -4px rgba(37, 99, 235, 0.18);
+  filter: drop-shadow(0 16px 40px rgba(37, 99, 235, 0.28));
 }
 
 .hero-3d-legend {
