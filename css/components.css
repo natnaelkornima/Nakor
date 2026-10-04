@@ -2408,41 +2408,228 @@
 }
 
 /* ==========================================================================
-   Contact Section
+   Unified Connect & Direct Consultation Section
    ========================================================================== */
-.contact-card {
+.unified-connect-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
-  padding: clamp(2rem, 5vw, 4rem);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-6);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-2xl);
+  padding: clamp(1.75rem, 4vw, 3.25rem);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
   position: relative;
   overflow: hidden;
+  transition: border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
 }
 
-.contact-headline {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  max-width: 18ch;
+.unified-connect-card.highlight-pulse {
+  animation: card-pulse-glow 1.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.contact-subtext {
-  font-size: var(--text-base);
+@keyframes card-pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5), 0 12px 40px rgba(0, 0, 0, 0.28);
+    border-color: #38bdf8;
+  }
+  40% {
+    box-shadow: 0 0 0 8px rgba(56, 189, 248, 0.18), 0 16px 50px rgba(0, 0, 0, 0.4);
+    border-color: #38bdf8;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0), 0 12px 40px rgba(0, 0, 0, 0.28);
+    border-color: var(--border-default);
+  }
+}
+
+.connect-card-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto var(--space-8) auto;
+}
+
+.connect-channels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .connect-channels-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+.connect-channel-tile {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: clamp(1.4rem, 2.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  transition: transform var(--duration-base) var(--ease-spring), border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
+}
+
+.connect-channel-tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tile-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.phone-icon-box {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+}
+
+.meet-icon-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="light"] .meet-icon-box {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.call-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   color: var(--text-secondary);
-  max-width: 50ch;
-  line-height: 1.65;
 }
 
-.contact-interactive-group {
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+.meet-dot {
+  background: #2684fc;
+  box-shadow: 0 0 8px #2684fc;
+}
+
+.tile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tile-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.tile-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.call-number-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+  width: fit-content;
+  margin-top: 0.35rem;
+}
+
+.tile-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.call-action-btn {
+  flex: 1;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.connect-async-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--space-6) 0 var(--space-6) 0;
+  position: relative;
+}
+
+.connect-async-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.connect-divider-label {
+  position: relative;
+  background: var(--bg-surface);
+  padding: 0 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.connect-async-group {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
   gap: var(--space-4);
 }
@@ -2475,165 +2662,6 @@
   color: var(--status-active);
 }
 
-/* ==========================================================================
-   Book a Call & Direct Consultation Channels
-   ========================================================================== */
-.book-call-section {
-  margin-bottom: var(--space-12);
-}
-
-.book-call-section .section-header {
-  text-align: center;
-  margin-bottom: var(--space-8);
-}
-
-.book-call-section .section-subtitle {
-  margin: 0 auto;
-}
-
-.call-channels-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-6);
-  max-width: 980px;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .call-channels-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.call-channel-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.25rem;
-  position: relative;
-  overflow: hidden;
-  transition: transform var(--duration-base) var(--ease-spring), border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-}
-
-.call-channel-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-}
-
-.call-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.call-icon-box {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.phone-icon-box {
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--accent);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-}
-
-.meet-icon-box {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="light"] .meet-icon-box {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.call-badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-full);
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-default);
-  color: var(--text-secondary);
-}
-
-.live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
-  animation: pulse-dot 2s infinite ease-in-out;
-}
-
-.meet-dot {
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
-}
-
-.call-channel-title {
-  font-family: var(--font-heading);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
-.call-channel-desc {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.call-number-display {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 0.95rem;
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: 0.02em;
-  width: fit-content;
-}
-
-.call-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.call-action-btn {
-  flex: 1;
-  min-width: 140px;
-  justify-content: center;
-}
 
 /* Call Pulse Indicator in Hero & Nav buttons */
 .call-pulse-indicator {
@@ -2861,8 +2889,91 @@
    ========================================================================== */
 .site-footer {
   border-top: 1px solid var(--border-subtle);
-  padding-top: var(--space-8);
-  padding-bottom: var(--space-8);
+  padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(3rem, 5vw, 4.5rem);
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* Kinetic Technical Brandmark Display Stage */
+.footer-brand-stage {
+  width: 100%;
+  margin-bottom: clamp(3rem, 6vw, 5.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.footer-stage-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: var(--space-4);
+  padding: 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.footer-stage-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+
+.footer-stage-hint {
+  opacity: 0.75;
+}
+
+@media (max-width: 640px) {
+  .footer-stage-hint,
+  .footer-stage-sep {
+    display: none;
+  }
+}
+
+.footer-nakor-container {
+  position: relative;
+  width: 100%;
+  height: clamp(260px, 32vw, 460px);
+  touch-action: pan-y;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.tech-text-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.footer-divider-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border-subtle);
+  margin-bottom: var(--space-8);
 }
 
 .footer-content {
@@ -2872,6 +2983,7 @@
   justify-content: space-between;
   gap: var(--space-4);
   text-align: center;
+  width: 100%;
 }
 
 @media (min-width: 768px) {

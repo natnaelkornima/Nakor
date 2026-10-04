@@ -24,7 +24,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/design-system.css?v=10.1">
-  <link rel="stylesheet" href="css/components.css?v=10.6">
+  <link rel="stylesheet" href="css/components.css?v=10.8">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -76,10 +76,10 @@
       </nav>
 
       <div class="nav-actions">
-        <button id="nav-book-call-btn" class="nav-cta-btn magnetic-item" type="button" aria-label="Book a Call">
+        <a href="#contact" id="nav-book-call-btn" class="nav-cta-btn magnetic-item" aria-label="Book a Call">
           <span class="call-pulse-indicator" aria-hidden="true"></span>
           <span>Book Call</span>
-        </button>
+        </a>
         <a href="assets/Natnael_Kornima_CV.pdf" download="Natnael_Kornima_CV.pdf" class="nav-cv-link magnetic-item" aria-label="Download Curriculum Vitae (PDF)">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           <span>CV</span>
@@ -104,10 +104,10 @@
     <a href="#experience" class="mobile-nav-link">Experience</a>
     <a href="#contact" class="mobile-nav-link">Contact</a>
     <div style="padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
-      <button id="mobile-book-call-btn" class="btn btn-primary" type="button" style="width: 100%; justify-content: center;">
+      <a href="#contact" id="mobile-book-call-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
         <span class="call-pulse-indicator" aria-hidden="true"></span>
         <span>Book a Call</span>
-      </button>
+      </a>
       <a href="assets/Natnael_Kornima_CV.pdf" download="Natnael_Kornima_CV.pdf" class="btn btn-secondary" style="width: 100%; justify-content: center;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
         <span>Download CV (PDF)</span>
@@ -137,11 +137,11 @@
               <span>View Projects</span>
               <span class="btn-arrow">↓</span>
             </a>
-            <button id="hero-book-call-btn" class="btn btn-secondary magnetic-item" type="button" aria-haspopup="dialog">
+            <a href="#contact" id="hero-book-call-btn" class="btn btn-secondary magnetic-item" aria-label="Book a Call or Consultation">
               <span class="call-pulse-indicator" aria-hidden="true"></span>
               <span>Book a Call</span>
-              <span class="btn-arrow">☎</span>
-            </button>
+              <span class="btn-arrow">↓</span>
+            </a>
             <a href="assets/Natnael_Kornima_CV.pdf" download="Natnael_Kornima_CV.pdf" class="btn btn-secondary magnetic-item" aria-label="Download Curriculum Vitae (PDF)">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               <span>Download CV</span>
@@ -333,35 +333,6 @@
                 <h4 class="shadcn-pillar-title">Cost &amp; Latency Optimization</h4>
                 <p class="shadcn-pillar-desc">Implementing aggressive semantic caching in Redis and selecting tiered model sizes based on task complexity.</p>
               </div>
-            </div>
-          </div>
-
-          <!-- Divider Separator -->
-          <hr class="shadcn-divider" />
-
-          <!-- BOTTOM BLOCK: Pipeline Blueprint -->
-          <div class="shadcn-arch-block">
-            <div class="shadcn-block-header">
-              <div class="shadcn-header-row">
-                <span class="shadcn-kicker font-mono">// PIPELINE BLUEPRINT</span>
-                <!-- Segmented Tabs -->
-                <div class="shadcn-tabs font-mono" role="tablist" aria-label="Pipeline Architecture">
-                  <button id="tab-ai-arch" class="shadcn-tab-btn active" role="tab" aria-selected="true">
-                    AI Inference &amp; RAG
-                  </button>
-                  <button id="tab-web-arch" class="shadcn-tab-btn" role="tab" aria-selected="false">
-                    Full-Stack Web Flow
-                  </button>
-                </div>
-              </div>
-
-              <h3 id="arch-title" class="shadcn-title">Production AI Inference &amp; RAG Pipeline</h3>
-              <p id="arch-description" class="shadcn-desc">Bridging non-deterministic language models with strict software engineering requirements, type safety, and vector grounding.</p>
-            </div>
-
-            <!-- Dynamic Sequential Stepper Flow -->
-            <div id="arch-diagram-flow" class="shadcn-pipeline-flow">
-              <!-- Dynamically populated by js/app.js -->
             </div>
           </div>
         </div>
@@ -732,25 +703,29 @@
       </div>
     </section>
 
-    <!-- Contact & Direct Call Section -->
+    <!-- Unified Connect & Direct Consultation Section -->
     <section id="contact" class="section-wrapper">
       <div class="container">
-        <!-- Direct Call Channels (Phone & Google Meet) -->
-        <div class="book-call-section reveal-on-scroll">
-          <div class="section-header">
+        <div class="unified-connect-card reveal-on-scroll">
+          
+          <div class="connect-card-header">
             <span class="section-label">// 07. DIRECT CONNECT</span>
-            <h2 class="section-title">Book a Call &amp; Consultation</h2>
-            <p class="section-subtitle">
-              Schedule a technical consultation, architecture review, or direct introductory sync. Choose your preferred channel:
+            <h2 class="section-title" style="margin-top: 0.5rem; margin-bottom: 0.75rem;">Let's build something exceptional.</h2>
+            <p class="section-subtitle" style="max-width: 62ch; margin: 0 auto;">
+              Open to engineering roles, contract architectures, and technical advisory. Reach out directly via voice or video, or connect asynchronously:
             </p>
           </div>
 
-          <div class="call-channels-grid">
+          <!-- Direct Channels Grid (Phone & Google Meet) -->
+          <div class="connect-channels-grid">
+            
             <!-- Channel 1: Phone Call -->
-            <div class="call-channel-card spotlight-card">
-              <div class="call-card-top">
-                <div class="call-icon-box phone-icon-box">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <div class="connect-channel-tile spotlight-card" id="tile-phone-call">
+              <div class="tile-top">
+                <div class="tile-icon-box phone-icon-box">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
                 </div>
                 <div class="call-badge-pill">
                   <span class="live-dot"></span>
@@ -758,23 +733,22 @@
                 </div>
               </div>
 
-              <div>
-                <h3 class="call-channel-title">Phone Call</h3>
-                <p class="call-channel-desc" style="margin-top: 0.35rem;">
+              <div class="tile-info">
+                <h3 class="tile-title">Phone Call</h3>
+                <p class="tile-desc">
                   Direct cellular voice dial for immediate technical discussions, active recruitment checks, or contract inquiries.
                 </p>
+                <div class="call-number-display font-mono">
+                  <span>+251 91 234 5678</span>
+                </div>
               </div>
 
-              <div class="call-number-display font-mono">
-                <span>+251 91 234 5678</span>
-              </div>
-
-              <div class="call-card-actions">
-                <a href="tel:+251912345678" class="btn btn-primary magnetic-item call-action-btn">
+              <div class="tile-actions">
+                <button id="call-now-trigger-btn" class="btn btn-primary magnetic-item call-action-btn" type="button" aria-label="Call +251 91 234 5678">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                  <span>Call Now</span>
+                  <span id="call-now-label">Call Now</span>
                   <span class="btn-arrow">↗</span>
-                </a>
+                </button>
                 <button id="copy-phone-btn" class="btn btn-secondary magnetic-item" type="button" aria-label="Copy phone number">
                   <span id="copy-phone-text">Copy</span>
                 </button>
@@ -782,16 +756,17 @@
             </div>
 
             <!-- Channel 2: Google Meet Call -->
-            <div class="call-channel-card spotlight-card">
-              <div class="call-card-top">
-                <div class="call-icon-box meet-icon-box">
-                  <!-- Official Google Meet Camera Logo -->
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="6" width="11" height="12" rx="2" fill="#00832D"/>
-                    <path d="M14 10.5L19 6.5V17.5L14 13.5V10.5Z" fill="#00AC47"/>
-                    <path d="M14 6H16.5C17.33 6 18 6.67 18 7.5V10.5L14 8V6Z" fill="#2684FC"/>
-                    <path d="M14 13.5L18 16V16.5C18 17.33 17.33 18 16.5 18H14V13.5Z" fill="#0066DA"/>
-                    <path d="M3 8.5C3 7.67 3.67 7 4.5 7H8V17H4.5C3.67 17 3 16.33 3 15.5V8.5Z" fill="#EA4335"/>
+            <div class="connect-channel-tile spotlight-card" id="tile-google-meet">
+              <div class="tile-top">
+                <div class="tile-icon-box meet-icon-box">
+                  <!-- Official Google Meet 4-Color Camera Logo -->
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.5 72" width="28" height="24" aria-label="Google Meet Logo">
+                    <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z"/>
+                    <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z"/>
+                    <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z"/>
+                    <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z"/>
+                    <path fill="#00ac47" d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"/>
+                    <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z"/>
                   </svg>
                 </div>
                 <div class="call-badge-pill meet-pill">
@@ -800,20 +775,26 @@
                 </div>
               </div>
 
-              <div>
-                <h3 class="call-channel-title">Google Meet Call</h3>
-                <p class="call-channel-desc" style="margin-top: 0.35rem;">
-                  Face-to-face video consultation, system architecture walkthrough, code review session, or engineering interview.
+              <div class="tile-info">
+                <h3 class="tile-title">Google Meet Call</h3>
+                <p class="tile-desc">
+                  Face-to-face video consultation, system architecture review, code walkthrough, or engineering interview.
                 </p>
+                <div class="call-number-display font-mono">
+                  <span>meet.google.com/new</span>
+                </div>
               </div>
 
-              <div class="call-number-display font-mono">
-                <span>meet.google.com</span>
-              </div>
-
-              <div class="call-card-actions">
+              <div class="tile-actions">
                 <a href="https://meet.google.com/new" target="_blank" rel="noopener noreferrer" class="btn btn-primary magnetic-item call-action-btn">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M14 10.5L19 6.5V17.5L14 13.5V10.5Z" fill="#00AC47"/><rect x="3" y="6" width="11" height="12" rx="2" fill="#00832D"/><path d="M14 6H16.5C17.33 6 18 6.67 18 7.5V10.5L14 8V6Z" fill="#2684FC"/><path d="M14 13.5L18 16V16.5C18 17.33 17.33 18 16.5 18H14V13.5Z" fill="#0066DA"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.5 72" width="16" height="14" style="margin-right: 0.25rem;">
+                    <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z"/>
+                    <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z"/>
+                    <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z"/>
+                    <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z"/>
+                    <path fill="#00ac47" d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"/>
+                    <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z"/>
+                  </svg>
                   <span>Launch Google Meet</span>
                   <span class="btn-arrow">↗</span>
                 </a>
@@ -822,42 +803,40 @@
                 </a>
               </div>
             </div>
+
           </div>
-        </div>
 
-        <!-- General Initiation & Social Links -->
-        <div class="contact-card reveal-on-scroll" style="margin-top: 2.5rem;">
-          <span class="section-label">// ASYNCHRONOUS COMMS</span>
-          <h2 class="contact-headline">Let's build something useful.</h2>
-          <p class="contact-subtext">
-            Prefer email or async messaging? Feel free to copy my direct inbox, explore my repository commits, or download my verified CV.
-          </p>
+          <!-- Bottom Unified Bar: Email Copy, Download CV, GitHub, LinkedIn -->
+          <div class="connect-async-divider">
+            <span class="connect-divider-label">OR CONNECT ASYNCHRONOUSLY</span>
+          </div>
 
-          <div class="contact-interactive-group">
+          <div class="connect-async-group">
             <button id="copy-email-btn" class="copy-email-btn magnetic-item" aria-label="Copy email address to clipboard">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
               <span id="copy-email-text">natnaelkornima78@gmail.com</span>
               <span id="copy-email-tag" style="font-size: 0.75rem; color: var(--accent); margin-left: 0.25rem;">[Copy]</span>
             </button>
 
-            <a href="assets/Natnael_Kornima_CV.pdf" download="Natnael_Kornima_CV.pdf" class="btn btn-secondary magnetic-item">
+            <a href="assets/Natnael_Kornima_CV.pdf" download="Natnael_Kornima_CV.pdf" class="btn btn-secondary magnetic-item" aria-label="Download CV (PDF)">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               <span>Download CV (PDF)</span>
               <span class="btn-arrow">↓</span>
             </a>
 
-            <a href="https://github.com/natnaelkornima" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item">
+            <a href="https://github.com/natnaelkornima" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item" aria-label="Natnael Kornima GitHub">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
               <span>GitHub</span>
               <span class="btn-arrow">↗</span>
             </a>
 
-            <a href="https://linkedin.com/in/natnaelkornima" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item">
+            <a href="https://linkedin.com/in/natnaelkornima" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic-item" aria-label="Natnael Kornima LinkedIn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
               <span>LinkedIn</span>
               <span class="btn-arrow">↗</span>
             </a>
           </div>
+
         </div>
       </div>
     </section>
@@ -911,10 +890,10 @@
             <span>+251 91 234 5678</span>
           </div>
           <div class="call-card-actions">
-            <a href="tel:+251912345678" class="btn btn-primary call-action-btn">
+            <button class="btn btn-primary call-action-btn modal-call-now-btn" type="button">
               <span>Call Now</span>
               <span class="btn-arrow">↗</span>
-            </a>
+            </button>
             <button class="btn btn-secondary modal-copy-phone-btn" type="button">
               <span>Copy</span>
             </button>
@@ -925,12 +904,13 @@
         <div class="call-channel-card" style="padding: 1.4rem;">
           <div class="call-card-top">
             <div class="call-icon-box meet-icon-box">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="6" width="11" height="12" rx="2" fill="#00832D"/>
-                <path d="M14 10.5L19 6.5V17.5L14 13.5V10.5Z" fill="#00AC47"/>
-                <path d="M14 6H16.5C17.33 6 18 6.67 18 7.5V10.5L14 8V6Z" fill="#2684FC"/>
-                <path d="M14 13.5L18 16V16.5C18 17.33 17.33 18 16.5 18H14V13.5Z" fill="#0066DA"/>
-                <path d="M3 8.5C3 7.67 3.67 7 4.5 7H8V17H4.5C3.67 17 3 16.33 3 15.5V8.5Z" fill="#EA4335"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.5 72" width="26" height="22" aria-label="Google Meet Logo">
+                <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z"/>
+                <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z"/>
+                <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z"/>
+                <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z"/>
+                <path fill="#00ac47" d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"/>
+                <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z"/>
               </svg>
             </div>
             <div class="call-badge-pill meet-pill">
@@ -943,7 +923,7 @@
             <p class="call-channel-desc" style="font-size: 0.82rem; margin-top: 0.25rem;">Interactive face-to-face walkthrough, code review, or interview.</p>
           </div>
           <div class="call-number-display font-mono" style="font-size: 0.88rem; padding: 0.45rem 0.75rem;">
-            <span>meet.google.com</span>
+            <span>meet.google.com/new</span>
           </div>
           <div class="call-card-actions">
             <a href="https://meet.google.com/new" target="_blank" rel="noopener noreferrer" class="btn btn-primary call-action-btn">
@@ -976,6 +956,29 @@
 
   <!-- Footer -->
   <footer class="site-footer" role="contentinfo">
+    <!-- Kinetic Technical Brandmark Display Stage (Full-Width NAKOR) -->
+    <div class="footer-brand-stage" aria-label="NAKOR Kinetic Brandmark">
+      <div class="container footer-stage-header">
+        <div class="footer-stage-meta font-mono">
+          <span class="live-dot" style="background: var(--accent);"></span>
+          <span class="footer-stage-code">SYS://KINETIC.TYPOGRAPHY</span>
+          <span class="footer-stage-sep">·</span>
+          <span class="footer-stage-hint">DRAG GLYPHS · HOVER TO INSPECT</span>
+        </div>
+        <div class="footer-stage-badge font-mono">
+          <span>NAKOR · 2026</span>
+        </div>
+      </div>
+
+      <div id="footer-nakor-container" class="footer-nakor-container" role="img" aria-label="NAKOR Interactive Technical Typography">
+        <canvas id="footer-nakor-canvas" class="tech-text-canvas"></canvas>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="footer-divider-rule"></div>
+    </div>
+
     <div class="container footer-content">
       <div class="footer-meta">
         © 2026 Natnael Kornima · Engineered with zero-slop craft & accessible web standards.
@@ -990,7 +993,7 @@
   </footer>
 
   <!-- Application Logic -->
-  <script type="module" src="js/app.js?v=18.0"></script>
+  <script type="module" src="js/app.js?v=21.0"></script>
 </body>
 </html>
 

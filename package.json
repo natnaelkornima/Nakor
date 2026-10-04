@@ -4,6 +4,8 @@
   "description": "> **Full-Stack Engineer & Systems Builder**   > Modern, minimal, highly professional, zero-slop portfolio engineered with **Taste Skill** and **Impeccable** design craft principles.",
   "main": "index.js",
   "scripts": {
+    "dev": "python3 -m http.server 3000 --bind 127.0.0.1",
+    "start": "python3 -m http.server 3000 --bind 127.0.0.1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

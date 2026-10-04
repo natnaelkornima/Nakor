@@ -16,6 +16,7 @@ import {
 } from './data.js?v=10.0';
 
 import { TechKnot3D } from './tech-knot.js?v=10.0';
+import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
 
 
@@ -33,13 +34,6 @@ const toastEl = document.getElementById('toast-notice');
 const projectDrawerOverlay = document.getElementById('project-drawer');
 const projectDrawerContent = document.getElementById('drawer-content');
 const drawerCloseBtn = document.getElementById('drawer-close-btn');
-
-// Architecture Tabs
-const tabWebBtn = document.getElementById('tab-web-arch');
-const tabAiBtn = document.getElementById('tab-ai-arch');
-const archDiagramEl = document.getElementById('arch-diagram-flow');
-const archTitleEl = document.getElementById('arch-title');
-const archDescEl = document.getElementById('arch-description');
 
 const timelineFillBar = document.getElementById('timeline-fill-bar');
 const telemetryChip = document.getElementById('hero-telemetry-chip');
@@ -746,68 +740,6 @@ function initDrawerEvents() {
 }
 
 /* ==========================================================================
-   Architecture Visualizer Tabs (Interactive Node Exploration)
-   ========================================================================== */
-function renderArchitectureFlow(type = 'ai') {
-  if (!archDiagramEl) return;
-
-  const data = type === 'ai' ? architectureData.aiPipeline : architectureData.webApplication;
-  if (archTitleEl) archTitleEl.textContent = data.title;
-  if (archDescEl) archDescEl.textContent = data.description;
-
-  const parseTechBadges = (techStr) => {
-    return techStr
-      .split(/[\/\+]/)
-      .map(t => t.trim())
-      .filter(t => t.length > 0);
-  };
-
-  archDiagramEl.innerHTML = data.layers.map((layer, idx) => {
-    const techs = parseTechBadges(layer.tech);
-    return `
-      <div class="shadcn-step">
-        <div class="shadcn-step-header">
-          <span class="shadcn-step-num font-mono">${layer.step}</span>
-          ${layer.metric ? `<span class="shadcn-step-badge font-mono">${layer.metric}</span>` : ''}
-        </div>
-        <h4 class="shadcn-step-title">${layer.layer}</h4>
-        <div class="shadcn-step-techs font-mono">
-          ${techs.map(t => `<span class="shadcn-tech-tag">${getTechLogo(t)} <span>${t}</span></span>`).join('')}
-        </div>
-        <p class="shadcn-step-desc">${layer.detail}</p>
-      </div>
-      ${idx < data.layers.length - 1 ? `
-        <div class="shadcn-step-arrow" aria-hidden="true">
-          <span>↓</span>
-        </div>
-      ` : ''}
-    `;
-  }).join('');
-}
-
-function initArchitectureTabs() {
-  if (!tabWebBtn || !tabAiBtn) return;
-
-  tabAiBtn.addEventListener('click', () => {
-    tabAiBtn.classList.add('active');
-    tabAiBtn.setAttribute('aria-selected', 'true');
-    tabWebBtn.classList.remove('active');
-    tabWebBtn.setAttribute('aria-selected', 'false');
-    renderArchitectureFlow('ai');
-  });
-
-  tabWebBtn.addEventListener('click', () => {
-    tabWebBtn.classList.add('active');
-    tabWebBtn.setAttribute('aria-selected', 'true');
-    tabAiBtn.classList.remove('active');
-    tabAiBtn.setAttribute('aria-selected', 'false');
-    renderArchitectureFlow('web');
-  });
-
-  renderArchitectureFlow('ai');
-}
-
-/* ==========================================================================
    Skills Matrix (With Semantic Relationship Highlighting & Prominent Logos)
    ========================================================================== */
 function renderSkills() {
@@ -1036,41 +968,44 @@ function initCopyEmail() {
 }
 
 /* ==========================================================================
-   Book a Call Modal Dialog & Phone Actions
+   Connect & Direct Consultation Channels
    ========================================================================== */
-function initBookCallModal() {
+function initConnectAndCallActions() {
   const modal = document.getElementById('book-call-modal');
   const closeBtn = document.getElementById('book-call-close-btn');
   const heroBtn = document.getElementById('hero-book-call-btn');
   const navBtn = document.getElementById('nav-book-call-btn');
   const mobileBtn = document.getElementById('mobile-book-call-btn');
-  const copyPhoneBtn = document.getElementById('copy-phone-btn');
-  const copyPhoneText = document.getElementById('copy-phone-text');
-  const modalCopyBtns = document.querySelectorAll('.modal-copy-phone-btn');
+  const contactCard = document.querySelector('.unified-connect-card');
 
-  const openModal = () => {
-    if (!modal) return;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  const scrollToContactAndHighlight = (e) => {
+    e?.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (contactCard) {
+        contactCard.classList.remove('highlight-pulse');
+        void contactCard.offsetWidth; // Force reflow
+        contactCard.classList.add('highlight-pulse');
+      }
+    }
   };
 
+  heroBtn?.addEventListener('click', scrollToContactAndHighlight);
+  navBtn?.addEventListener('click', scrollToContactAndHighlight);
+  mobileBtn?.addEventListener('click', (e) => {
+    mobileNavToggle?.setAttribute('aria-expanded', 'false');
+    mobileMenu?.classList.remove('open');
+    scrollToContactAndHighlight(e);
+  });
+
+  // Modal Close triggers
   const closeModal = () => {
     if (!modal) return;
     modal.classList.remove('open');
     document.body.style.overflow = '';
   };
 
-  // Open triggers
-  heroBtn?.addEventListener('click', openModal);
-  navBtn?.addEventListener('click', openModal);
-  mobileBtn?.addEventListener('click', () => {
-    // Close mobile nav drawer if open
-    mobileNavToggle?.setAttribute('aria-expanded', 'false');
-    mobileMenu?.classList.remove('active');
-    openModal();
-  });
-
-  // Close triggers
   closeBtn?.addEventListener('click', closeModal);
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) {
@@ -1084,7 +1019,43 @@ function initBookCallModal() {
     }
   });
 
-  // In-page Phone Copy
+  // Call Now Handlers (Dial + Clipboard copy fallback + Interactive feedback)
+  const handleCallNow = (btn) => {
+    const numToCopy = profileData.phoneDisplay || "+251 91 234 5678";
+    const telUri = `tel:${profileData.phone || "+251912345678"}`;
+
+    navigator.clipboard.writeText(numToCopy).then(() => {
+      showToast(`Calling ${numToCopy} · Copied to clipboard`);
+    }).catch(() => {
+      showToast(`Calling ${numToCopy}`);
+    });
+
+    if (btn) {
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = `<span style="font-size: 0.82rem;">✓ Copied · Dialing...</span>`;
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+      }, 2600);
+    }
+
+    setTimeout(() => {
+      window.location.href = telUri;
+    }, 150);
+  };
+
+  const callNowTriggerBtn = document.getElementById('call-now-trigger-btn');
+  callNowTriggerBtn?.addEventListener('click', () => handleCallNow(callNowTriggerBtn));
+
+  const modalCallNowBtns = document.querySelectorAll('.modal-call-now-btn');
+  modalCallNowBtns.forEach(btn => {
+    btn.addEventListener('click', () => handleCallNow(btn));
+  });
+
+  // Phone Copy Handlers
+  const copyPhoneBtn = document.getElementById('copy-phone-btn');
+  const copyPhoneText = document.getElementById('copy-phone-text');
+  const modalCopyBtns = document.querySelectorAll('.modal-copy-phone-btn');
+
   copyPhoneBtn?.addEventListener('click', () => {
     const numToCopy = profileData.phoneDisplay || profileData.phone;
     navigator.clipboard.writeText(numToCopy).then(() => {
@@ -1100,7 +1071,6 @@ function initBookCallModal() {
     });
   });
 
-  // Modal Phone Copy
   modalCopyBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const numToCopy = profileData.phoneDisplay || profileData.phone;
@@ -1135,16 +1105,36 @@ function initApp() {
   initProjectFilters();
   initDrawerEvents();
   
-  initArchitectureTabs();
   renderSkills();
   renderGitHubShowcase();
   renderExperience();
   renderEducation();
   initCopyEmail();
-  initBookCallModal();
+  initConnectAndCallActions();
 
   // Initialize 3D Procedural Tech Knot
   new TechKnot3D('hero-tech-knot-canvas');
+
+  // Initialize Kinetic Architectural Typography TechText for Footer Brandmark
+  new TechText('#footer-nakor-container', {
+    text: 'NAKOR',
+    fontWeight: 700,
+    fontSize: 280,
+    letterSpacing: -0.04,
+    reveal: 'letter',
+    dashLength: 4,
+    dashGap: 2,
+    specks: 15,
+    strokeWidth: 1.5,
+    reach: 220,
+    softness: 0.7,
+    selection: true,
+    labels: true,
+    draggable: true,
+    sweep: true,
+    speed: 1,
+    fullWidth: true
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -1152,4 +1142,5 @@ if (document.readyState === 'loading') {
 } else {
   initApp();
 }
+
 
