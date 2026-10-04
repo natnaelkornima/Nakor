@@ -18,7 +18,7 @@ import {
 import { HackerTyper } from './hacker-typer.js?v=1.0';
 import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
-import { initTextLoop } from './text-loop.js';
+import { initTextLoop } from './text-loop.js?v=2.0';
 
 // Expose TextLoop globally for component integration
 if (typeof window !== 'undefined') {
@@ -108,15 +108,35 @@ function initHeaderScroll() {
 
 function initScrollReveals() {
   const elements = document.querySelectorAll('.reveal-on-scroll');
+  const winH = window.innerHeight || 800;
+
+  // Immediately reveal elements already inside or near the initial viewport
+  elements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < winH * 1.15) {
+      el.classList.add('revealed');
+    }
+  });
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('revealed');
       }
     });
-  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
+  }, { rootMargin: '40px 0px -20px 0px', threshold: 0.02 });
 
   elements.forEach(el => observer.observe(el));
+
+  // Safety fallback: ensure nothing stays hidden if observer is delayed or blocked
+  setTimeout(() => {
+    elements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < (window.innerHeight || 800) * 1.3) {
+        el.classList.add('revealed');
+      }
+    });
+  }, 450);
 }
 
 function initActiveNavObserver() {

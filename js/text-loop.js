@@ -220,4 +220,4 @@ export function initTextLoop(container, options = {}) {
   };
 }
 
-export default TextLoop;
+export default initTextLoop;
