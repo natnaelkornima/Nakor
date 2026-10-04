@@ -15,7 +15,7 @@ import {
   githubShowcaseData
 } from './data.js?v=10.0';
 
-import { TechKnot3D } from './tech-knot.js?v=10.0';
+import { HeroAsciiDither } from './hero-ascii-dither.js?v=1.0';
 import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
 
@@ -1111,8 +1111,8 @@ function initApp() {
   initCopyEmail();
   initConnectAndCallActions();
 
-  // Initialize 3D Procedural Tech Knot
-  new TechKnot3D('hero-tech-knot-canvas');
+  // Initialize Living ASCII & Dither Creation Artwork Canvas
+  new HeroAsciiDither('hero-creation-canvas');
 
   // Initialize Kinetic Architectural Typography TechText for Footer Brandmark
   new TechText('#footer-nakor-container', {
