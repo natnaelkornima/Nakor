@@ -15,7 +15,7 @@ import {
   githubShowcaseData
 } from './data.js?v=10.0';
 
-import { GradientBlinds } from './gradient-blinds.js?v=2.0';
+import { HackerTyper } from './hacker-typer.js?v=1.0';
 import { TechText } from './tech-text.js?v=1.0';
 import { getTechLogo } from './tech-logos.js?v=10.0';
 
@@ -1111,20 +1111,12 @@ function initApp() {
   initCopyEmail();
   initConnectAndCallActions();
 
-  // Initialize Interactive WebGL Gradient Blinds (Large, Diagonal, Smooth Left-to-Right Transition)
-  new GradientBlinds('#hero-blinds-container', {
-    gradientColors: ['#FF9FFC', '#5227FF'],
-    angle: 45, // Diagonal blinds
-    noise: 0.18,
-    blindCount: 10, // Larger, wider architectural blinds
-    blindMinWidth: 60,
-    spotlightRadius: 0.8, // Generous spotlight illumination
-    spotlightSoftness: 1.15,
-    spotlightOpacity: 1.0,
-    mouseDampening: 0.15,
-    distortAmount: 0,
-    shineDirection: 'right', // Bevel shine smoothly flows towards the right
-    mixBlendMode: 'normal' // Standard alpha compositing preserves website background
+  // Initialize Retro Hacker Terminal Typing Animation ("Hello World :)" -> "Let's Connect :)")
+  new HackerTyper('#hero-hacker-text', {
+    phrases: ["Hello World :)", "Let's Connect :)"],
+    typeSpeed: 95,
+    deleteSpeed: 45,
+    holdTime: 2400
   });
 
   // Initialize Kinetic Architectural Typography TechText for Footer Brandmark

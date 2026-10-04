@@ -305,7 +305,7 @@
   flex-direction: column;
 }
 
-/* Hero Visual: GradientBlinds WebGL Component (Large, Diagonal, Transparent) */
+/* Hero Visual: Retro Hacker Terminal Type Animation */
 .hero-visual-wrapper {
   display: flex;
   flex-direction: column;
@@ -313,75 +313,59 @@
   justify-content: center;
   position: relative;
   width: 100%;
-  min-height: 640px;
+  min-height: 480px;
 }
 
-.hero-blinds-wrapper {
+.hero-hacker-terminal {
   position: relative;
   width: 100%;
-  height: clamp(600px, 78vh, 720px);
-  max-width: 100%;
+  max-width: 580px;
+  min-height: 160px;
+  padding: var(--space-8) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: transparent !important;
   border-radius: 5px;
-  overflow: hidden;
-  background: transparent !important;
-
-  /* Smooth transition: softly emerges from the left, shines across, and gracefully extends to the right */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.4) 6%,
-    rgba(0, 0, 0, 0.9) 20%,
-    rgba(0, 0, 0, 1) 32%,
-    rgba(0, 0, 0, 1) 85%,
-    rgba(0, 0, 0, 0.6) 95%,
-    rgba(0, 0, 0, 0.2) 100%
-  ),
-  linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.8) 5%,
-    rgba(0, 0, 0, 1) 14%,
-    rgba(0, 0, 0, 1) 86%,
-    rgba(0, 0, 0, 0.4) 96%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  -webkit-mask-composite: source-in;
-
-  mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.4) 6%,
-    rgba(0, 0, 0, 0.9) 20%,
-    rgba(0, 0, 0, 1) 32%,
-    rgba(0, 0, 0, 1) 85%,
-    rgba(0, 0, 0, 0.6) 95%,
-    rgba(0, 0, 0, 0.2) 100%
-  ),
-  linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.8) 5%,
-    rgba(0, 0, 0, 1) 14%,
-    rgba(0, 0, 0, 1) 86%,
-    rgba(0, 0, 0, 0.4) 96%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-composite: intersect;
+  user-select: none;
+  cursor: default;
+  transition: transform var(--duration-fast) var(--ease-spring);
 }
 
-.gradient-blinds-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: transparent !important;
+.hero-hacker-terminal:hover {
+  transform: translateY(-2px);
 }
 
-.gradient-blinds-container canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  background: transparent !important;
+.hero-hacker-terminal .hacker-text {
+  font-family: var(--font-pixel);
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+  color: var(--hacker-green);
+  text-shadow: 0 0 12px var(--hacker-glow), 0 0 26px var(--hacker-glow);
+  white-space: pre-wrap;
+  word-break: break-word;
+  image-rendering: pixelated;
+}
+
+.hero-hacker-terminal .hacker-cursor {
+  display: inline-block;
+  font-family: var(--font-pixel);
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  line-height: 1.1;
+  color: var(--hacker-green);
+  text-shadow: 0 0 12px var(--hacker-glow), 0 0 26px var(--hacker-glow);
+  margin-left: 4px;
+  animation: hackerCursorBlink 0.8s steps(2, start) infinite;
+}
+
+@keyframes hackerCursorBlink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
 }
 
 .hero-status-pill {

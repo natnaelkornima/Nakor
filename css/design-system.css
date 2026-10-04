@@ -7,7 +7,7 @@
  * - Respects prefers-reduced-motion and custom browser surfaces
  */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=VT323&display=swap');
 
 :root {
   /* Color Palette — Dark Mode (Default) — Monochrome */
@@ -45,6 +45,9 @@
   --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-pixel: 'VT323', 'JetBrains Mono', monospace;
+  --hacker-green: #00ff66;
+  --hacker-glow: rgba(0, 255, 102, 0.45);
 
   /* Type Scale */
   --text-xs: 0.75rem;
@@ -142,6 +145,8 @@
   --status-active-border: rgba(75, 77, 88, 0.3);
 
   --grid-dot-color: rgba(0, 0, 0, 0.05);
+  --hacker-green: #15803d;
+  --hacker-glow: rgba(21, 128, 61, 0.25);
 
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 14px 0 rgba(0, 0, 0, 0.08);
