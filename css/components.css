@@ -42,16 +42,33 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: var(--text-lg);
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  transition: opacity var(--duration-fast) ease;
+  text-decoration: none;
+  transition: opacity var(--duration-fast) ease, transform var(--duration-fast) var(--ease-spring);
 }
 
 .brand-link:hover {
-  opacity: 0.85;
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.brand-logo {
+  height: 34px;
+  width: auto;
+  max-width: 44px;
+  display: block;
+  object-fit: contain;
+  /* Since source image.png is black, invert to pure white for starter dark theme */
+  filter: brightness(0) invert(1);
+  transition: transform var(--duration-fast) var(--ease-spring), filter var(--duration-fast) ease;
+}
+
+.brand-link:hover .brand-logo {
+  transform: scale(1.06);
+}
+
+/* In light mode, display the original black logo */
+[data-theme="light"] .brand-logo {
+  filter: none;
 }
 
 .brand-dot {
