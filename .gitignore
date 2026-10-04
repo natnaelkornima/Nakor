@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Environment & local files
+.env
+.env.local
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Scratch and intermediate artifacts
+scratch/
