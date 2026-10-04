@@ -2174,10 +2174,10 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 1.5rem 0;
+  padding: 0.5rem 0 1.5rem 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.25rem;
   /* Premium edge fade mask on left and right */
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
@@ -2186,7 +2186,7 @@
 .tech-carousel-row {
   position: relative;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   user-select: none;
 }
@@ -2197,6 +2197,7 @@
   gap: 1.25rem;
   width: max-content;
   will-change: transform;
+  padding: 2.5rem 0 0.85rem 0;
 }
 
 /* Individual Tech Carousel Logo Pod (Pure Logo Only) */
