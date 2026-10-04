@@ -746,38 +746,39 @@ function renderSkills() {
   const container = document.getElementById('skills-container');
   if (!container) return;
 
-  const categoryKickoffs = [
-    '01 // CLIENT ARCHITECTURE',
-    '02 // DISTRIBUTED SERVICES',
-    '03 // MACHINE INTELLIGENCE',
-    '04 // DEVOPS & INFRASTRUCTURE'
-  ];
+  container.className = 'tech-stack-container';
 
   container.innerHTML = skillsData.categories.map((cat, cIdx) => `
-    <div class="skill-category-card">
-      <div class="skill-category-header">
-        <div class="skill-category-meta">
-          <span class="skill-category-kicker font-mono">${categoryKickoffs[cIdx] || `DOMAIN 0${cIdx + 1}`}</span>
-          <span class="skill-category-count font-mono">${cat.skills.length} TECHS</span>
+    <div class="tech-stack-group" role="region" aria-label="${cat.name}">
+      <div class="tech-group-header">
+        <div class="tech-group-meta">
+          <span class="tech-group-kicker font-mono">
+            <span class="live-dot" style="background: var(--accent);"></span>
+            ${cat.kicker}
+          </span>
+          <span class="tech-group-count font-mono">${cat.count}</span>
         </div>
-        <h3 class="skill-category-name">${cat.name}</h3>
-        <p class="skill-category-desc">${cat.description}</p>
+        <h3 class="tech-group-name">${cat.name}</h3>
+        <p class="tech-group-desc">${cat.description}</p>
       </div>
 
-      <div class="skills-card-grid">
-        ${cat.skills.map(s => {
-          const levelLower = s.level.toLowerCase();
+      <div class="tech-logo-cluster" role="list">
+        ${cat.skills.map((s, sIdx) => {
+          const delay = ((sIdx % 6) * 0.28).toFixed(2);
+          const duration = (3.8 + (sIdx % 4) * 0.5).toFixed(1);
           return `
-            <div class="skill-card spotlight-card" data-rel="${s.rel || 'general'}" tabindex="0" role="region" aria-label="${s.name} - ${s.level}">
-              <div class="skill-icon-tile" aria-hidden="true">
-                ${getTechLogo(s.name)}
+            <div 
+              class="tech-logo-pod" 
+              role="listitem"
+              tabindex="0"
+              aria-label="${s.name}"
+              style="--tech-color: ${s.color}; --tech-glow: ${s.glow}; --pod-delay: ${delay}s; --pod-duration: ${duration}s;"
+            >
+              <div class="tech-logo-icon" aria-hidden="true">
+                ${getTechLogo(s.logo || s.name)}
               </div>
-              <div class="skill-card-content">
-                <div class="skill-card-header">
-                  <h4 class="skill-card-title">${s.name}</h4>
-                  <span class="skill-level-chip skill-level-${levelLower} font-mono">${s.level}</span>
-                </div>
-                <p class="skill-card-note">${s.note}</p>
+              <div class="tech-logo-tooltip font-mono" role="tooltip">
+                ${s.name}
               </div>
             </div>
           `;
@@ -785,8 +786,6 @@ function renderSkills() {
       </div>
     </div>
   `).join('');
-
-  attachSpotlightListeners();
 }
 
 /* ==========================================================================

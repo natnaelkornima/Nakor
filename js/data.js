@@ -191,46 +191,56 @@ export const projectsData = [
 export const skillsData = {
   categories: [
     {
+      kicker: "01 // CLIENT ARCHITECTURE",
+      count: "6 TECHS",
       name: "Frontend Engineering",
       description: "Constructing accessible, resilient, and responsive client architectures.",
       skills: [
-        { name: "TypeScript", level: "Core", note: "Type safety, generics, strict mode", rel: "typescript" },
-        { name: "JavaScript (ESNext)", level: "Core", note: "Async/await, DOM APIs, event loops", rel: "typescript" },
-        { name: "React", level: "Core", note: "Hooks, state management, concurrent features", rel: "typescript" },
-        { name: "Next.js", level: "Proficient", note: "App Router, SSR, Server Components", rel: "typescript" },
-        { name: "Tailwind CSS & CSS Systems", level: "Proficient", note: "Responsive design, CSS variables, tokens", rel: "design" },
-        { name: "HTML5 & Web Accessibility", level: "Core", note: "Semantic structure, WCAG standards, ARIA", rel: "design" }
+        { name: "TypeScript", logo: "typescript", color: "#3178C6", glow: "rgba(49, 120, 198, 0.45)" },
+        { name: "JavaScript (ESNext)", logo: "javascript", color: "#F7DF1E", glow: "rgba(247, 223, 30, 0.4)" },
+        { name: "React", logo: "react", color: "#61DAFB", glow: "rgba(97, 218, 251, 0.45)" },
+        { name: "Next.js", logo: "nextjs", color: "#ffffff", glow: "rgba(255, 255, 255, 0.35)" },
+        { name: "Tailwind CSS", logo: "tailwind", color: "#06B6D4", glow: "rgba(6, 182, 212, 0.45)" },
+        { name: "HTML5 & CSS3", logo: "html", color: "#E34F26", glow: "rgba(227, 79, 38, 0.45)" }
       ]
     },
     {
+      kicker: "02 // DISTRIBUTED SERVICES",
+      count: "5 TECHS",
       name: "Backend & Systems",
       description: "Designing deterministic APIs, distributed services, and data pipelines.",
       skills: [
-        { name: "Node.js & Fastify / Express", level: "Core", note: "REST APIs, middleware, worker pools", rel: "typescript" },
-        { name: "Python & FastAPI", level: "Proficient", note: "Async endpoints, Pydantic schemas, microservices", rel: "python" },
-        { name: "PostgreSQL", level: "Core", note: "Schema design, relational modeling, indexing", rel: "data" },
-        { name: "Redis", level: "Proficient", note: "Caching layer, pub/sub, message queuing", rel: "data" },
-        { name: "Authentication & Security", level: "Core", note: "JWT, RBAC, OAuth2, input sanitization", rel: "systems" }
+        { name: "Node.js", logo: "nodejs", color: "#5FA04E", glow: "rgba(95, 160, 78, 0.45)" },
+        { name: "Fastify / Express", logo: "fastify", color: "#22c55e", glow: "rgba(34, 197, 94, 0.45)" },
+        { name: "Python & FastAPI", logo: "python", color: "#3776AB", glow: "rgba(55, 118, 171, 0.45)" },
+        { name: "PostgreSQL", logo: "postgresql", color: "#4169E1", glow: "rgba(65, 105, 225, 0.45)" },
+        { name: "Redis", logo: "redis", color: "#FF4438", glow: "rgba(255, 68, 56, 0.45)" },
+        { name: "Auth & Security (JWT)", logo: "security", color: "#EAB308", glow: "rgba(234, 179, 8, 0.45)" }
       ]
     },
     {
+      kicker: "03 // MACHINE INTELLIGENCE",
+      count: "4 TECHS",
       name: "AI & Machine Learning Systems",
       description: "Pragmatic engineering around probabilistic models and pipelines.",
       skills: [
-        { name: "Python Scientific Stack", level: "Proficient", note: "NumPy, Pandas, Matplotlib, scikit-learn", rel: "python" },
-        { name: "PyTorch & Transformers", level: "Familiar", note: "Model architectures, fine-tuning, embeddings", rel: "ai" },
-        { name: "LLM Orchestration & APIs", level: "Proficient", note: "Few-shot prompting, structured output validation", rel: "ai" },
-        { name: "RAG & Vector Retrieval", level: "Proficient", note: "Semantic search, chunking strategies, embeddings", rel: "ai" }
+        { name: "Python Scientific Stack (NumPy/Pandas)", logo: "numpy", color: "#4DABCF", glow: "rgba(77, 171, 207, 0.45)" },
+        { name: "PyTorch", logo: "pytorch", color: "#EE4C2C", glow: "rgba(238, 76, 44, 0.45)" },
+        { name: "Transformers (Hugging Face)", logo: "transformers", color: "#FFD21E", glow: "rgba(255, 210, 30, 0.45)" },
+        { name: "LLM Orchestration & APIs", logo: "ai", color: "#10A37F", glow: "rgba(16, 163, 127, 0.45)" },
+        { name: "RAG & Vector Retrieval", logo: "langchain", color: "#2dd4bf", glow: "rgba(45, 212, 191, 0.45)" }
       ]
     },
     {
+      kicker: "04 // DEVOPS & INFRASTRUCTURE",
+      count: "4 TECHS",
       name: "Infrastructure & Engineering Tools",
       description: "Deployment, containerization, and developer workflow automation.",
       skills: [
-        { name: "Linux & Shell Scripting", level: "Core", note: "System administration, process management, bash", rel: "systems" },
-        { name: "Docker & Containerization", level: "Proficient", note: "Dockerfile optimization, multi-stage builds", rel: "systems" },
-        { name: "Git & Version Control", level: "Core", note: "Branching strategies, code review, git hooks", rel: "systems" },
-        { name: "CI/CD & Deployment", level: "Proficient", note: "Automated testing, GitHub Actions, cloud hosts", rel: "systems" }
+        { name: "Linux & Shell Scripting", logo: "linux", color: "#FCC624", glow: "rgba(252, 198, 36, 0.45)" },
+        { name: "Docker & Containerization", logo: "docker", color: "#2496ED", glow: "rgba(36, 150, 237, 0.45)" },
+        { name: "Git & Version Control", logo: "git", color: "#F05032", glow: "rgba(240, 80, 50, 0.45)" },
+        { name: "CI/CD & Deployment", logo: "cicd", color: "#2088FF", glow: "rgba(32, 136, 255, 0.45)" }
       ]
     }
   ]
